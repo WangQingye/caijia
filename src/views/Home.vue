@@ -1,5 +1,16 @@
 <template>
-  <div class="about">
-    <h1>This is an home page</h1>
+  <div class="home">
+    <router-link
+      tag="li"
+      to="/"
+    >
+    <a>当前在首页</a>
+    </router-link>
+        <router-link
+      tag="li"
+      to="/subpage"
+    >
+    <a>主页面2</a>
+    </router-link>
   </div>
 </template>

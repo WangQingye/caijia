@@ -1,6 +1,6 @@
 <template>
   <div>
-    2
+   子路由2
   </div>
 </template>
 

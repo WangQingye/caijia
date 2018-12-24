@@ -11,31 +11,18 @@ export default new Router({
       component: Home
     },
     {
-      path: '/query',
-      name: 'query',
+      path: '/subpage',
       // route level code-splitting
-      // this generates a separate chunk (query.[hash].js) for this route
+      // this generates a separate chunk (subpage.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import( /* webpackChunkName: "query" */ './views/Query.vue'),
+      component: () => import( /* webpackChunkName: "subpage" */ './views/Subpage.vue'),
       children: [{
           path: "/",
-          component: () => import( /* webpackChunkName: "form" */ './views/pages/Form.vue')
+          component: () => import( /* webpackChunkName: "page1" */ './views/pages/Page1.vue')
         },
         {
-          path: "/fund",
-          component: () => import( /* webpackChunkName: "fund" */ './views/pages/Fund.vue')
-        },
-        {
-          path: "/target",
-          component: () => import( /* webpackChunkName: "target" */ './views/pages/Target.vue')
-        },
-        {
-          path: "/payment",
-          component: () => import( /* webpackChunkName: "payment" */ './views/pages/Payment.vue')
-        },
-        {
-          path: "/warning",
-          component: () => import( /* webpackChunkName: "warning" */ './views/pages/Warning.vue')
+          path: "/page2",
+          component: () => import( /* webpackChunkName: "page2" */ './views/pages/Page2.vue')
         }
       ]
     }
