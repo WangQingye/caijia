@@ -7,7 +7,7 @@
 </template>
 
 <script>
-// import fetch from "@/assets/js/fetch.js";
+// import fetch from "@/assets/js/Fetch.js";
 export default {
   data() {
     return {
