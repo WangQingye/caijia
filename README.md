@@ -1,21 +1,19 @@
-# dazhou
+## 前端部分启动项目
 
-## Project setup
-```
-npm install
-```
+##### 目的：
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+搭建一个方便快速启动新需求开发的基本项目，在vue-cli的基础上添加一些适应自己项目的配置，最大限度的缩短项目启动的时间消耗。
 
-### Compiles and minifies for production
-```
-npm run build
-```
+##### 已实现功能：
 
-### Lints and fixes files
-```
-npm run lint
-```
+在vue-cli的基础上，直接集成了项目可能用到的一些组件，如下：
+
+- UI框架ElementUI
+- vue-router的基本路由配置
+- 项目通用工具，比如fetch请求包、通用样式。
+- 方便配置的config文件，独立于整个项目，可以在打包完成后直接切换运行环境。
+- 未完待续
+
+##### 技术栈：
+
+前端框架Vue@^2.5.17
