@@ -27,7 +27,18 @@
 ##### 目录结构：
 
 ```javascript
-
+|---src                   // 项目代码目录
+     |---assets           // 静态资源
+            |---css
+            |---imgs
+            |---js
+     |---components       // vue公用组件目录
+     |---plugins          // 项目所用插件目录
+     |---views            // vue页面文件（一级页面）
+           |---pages      // 二级路由页面
+     |---config.js        // 项目整体配置，比如API接口（不参与webpack打包）
+     |---main.js          // vue项目主入口
+     |---router.js        // 路由配置文件
 ```
 
 ##### 初始用法：
@@ -35,7 +46,7 @@
 首先从项目仓库中拉取项目：
 
 ```bash
-
+git clone http://172.16.101.211/wangqingye/base-repo.git
 ```
 
 **然后修改仓库地址到新项目并上传初始代码（这一步很重要）：**
@@ -50,6 +61,6 @@ git push -u origin master
 接着就可以运行并开始开发：
 
 ```bash
-
+npm run serve
 ```
 
