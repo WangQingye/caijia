@@ -33,7 +33,7 @@ export default new Router({
       ]
     },
     {
-      path: '/phone',
+      path: '/qrcode',
       component: () => import( /* webpackChunkName: "subpage" */ './views/Phone.vue')
     }
   ]
