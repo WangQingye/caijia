@@ -1,16 +1,17 @@
 <template>
   <div class="home">
-    <router-link
-      tag="li"
-      to="/"
-    >
-    <a>当前在首页</a>
-    </router-link>
-        <router-link
-      tag="li"
-      to="/subpage"
-    >
-    <a>主页面2</a>
-    </router-link>
+    <my-header></my-header>
+    <router-view></router-view>
+    <my-footer></my-footer>
   </div>
 </template>
+<script>
+import MyHeader from '@/components/Header.vue'
+import MyFooter from '@/components/Footer.vue'
+export default {
+  components: {
+    MyHeader,
+    MyFooter
+  }
+}
+</script>

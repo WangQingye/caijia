@@ -36,11 +36,12 @@ export default {
   data() {
     return {
       navs: [
-        { name: "表单查询", url: "/query" },
-        { name: "资金条线查询", url: "/fund" },
-        { name: "发放对象查询", url: "/target" },
-        { name: "定向支付查询", url: "/payment" },
-        { name: "报警查询", url: "/warning" }
+        { name: "首页", url: "/main" },
+        { name: "农产电商", url: "/main" },
+        { name: "农产品投保", url: "/main" },
+        { name: "理赔公示", url: "/main" },
+        { name: "联系我们", url: "/main" },
+        { name: "登陆后台", url: "/backend" }
       ],
       hoverIndex: null,
       hoverOnList: false
