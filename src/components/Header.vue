@@ -11,12 +11,6 @@
       <div class="nav-wrapper">
         <ul class="nav-ul">
           <li
-            class="nav-li nav-main"
-            @click="backToMain"
-          >
-            回到首页
-          </li>
-          <li
             :class="['nav-li', index === hoverIndex ? 'nav-active' : '', index == nowIndex ? 'nav-big-font' : '']"
             v-for="(nav, index) in navs"
             :key="index"
@@ -24,10 +18,10 @@
             @mouseover="onMouseOver(index)"
             @mouseout="onMouseOut(index)"
           >
-            <div
+            <!-- <div
               class="nav-border"
               v-show=" index == nowIndex"
-            ></div>
+            ></div> -->
             {{navs[index]['name']}}
           </li>
         </ul>
@@ -88,12 +82,16 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
+$background:white;
+$hover-background:#39AC5F;
+$text-color:#757575;
+$hover-text-color:white;
 .header {
   /* width: 1920px; */
   width: 100%;
   height: 60px;
-  background: #3c3c9f;
+  background: $background;
 }
 .content-wrapper {
   width: 100%;
@@ -106,14 +104,14 @@ export default {
   /* margin-left: 360px; */
   /* padding: 15px; */
   margin-right: 22%;
-  background: #503faf;
   height: 60px;
   width: 60px;
 }
 .logo-img {
-  width: 30px;
-  height: 30px;
-  margin-left: 050px;
+  width: 160px;
+  height: 40px;
+  margin-left: 50px;
+  margin-top: 10px;
 }
 .nav-wrapper {
   display: inline-block;
@@ -132,19 +130,17 @@ export default {
   min-width: 120px;
   text-align: center;
   line-height: 60px;
-  color: #ceceff;
+  color: $text-color;
   cursor: pointer;
   /* transition:rgba(255, 255, 255, 0.1) 0.3s linear; */
   position: relative;
 }
-/* .nav-li:hover { */
-/* background: rgba(134, 130, 130, 0.1); */
-/* } */
 .nav-active {
-  color: #ffffff;
-  background: #503faf;
+  color: $hover-text-color;
+  background: $hover-background;
 }
 .nav-big-font {
+  background: $hover-background;
   color: #ffffff;
 }
 .nav-border {
@@ -157,47 +153,6 @@ export default {
 .nav-main {
   color: #1bf1fe;
   text-decoration: underline;
-}
-.solution-list {
-  position: absolute;
-  left: 180px;
-  width: 90px;
-  /* min-width: 290px; */
-  height: 80px;
-  background: #503faf;
-}
-.solution-ul {
-  width: 100%;
-  box-sizing: border-box;
-}
-.solution-li {
-  display: inline-block;
-  height: 60px;
-  width: 40px;
-  padding-top: 050px;
-  box-sizing: border-box;
-  cursor: pointer;
-  color: #d4ccff;
-  /* display: flex; */
-  justify-content: space-around;
-}
-.solution-li:hover {
-  color: white;
-}
-.solution-img {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  margin-left: 050px;
-}
-.solution-text {
-  display: inline-block;
-  margin-left: 050px;
-  line-height: 30px;
-  font-size: 040px;
-  text-align: left;
-  width: 90px;
-  vertical-align: top;
 }
 .header-1 {
   background: #ffffff;
