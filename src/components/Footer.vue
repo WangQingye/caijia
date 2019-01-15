@@ -125,7 +125,7 @@ export default {
   height: 300px;
   color: white;
   .footer-bg {
-    width: 1920px;
+    width: 100%;
     height: 300px;
     position: absolute;
     z-index: -1;

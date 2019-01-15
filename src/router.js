@@ -26,7 +26,7 @@ export default new Router({
       // route level code-splitting
       // this generates a separate chunk (subpage.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import( /* webpackChunkName: "backend" */ './views/Backend.vue'),
+      component: () => import( /* webpackChunkName: "backend" */ './views/backend/Backend.vue'),
       children: [{
           path: "/",
           component: () => import( /* webpackChunkName: "page1" */ './views/pages/Page1.vue')
@@ -36,6 +36,10 @@ export default new Router({
           component: () => import( /* webpackChunkName: "page2" */ './views/pages/Page2.vue')
         }
       ]
+    },
+    {
+      path: '/login',
+      component: () => import( /* webpackChunkName: "phone" */ './views/Login.vue')
     },
     {
       path: '/qrcode',

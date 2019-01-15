@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <my-header @click-nav="clickNav" :nowIndex="navIndex"></my-header>
-    <router-view></router-view>
+    <router-view class="main-router"></router-view>
     <my-footer></my-footer>
   </div>
 </template>
@@ -26,3 +26,6 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+</style>
+

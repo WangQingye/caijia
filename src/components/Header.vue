@@ -40,7 +40,7 @@ export default {
         { name: "新闻中心", url: "/main" },
         { name: "申请入驻", url: "/apply" },
         { name: "联系我们", url: "/main" },
-        { name: "后台登陆", url: "/backend" }
+        { name: "后台登陆", url: "/login" }
       ],
       hoverIndex: null,
       hoverOnList: false
@@ -92,6 +92,8 @@ $hover-text-color:white;
   width: 100%;
   height: 60px;
   background: $background;
+  z-index: 99;
+  box-shadow: 1px 1px 5px #ddd;
 }
 .content-wrapper {
   width: 100%;
