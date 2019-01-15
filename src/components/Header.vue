@@ -37,11 +37,10 @@ export default {
     return {
       navs: [
         { name: "首页", url: "/main" },
-        { name: "农产电商", url: "/main" },
-        { name: "农产品投保", url: "/main" },
-        { name: "理赔公示", url: "/main" },
+        { name: "新闻中心", url: "/main" },
+        { name: "申请入驻", url: "/apply" },
         { name: "联系我们", url: "/main" },
-        { name: "登陆后台", url: "/backend" }
+        { name: "后台登陆", url: "/backend" }
       ],
       hoverIndex: null,
       hoverOnList: false
