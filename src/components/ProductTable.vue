@@ -90,7 +90,7 @@ export default{
     display:inline-block;
     width:3px;
     height:150px;
-    float: left;
+    float:left;
     background:rgba(242,242,242,1);
     position:absolute;
     top:19px;
