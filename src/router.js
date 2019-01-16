@@ -6,7 +6,8 @@ import Main from './views/front/Main.vue'
 Vue.use(Router)
 
 export default new Router({
-  routes: [{
+  routes: [
+    {
       path: '/',
       name: 'home',
       component: Home,
