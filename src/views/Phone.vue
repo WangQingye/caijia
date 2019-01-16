@@ -22,13 +22,14 @@
       <div class="product">
         <product-table :listData="productDetails" v-for="(item,index) in productDetails " :key="index" :productIndex="index"></product-table>
       </div>
-
+      <up-to-now></up-to-now>
     </div>
 </template>
 
 <script>
 import HeadLine from '@/components/HeadLine.vue'
 import ProductTable from '@/components/ProductTable.vue'
+import UpToNow from '@/components/UpToNow.vue'
 import goods from "@/assets/imgs/goods.jpg";
 export default {
   name: "phone",
@@ -113,7 +114,8 @@ export default {
   },
   components: {
     HeadLine,
-    ProductTable
+    ProductTable,
+    UpToNow
   }
 }
 </script>
