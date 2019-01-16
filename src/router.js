@@ -6,7 +6,8 @@ import MainPage from './views/front/MainPage.vue'
 Vue.use(Router)
 
 export default new Router({
-  routes: [{
+  routes: [
+    {
       path: '/',
       redirect: '/main',
       name: 'home',
