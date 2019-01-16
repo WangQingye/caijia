@@ -54,6 +54,26 @@
           </el-select>
         </el-form-item>
         <el-form-item
+          label="营业执照"
+          prop="certificate"
+        >
+          <el-upload
+            class="upload-demo"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :on-change="handleFileChange"
+            :file-list="fileList"
+          >
+            <el-button
+              size="small"
+              type="primary"
+            >点击上传</el-button>
+            <div
+              slot="tip"
+              class="el-upload__tip"
+            >只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </el-form-item>
+        <el-form-item
           label="联系人"
           prop="person"
         >
@@ -75,13 +95,19 @@
           label="密码"
           prop="password"
         >
-          <el-input type="password" v-model="applyForm.password"></el-input>
+          <el-input
+            type="password"
+            v-model="applyForm.password"
+          ></el-input>
         </el-form-item>
         <el-form-item
           label="确认密码"
           prop="repassword"
         >
-          <el-input type="password" v-model="applyForm.repassword"></el-input>
+          <el-input
+            type="password"
+            v-model="applyForm.repassword"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -124,8 +150,12 @@ export default {
         ],
         repassword: [
           { required: true, message: "请再次输入密码", trigger: "blur" }
+        ],
+        certificate: [
+          { required: true, message: "请上传营业执照", trigger: "blur" }
         ]
-      }
+      },
+      fileList: []
     };
   },
   props: {},
@@ -134,8 +164,8 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.applyForm.password !== this.applyForm.repassword) {
-              this.$message.error('两次密码不一致');
-              return;
+            this.$message.error("两次密码不一致");
+            return;
           }
           alert("submit!");
         } else {
@@ -146,7 +176,8 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    }
+    },
+    handleFileChange() {}
   },
   watch: {}
 };
@@ -156,7 +187,7 @@ export default {
 <style lang="scss" scoped>
 .apply {
   padding-top: 50px;
-  padding-bottom: 100px;
+  padding-bottom: 50px;
   box-sizing: border-box;
   .title {
     font-size: 20px;
