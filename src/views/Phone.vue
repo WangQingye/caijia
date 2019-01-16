@@ -188,7 +188,7 @@ export default {
   }
 }
 .product{
-  width:375px;
+  width:311px;
   margin:0 auto;
 }
 
