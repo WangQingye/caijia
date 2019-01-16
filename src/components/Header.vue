@@ -37,11 +37,10 @@ export default {
     return {
       navs: [
         { name: "首页", url: "/main" },
-        { name: "农产电商", url: "/main" },
-        { name: "农产品投保", url: "/main" },
-        { name: "理赔公示", url: "/main" },
+        { name: "新闻中心", url: "/main" },
+        { name: "申请入驻", url: "/apply" },
         { name: "联系我们", url: "/main" },
-        { name: "登陆后台", url: "/backend" }
+        { name: "后台登陆", url: "/login" }
       ],
       hoverIndex: null,
       hoverOnList: false
@@ -93,6 +92,8 @@ $hover-text-color:white;
   width: 100%;
   height: 60px;
   background: $background;
+  z-index: 99;
+  box-shadow: 1px 1px 5px #ddd;
 }
 .content-wrapper {
   width: 100%;

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import Main from './views/front/Main.vue'
+import MainPage from './views/front/MainPage.vue'
 
 Vue.use(Router)
 
@@ -9,12 +9,17 @@ export default new Router({
   routes: [
     {
       path: '/',
+      redirect: '/main',
       name: 'home',
       component: Home,
       children: [{
-        path: '/',
-        name: 'main',
-        component: Main
+        path: '/main',
+        name: 'mainPage',
+        component: MainPage
+      },{
+        path: '/apply',
+        name: 'apply',
+        component: () => import( /* webpackChunkName: "apply" */ './views/front/Apply.vue')
       }]
     },
     {
@@ -22,7 +27,7 @@ export default new Router({
       // route level code-splitting
       // this generates a separate chunk (subpage.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import( /* webpackChunkName: "subpage" */ './views/Backend.vue'),
+      component: () => import( /* webpackChunkName: "backend" */ './views/backend/Backend.vue'),
       children: [{
           path: "/",
           component: () => import( /* webpackChunkName: "page1" */ './views/pages/Page1.vue')
@@ -34,8 +39,12 @@ export default new Router({
       ]
     },
     {
+      path: '/login',
+      component: () => import( /* webpackChunkName: "phone" */ './views/Login.vue')
+    },
+    {
       path: '/qrcode',
-      component: () => import( /* webpackChunkName: "subpage" */ './views/Phone.vue')
+      component: () => import( /* webpackChunkName: "phone" */ './views/Phone.vue')
     }
   ]
 })
