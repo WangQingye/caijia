@@ -1,0 +1,1 @@
+window.baseUrl = "http://172.16.0.87:8080"

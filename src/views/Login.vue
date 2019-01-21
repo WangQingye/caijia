@@ -73,25 +73,18 @@ export default {
   methods: {
     async login() {
       let data = {
-        name: this.loginUser,
-        password: this.loginPass
+        account: this.loginForm.account,
+        password: this.loginForm.password
       };
       this.loading = true;
-      let res = await fetch("/loginInSystem", data, "POST");
+      let res = await fetch("/user/login", data, "POST");
       this.loading = false;
-      console.log(res);
-      if (res.code == 200) {
-        this.$message({
-          message: "登陆成功",
-          type: "success"
-        });
-        this.$router.push({ path: "/main" });
-      } else {
-        this.$message({
-          message: res.msg,
-          type: "warning"
-        });
-      }
+      this.$message({
+        message: "登陆成功",
+        type: "success"
+      });
+      this.$store.commit("saveUserInfo", res.data.data);
+      this.$router.push({ path: "/backend" });
     },
     async checkLogin() {
       let res = await fetch("/checkIsLogin");
@@ -103,7 +96,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$router.push({path:'/backend'})
+          this.login();
         } else {
           console.log("error submit!!");
           return false;

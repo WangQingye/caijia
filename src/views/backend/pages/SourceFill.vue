@@ -84,7 +84,7 @@ export default {
     return {
       searchCode: "",
       searchBoxNum: "",
-      userType: 3,
+      userType: 2,
       showAddCode: false,
       codeData: [
         {

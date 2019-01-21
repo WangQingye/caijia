@@ -11,14 +11,14 @@
       <div class="user-info">
         <el-dropdown>
           <span class="el-dropdown-link">
-            系统管理员<i class="el-icon-caret-bottom el-icon--right"></i>
+            {{this.$store.state.userInfo.account}}<i class="el-icon-caret-bottom el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>修改密码</el-dropdown-item>
             <el-dropdown-item>退出登陆</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <p class="user-company">电科信链</p>
+        <p class="user-company">{{this.$store.state.userInfo.companyTypeName}}</p>
       </div>
     </div>
   </div>

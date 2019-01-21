@@ -86,6 +86,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this.$store.state);
   },
   methods: {
     onMenuSelect(index, indexPath) {

@@ -158,8 +158,22 @@ export default {
       fileList: []
     };
   },
+  mounted() {
+    this.getOrgTypes();
+  },
   props: {},
   methods: {
+    async getOrgTypes() {
+      let data = {
+        name: applyForm.name,
+        ucode: applyForm.code,
+        typeCode: applyForm.type,
+        licPic: '',
+        // contacts:
+      };
+      let res = await this.$fetch("/companyType/getAllCompanyTypes");
+
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
