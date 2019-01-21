@@ -1,9 +1,8 @@
 import a from '../../main';
 import { Loading } from 'element-ui';
-export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
+export default async (url = '', data = {}, type = 'GET', backend = '', method = 'fetch') => {
     type = type.toUpperCase();
-    url = baseUrl + url;
-    console.log(baseUrl);
+    url = backend == 'user' ? userUrl + url : productUrl + url;
     if (type == 'GET') {
         let dataStr = ''; // 准备拼接请求字符串
         Object.keys(data).forEach(key => {
