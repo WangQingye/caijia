@@ -77,7 +77,7 @@ export default {
         password: this.loginForm.password
       };
       this.loading = true;
-      let res = await fetch("/user/login", data, "POST");
+      let res = await fetch("/user/login", data, "POST", 'user');
       this.loading = false;
       this.$message({
         message: "登陆成功",
