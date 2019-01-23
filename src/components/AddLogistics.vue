@@ -8,7 +8,7 @@
       class="form"
     >
       <el-form-item label="批次号">
-        <el-select
+        <!-- <el-select
           v-model="logisticsForm.code"
           placeholder="请选择批次号"
         >
@@ -18,7 +18,8 @@
             :label="code"
             :value="code"
           ></el-option>
-        </el-select>
+        </el-select> -->
+        <p>{{rowData.batchCode}}</p>
       </el-form-item>
       <el-form-item label="箱码">
         <el-input
@@ -50,7 +51,7 @@
       </el-form-item>
       <el-form-item label="时间">
         <el-date-picker
-          v-model="logisticsForm.time"
+          v-model="logisticsForm.date"
           type="date"
           placeholder="请选择时间"
         >
@@ -62,7 +63,7 @@
       <el-form-item>
         <el-button
           type="primary"
-          @click="onAddSubmit"
+          @click="addTransInfo"
         >添加信息</el-button>
         <el-button @click="back">返回列表</el-button>
       </el-form-item>
@@ -86,14 +87,55 @@ export default {
       codes: ["001", "002"]
     };
   },
-  props: {},
+  props: {
+    rowData: {
+      default: () => {
+        return { batchCode: 0 };
+      },
+      type: Object
+    }
+  },
   methods: {
     onAddSubmit() {},
     back() {
       this.$emit("back");
+    },
+    async getBoxNum() {
+      let res = await this.$fetch("/transfer/boxCountByCode", {
+        actionId: this.rowData.id
+      });
+      this.logisticsForm.boxNumStart = this.rowData.curBoxNum || 0;
+      this.logisticsForm.boxNumEnd = this.rowData.endBoxNum;
+    },
+    async addTransInfo() {
+      let data = this.$signData({
+        action: "物流信息",
+        actionId: this.rowData.id,
+        batchCode: this.rowData.batchCode,
+        destAddr: this.logisticsForm.endPlace,
+        endBoxNum: this.logisticsForm.boxNumEnd,
+        srcAddr: this.logisticsForm.startPlace,
+        startBoxNum: this.logisticsForm.boxNumStart,
+        transferTime: this.logisticsForm.date
+      });
+      if (!data) return;
+      console.log(data);
+      let res = await this.$fetch("/transfer/addTransfer", data, "POST");
+      console.log(res);
+      // if (res.code == 0) {
+      //   this.$message.success("添加成功");
+      //   this.$emit("back");
+      // }
     }
   },
-  watch: {}
+  watch: {
+    "rowData.batchCode": {
+      // immediate: true,
+      handler: function(val) {
+        this.getBoxNum();
+      }
+    }
+  }
 };
 </script>
 

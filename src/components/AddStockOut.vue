@@ -8,7 +8,7 @@
       class="form"
     >
       <el-form-item label="批次号">
-        <el-select
+        <!-- <el-select
           v-model="stockOutForm.codes"
           placeholder="请选择批次号"
         >
@@ -18,7 +18,8 @@
             :label="code"
             :value="code"
           ></el-option>
-        </el-select>
+        </el-select> -->
+        <p>{{rowData.batchCode}}</p>
       </el-form-item>
       <el-form-item label="箱码">
         <el-input
@@ -44,26 +45,26 @@
           <el-option
             v-for="(com,index) in logisticsCompanys"
             :key="index"
-            :label="com"
-            :value="com"
+            :label="com.name"
+            :value="com.company_code"
           ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="时间">
         <el-date-picker
-          v-model="stockOutForm.time"
+          v-model="stockOutForm.date"
           type="date"
           placeholder="请选择时间"
         >
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="责任人">
-        <p>农企1</p>
+      <el-form-item label="填报人">
+        <p>{{this.$store.state.userInfo.companyName}}</p>
       </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
-          @click="onAddSubmit"
+          @click="addTransInfo"
         >添加信息</el-button>
         <el-button @click="back">返回列表</el-button>
       </el-form-item>
@@ -84,17 +85,69 @@ export default {
         date: ""
       },
       codes: ["001", "002"],
-      logisticsCompanys: ['物流企业1','物流企业2']
+      logisticsCompanys: []
     };
   },
-  props: {},
+  props: {
+    rowData: {
+      default: () => {
+        return { batchCode: 0 };
+      },
+      type: Object
+    }
+  },
   methods: {
     onAddSubmit() {},
     back() {
       this.$emit("back");
+    },
+    async getBoxNum() {
+      let res = await this.$fetch("/out/boxCountByCode", {
+        batchCode: this.rowData.batchCode
+      });
+      if (res.code == 0) {
+        this.stockOutForm.boxNumStart = res.data.curBoxNum || 0;
+        this.stockOutForm.boxNumEnd = res.data.boxNum;
+      }
+    },
+    async getTransCom() {
+      let res = await this.$fetch("/list/agricultureList", {
+        companyType: 5
+      });
+      console.log(res);
+      if (res.code == 0) {
+        this.logisticsCompanys = res.data;
+      }
+    },
+    async addTransInfo() {
+      let data = this.$signData({
+        actionId: this.rowData.id,
+        batchCode: this.rowData.batchCode,
+        startBoxNum: this.stockOutForm.boxNumStart,
+        endBoxNum: this.stockOutForm.boxNumEnd,
+        action: "产品出库",
+        transferCompanyCode: this.stockOutForm.logisticsCompany,
+        outTime: this.stockOutForm.date,
+      });
+      if (!data) return;
+      console.log(data);
+      let res = await this.$fetch("/out/outRepertory", data, 'POST');
+      console.log(res);
+      if (res.code == 0) {
+        this.$message.success('添加成功');
+        this.$emit("back");
+      }
     }
   },
-  watch: {}
+  watch: {
+    "rowData.batchCode": {
+      // immediate: true,
+      handler: function(val) {
+        this.getBoxNum();
+        this.getTransCom();
+      }
+    }
+  }
 };
 </script>
 

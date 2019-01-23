@@ -7,7 +7,7 @@
       label-width="80px"
       class="form"
     >
-      <el-form-item label="农企">
+      <!-- <el-form-item label="农企">
         <el-select
           v-model="stockOutForm.company"
           placeholder="请选择批次号"
@@ -19,8 +19,14 @@
             :value="com"
           ></el-option>
         </el-select>
+      </el-form-item> -->
+      <el-form-item label="农企">
+        <p>{{rowData.companyName}}</p>
       </el-form-item>
       <el-form-item label="批次号">
+        <p>{{rowData.batchCode}}</p>
+      </el-form-item>
+      <!-- <el-form-item label="批次号">
         <el-select
           v-model="stockOutForm.codes"
           placeholder="请选择批次号"
@@ -32,7 +38,7 @@
             :value="code"
           ></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="溯源类别">
         <p>检测</p>
       </el-form-item>
@@ -61,14 +67,14 @@
       </el-form-item>
       <el-form-item label="时间">
         <el-date-picker
-          v-model="stockOutForm.time"
+          v-model="stockOutForm.date"
           type="date"
           placeholder="请选择时间"
         >
         </el-date-picker>
       </el-form-item>
       <el-form-item label="责任人">
-        <p>检测机构1</p>
+        <p>{{rowData.companyName}}</p>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -91,22 +97,52 @@ export default {
         boxNumStart: "",
         boxNumEnd: "",
         logisticsCompany: "",
-        date: ""
+        date: "",
+        desc: ""
       },
       codes: ["001", "002"],
       companys: ["农企1", "农企2"],
       fileList: []
     };
   },
-  props: {},
+  props: {
+    rowData: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    }
+  },
   methods: {
-    onAddSubmit() {},
+    async onAddSubmit() {
+      let data = {
+        account: this.$store.state.userInfo.account,
+        action: "检测",
+        actionId: this.rowData.actionId,
+        batchCode: this.rowData.batchCode,
+        checkCompanyCode: this.$store.state.userInfo.companyCode,
+        checkCompanyName: this.$store.state.userInfo.companyName,
+        checkTime: this.stockOutForm.date,
+        farmCode: this.rowData.companyCode,
+        farmName: this.rowData.companyName,
+        flowId: this.rowData.flowId,
+        handlerId: this.$store.state.userInfo.id,
+        picList: '',
+        remark: this.stockOutForm.desc
+      };
+      let signData = this.$signData(data);
+      if (!signData) return;
+      let res = await this.$fetch('/check/save', signData,'POST');
+      console.log(res);
+      if (res.code == 0) {
+        this.$message.success('信息填报成功');
+        this.back();
+      }
+    },
     back() {
       this.$emit("back");
     },
-    handleFileChange(){
-
-    }
+    handleFileChange() {}
   },
   watch: {}
 };

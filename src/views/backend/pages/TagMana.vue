@@ -10,6 +10,7 @@
       <el-button
         type="primary"
         icon="el-icon-search"
+        disabled
       >搜索</el-button>
       <el-row class="mana-buttons">
         <el-button
@@ -24,7 +25,7 @@
         style="width: 100%"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column
+        <!-- <el-table-column
           type="selection"
           width="55"
         >
@@ -33,7 +34,7 @@
           type="index"
           width="50"
         >
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           v-for="(item,index) in labels"
           :key="index"
@@ -68,7 +69,7 @@
       ></pagination>
     </div>
     <div v-if="showAddCode">
-        <p class="title">溯源标签申请</p>
+      <p class="title">溯源标签申请</p>
       <el-form
         ref="addTagForm"
         :model="addTagForm"
@@ -79,17 +80,18 @@
           <el-select
             v-model="addTagForm.code"
             placeholder="请选择批次号"
+            @change="onSelectCode"
           >
             <el-option
               v-for="(code,index) in codes"
               :key="index"
-              :label="code"
-              :value="code"
+              :label="code.batch"
+              :value="code.batch"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="农产种类">
-            {{addTagForm.goodType}}
+          {{addTagForm.goodType}}
         </el-form-item>
         <el-form-item label="箱码数量">
           <el-input
@@ -111,24 +113,33 @@
             <el-option
               v-for="(type,index) in getTypes"
               :key="index"
-              :label="type"
-              :value="type"
+              :label="type.name"
+              :value="type.code"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="addTagForm.getType == '快递'" label="收货地址">
+        <el-form-item
+          v-if="addTagForm.getType == '快递'"
+          label="收货地址"
+        >
           <el-input
             placeholder="请输入收货地址"
             v-model="addTagForm.address"
           ></el-input>
         </el-form-item>
-        <el-form-item v-if="addTagForm.getType == '快递'" label="联系人">
+        <el-form-item
+          v-if="addTagForm.getType == '快递'"
+          label="联系人"
+        >
           <el-input
             placeholder="请输入联系人"
             v-model="addTagForm.contact"
           ></el-input>
         </el-form-item>
-        <el-form-item v-if="addTagForm.getType == '快递'" label="电话号码">
+        <el-form-item
+          v-if="addTagForm.getType == '快递'"
+          label="电话号码"
+        >
           <el-input
             placeholder="请输入电话号码"
             v-model="addTagForm.phone"
@@ -155,27 +166,11 @@ export default {
       searchCode: "",
       showAddCode: false,
       codeData: [
-        {
-          code: "001",
-          boxNum: 64,
-          singleNum: 10000,
-          goodType: "红心猕猴桃",
-          tagNum: 640000,
-          state: "审核中",
-        },
-        {
-          code: "001",
-          boxNum: 64,
-          singleNum: 10000,
-          goodType: "红心猕猴桃",
-          tagNum: 160000,
-          state: "审核中",
-        }
       ],
       labels: [
         {
           name: "批次号",
-          prop: "code"
+          prop: "batchCode"
         },
         {
           name: "箱码数量",
@@ -183,11 +178,11 @@ export default {
         },
         {
           name: "果码数量",
-          prop: "singleNum"
+          prop: "perNum"
         },
         {
           name: "农产种类",
-          prop: "goodType"
+          prop: "varietyName"
         },
         {
           name: "溯源码数量",
@@ -195,27 +190,86 @@ export default {
         },
         {
           name: "状态",
-          prop: "state"
+          prop: "step"
         }
       ],
       addTagForm: {
         code: "",
-        goodType: "红心猕猴桃",
+        goodType: "",
         boxNum: "",
         singleNum: "",
-        getType: "自行打印",
+        getType: 0,
         address: "",
         contact: "",
-        phone: ""
+        phone: "",
+        kindCode: "",
+        flowId: ""
       },
-      codes: ["001", "002"],
-      getTypes: ["快递", "自行打印"]
+      codes: [],
+      getTypes: [{ name: "快递", code: 1 }, { name: "自行打印", code: 0 }]
     };
   },
   mounted() {
-    // this.getTem();
+    this.getApplyList();
+    this.getCode();
   },
   methods: {
+    async getCode() {
+      let res = await this.$fetch("/storeRepertory/batchsAndVariety", {
+        farmCode: this.$store.state.userInfo.companyCode
+      });
+      this.codes = res.data;
+    },
+    async applyTag() {
+      let data = {
+        action: "申请标签",
+        batchCode: this.addTagForm.code,
+        boxNum: this.addTagForm.boxNum,
+        companyCode: this.$store.state.userInfo.companyCode,
+        flowId: this.addTagForm.flowId,
+        handlerId: this.$store.state.userInfo.id,
+        kindCode: this.addTagForm.kindCode,
+        perNum: this.addTagForm.singleNum,
+        contacts: this.addTagForm.contact,
+        phone: this.addTagForm.phone,
+        recAddr: this.addTagForm.address,
+        recType: this.addTagForm.getType,
+        remark: ""
+      };
+      let signData = this.$signData(data);
+      if (!signData) return;
+      let res = this.$fetch("/label/apply", data, "POST");
+      if (res.code == 0) {
+        this.$Message.success("申请成功，请等待审核");
+        this.showAddCode = false;
+        this.getApplyList();
+      }
+    },
+    async getApplyList() {
+      let res = await this.$fetch(
+        "/label/getAuditOfcompany",
+        {
+          batchCode: '',
+          companyCode: this.$store.state.userInfo.companyCode,
+          typeCode: this.$store.state.userInfo.typeCode,
+          limit: 5,
+          page: 1,
+        },
+        "POST"
+      );
+      if (res.code == 0) {
+        this.codeData = res.data.data;
+      }
+    },
+    onSelectCode(value) {
+      this.codes.forEach(item => {
+        if (item.batch == value) {
+          this.addTagForm.goodType = item.varietyName;
+          this.addTagForm.kindCode = item.varietyCode;
+          this.addTagForm.flowId = item.flowId;
+        }
+      });
+    },
     handleSelectionChange() {
       console.log(1);
     },
@@ -225,7 +279,18 @@ export default {
     pageChange(page) {
       console.log(page);
     },
-    onAddSubmit() {}
+    onAddSubmit() {
+      this.applyTag();
+    },
+    findKindName(value, tag, find, arrName) {
+      let a;
+      this[arrName].forEach(item => {
+        if (item[tag] == value) {
+          a = item[find];
+        }
+      });
+      return a;
+    }
   },
   components: {
     Pagination

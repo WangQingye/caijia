@@ -36,8 +36,16 @@ export default new Router({
           component: () => import( /* webpackChunkName: "codemana" */ './views/backend/pages/CodeMana.vue')
         },
         {
-          path: "/sourcefill",
-          component: () => import( /* webpackChunkName: "sourcefill" */ './views/backend/pages/SourceFill.vue')
+          path: "/stockoutfill",
+          component: () => import( /* webpackChunkName: "sourcefill" */ './views/backend/pages/StockOutFill.vue')
+        },
+        {
+          path: "/transfill",
+          component: () => import( /* webpackChunkName: "sourcefill" */ './views/backend/pages/TransFill.vue')
+        },
+        {
+          path: "/verifyfill",
+          component: () => import( /* webpackChunkName: "sourcefill" */ './views/backend/pages/VerifyFill.vue')
         },
         {
           path: "/storemana",

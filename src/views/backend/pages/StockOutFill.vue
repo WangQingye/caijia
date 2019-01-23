@@ -23,13 +23,14 @@
       <el-button
         type="primary"
         icon="el-icon-search"
+        disabled
       >搜索</el-button>
-      <el-row class="mana-buttons">
+      <!-- <el-row class="mana-buttons">
         <el-button
           type="primary"
-          @click="showAddCode=true"
+          @click="showSourceFill"
         >填报信息</el-button>
-      </el-row>
+      </el-row> -->
       <el-table
         ref="codeTable"
         :data="codeData"
@@ -45,6 +46,10 @@
           :width="item.width||'160'"
           align="center"
         >
+          <template slot-scope="scope">
+            <p v-if="!scope.row[item.prop]"> </p>
+            <p v-else>{{scope.row[item.prop]}}</p>
+          </template>
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -53,10 +58,10 @@
         >
           <template slot-scope="scope">
             <el-button
-              @click="manuCode(scope.row)"
+              @click="showSourceFill(scope.row)"
               type="text"
               size="small"
-            >查看</el-button>
+            >填报出库</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -65,10 +70,11 @@
         :page-change="pageChange"
       ></pagination>
     </div>
-    <div v-if="showAddCode">
-      <add-logistics v-if="userType == 1" @back="showAddCode=false"></add-logistics>
-      <add-stock-out v-if="userType == 2" @back="showAddCode=false"></add-stock-out>
-      <add-verify v-if="userType == 3" @back="showAddCode=false"></add-verify>
+    <div v-show="showAddCode">
+      <add-stock-out
+        @back="showAddCode=false"
+        :rowData="nowRow"
+      ></add-stock-out>
     </div>
   </div>
 </template>
@@ -84,58 +90,21 @@ export default {
     return {
       searchCode: "",
       searchBoxNum: "",
-      userType: 2,
+      userType: 3,
       showAddCode: false,
-      codeData: [
-        {
-          company: "都江堰猕猴桃企业",
-          code: "1",
-          boxNum: "",
-          type: "入库",
-          desc: "猕猴桃采摘时间",
-          report: "无",
-          date: "2018-12-26",
-          person: "小张"
-        },
-        {
-          company: "都江堰猕猴桃企业",
-          code: "1",
-          boxNum: "",
-          type: "检测",
-          desc: "欧陆分析农产品检测，检测结果：合格",
-          report: "无",
-          date: "2018-12-26",
-          person: "小张"
-        },
-        {
-          company: "都江堰猕猴桃企业",
-          code: "1",
-          boxNum: "0001-0002",
-          type: "出库",
-          desc: "物流企业:物流企业1",
-          report: "无",
-          date: "2018-12-26",
-          person: "小张"
-        },
-        {
-          company: "都江堰猕猴桃企业",
-          code: "1",
-          boxNum: "0001-0002",
-          type: "物流",
-          desc: "始发地:成都 目的地:北京",
-          report: "无",
-          date: "2018-12-26",
-          person: "小张"
-        },
-      ],
+      codeData: [],
       labels: [
         {
           name: "农企",
-          prop: "company"
+          prop: "name"
         },
         {
           name: "批次号",
-          prop: "code"
+          prop: "batchCode"
+        },
+        {
+          name: "品种",
+          prop: "varietyName"
         },
         {
           name: "箱码",
@@ -143,12 +112,12 @@ export default {
         },
         {
           name: "溯源类别",
-          prop: "type"
+          prop: "action"
         },
         {
           name: "描述",
-          prop: "desc",
-          width:"auto"
+          prop: "remark",
+          width: "auto"
         },
         {
           name: "报告",
@@ -156,20 +125,36 @@ export default {
         },
         {
           name: "时间",
-          prop: "date"
+          prop: "createTime"
         },
         {
           name: "责任人",
-          prop: "person"
+          prop: "username"
         }
       ],
-      codes: ['001','002']
+      codes: ["001", "002"],
+      nowRow: {}
     };
   },
   mounted() {
     // this.getTem();
+    this.getList();
   },
   methods: {
+    async getList() {
+      let res = await this.$fetch("/list/queryOriginAction", {
+        page: 1,
+        limit: 5
+      });
+      if (res.code == 0) {
+        this.codeData = res.data.data;
+      }
+    },
+    showSourceFill(row) {
+      this.showAddCode = true;
+      this.nowRow = row;
+      // console.log(this.nowRow);
+    },
     handleSelectionChange() {
       console.log(1);
     },

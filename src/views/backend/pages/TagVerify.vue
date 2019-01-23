@@ -10,6 +10,7 @@
       <el-button
         type="primary"
         icon="el-icon-search"
+        disabled
       >搜索</el-button>
       <el-table
         ref="codeTable"
@@ -17,7 +18,7 @@
         style="width: 100%;margin-top:40px"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column
+        <!-- <el-table-column
           type="selection"
           width="55"
         >
@@ -26,7 +27,7 @@
           type="index"
           width="50"
         >
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           v-for="(item,index) in labels"
           :key="index"
@@ -53,6 +54,7 @@
               type="text"
               size="small"
               v-else
+              @click="showAuditConfirm(scope.row)"
             >审核</el-button>
           </template>
         </el-table-column>
@@ -62,6 +64,23 @@
         :page-change="pageChange"
       ></pagination>
     </div>
+    <el-dialog
+      title="审核操作"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <span>是否要通过此条溯源标签申请？</span>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="auditApply(0)">不通过</el-button>
+        <el-button
+          type="primary"
+          @click="auditApply(1)"
+        >通 过</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -73,28 +92,17 @@ export default {
     return {
       searchCode: "",
       showAddCode: false,
+      dialogVisible: false,
       codeData: [
-        {
-          code: "001",
-          boxNum: 64,
-          singleNum: 10000,
-          goodType: "红心猕猴桃",
-          tagNum: 640000,
-          state: "审核通过",
-        },
-        {
-          code: "001",
-          boxNum: 64,
-          singleNum: 10000,
-          goodType: "红心猕猴桃",
-          tagNum: 160000,
-          state: "审核中",
-        }
       ],
       labels: [
         {
+          name: "农企",
+          prop: "companyName"
+        },
+        {
           name: "批次号",
-          prop: "code"
+          prop: "batchCode"
         },
         {
           name: "箱码数量",
@@ -102,11 +110,11 @@ export default {
         },
         {
           name: "果码数量",
-          prop: "singleNum"
+          prop: "perNum"
         },
         {
           name: "农产种类",
-          prop: "goodType"
+          prop: "varietyName"
         },
         {
           name: "溯源码数量",
@@ -114,7 +122,7 @@ export default {
         },
         {
           name: "状态",
-          prop: "state"
+          prop: "step"
         }
       ],
       addTagForm: {
@@ -128,13 +136,56 @@ export default {
         phone: ""
       },
       codes: ["001", "002"],
-      getTypes: ["快递", "自行打印"]
+      getTypes: ["快递", "自行打印"],
+      nowRow: null
     };
   },
   mounted() {
-    // this.getTem();
+    this.getApplyList();
   },
   methods: {
+    async getApplyList() {
+      let res = await this.$fetch(
+        "/label/getAudit",
+        {
+          batchCode: "",
+          companyCode: this.$store.state.userInfo.companyCode,
+          typeCode: this.$store.state.userInfo.typeCode,
+          limit: 5,
+          page: 1
+        },
+        "POST"
+      );
+      console.log(res);
+      if (res.code == 0) {
+        this.codeData = res.data.data;
+      }
+    },
+    showAuditConfirm(row) {
+      this.dialogVisible = true;
+      this.nowRow = row;
+    },
+    async auditApply(flag) {
+      console.log(this.nowRow);
+      let data = {
+        account: this.$store.state.userInfo.account,
+        action: "审核标签",
+        actionId: this.nowRow.actionId,
+        flowId: this.nowRow.flowId,
+        companyCode: this.nowRow.companyCode,
+        labelCompanyCode: this.$store.state.userInfo.companyCode,
+        labelCompanyName: this.$store.state.userInfo.companyName,
+        labelUserId: this.$store.state.userInfo.id,
+      };
+      let signData = this.$signData(data);
+      if (!signData) return;
+      let res = await this.$fetch('/label/audit', signData, 'POST');
+      if (res.code == 0) {
+        this.dialogVisible = false;
+        this.$Message.success('操作成功！');
+        this.getApplyList();
+      };
+    },
     handleSelectionChange() {
       console.log(1);
     },
