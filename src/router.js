@@ -12,15 +12,18 @@ export default new Router({
       redirect: '/main',
       name: 'home',
       component: Home,
-      children: [{
-        path: '/main',
-        name: 'mainPage',
-        component: MainPage
-      }, {
-        path: '/apply',
-        name: 'apply',
-        component: () => import( /* webpackChunkName: "apply" */ './views/front/Apply.vue')
-      }]
+      children:
+       [
+          {
+          path: '/main',
+          name: 'mainPage',
+          component: MainPage
+        },{
+          path: '/apply',
+          name: 'apply',
+          component: () => import( /* webpackChunkName: "apply" */ './views/front/Apply.vue')
+        }
+      ]
     },
     {
       path: '/backend',

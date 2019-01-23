@@ -12,14 +12,39 @@
       <head-line :text="'产品信息'" :text02="'PRODUCT INFORMATION'"></head-line>
       <div class="product-msg">
         <ul>
-          <li v-for="(pro,index) in products " :key="index">
-            <span class="pro-title">{{pro.title}}</span>
-            <span class="pro-details">{{pro.details}}</span>
+          <li>
+            <span class="pro-title">产品编码</span>
+            <span class="pro-details">121212</span>
+          </li>
+          <li>
+            <span class="pro-title">产地</span>
+            <span class="pro-details">{{this.products.sorigin}}</span>
+          </li>
+          <li>
+            <span class="pro-title">农产种类</span>
+            <span class="pro-details">{{this.products.skindName}}</span>
+          </li>
+          <li>
+            <span class="pro-title">农产品种</span>
+            <span class="pro-details">{{this.products.svarietyName}}</span>
+          </li>
+           <li>
+            <span class="pro-title">采摘时间</span>
+            <span class="pro-details">{{renderTime(this.products.sstoreTime)}}</span>
+          </li>
+          <li>
+            <span class="pro-title">企业</span>
+            <span class="pro-details">{{this.products.sstoreCompanyName}}</span>
           </li>
         </ul>
       </div>
       <head-line :text="'产品溯源'" :text02="'PRODUCT  TRACEABILITY'"></head-line>
       <div class="product">
+        <el-row :gutter="20">
+          <el-col :span="12"  class="tableDot">
+            <img src="@/assets/imgs/yuan1.png">
+          </el-col>
+        </el-row>
         <product-table :listData="productDetails" v-for="(item,index) in productDetails " :key="index" :productIndex="index"></product-table>
       </div>
       <up-to-now></up-to-now>
@@ -27,6 +52,7 @@
 </template>
 
 <script>
+import fetch from "@/assets/js/fetch.js";
 import HeadLine from '@/components/HeadLine.vue'
 import ProductTable from '@/components/ProductTable.vue'
 import UpToNow from '@/components/UpToNow.vue'
@@ -35,80 +61,48 @@ export default {
   name: "phone",
   data() {
     return {
-      products:[
-        {
-          title:'产品编号',
-          details:'12545645648323564545'
-        },
-        {
-          title:'产品品牌',
-          details:'徐香猕猴桃'
-        },
-        {
-          title:'单果重量',
-          details:'75-135g'
-        },
-        {
-          title:'产品等级',
-          details:'一等'
-        },
-        {
-          title:'采摘时间',
-          details:'2018年2月30日'
-        },
-        {
-          title:'原产地',
-          details:'四川。蒲江'
-        },
-        {
-          title:'生产单位',
-          details:'成都猕猴桃基地'
-        },
-        {
-          title:'农残指标',
-          details:'承保公司'
-        },
-         {
-          title:'承保单位',
-          details:'锦泰保险'
-        },
-         {
-          title:'储藏条件',
-          details:'0-10度条件下30天'
-        }
-      ],
-      productDetails:[
-        {
-          time:'2012-03-02',
-          details:'猕猴桃嫁接苗培育----选生长充实，髓部较小的接穗，要求接穗大小与砧木相同，用塑料薄膜嫁接包扎，露出接穗芽即可',
-          imagineSrc:goods
-        },
-        {
-          time:'2017-10-20',
-          details:'施肥管理----沿植株横向开沟，施入腐熟的有机肥，萌芽前追肥，结合灌水，尿素液进行根外追肥',
-          imagineSrc:goods
-        },
-        {
-          time:'2018-09-02',
-          details:'猕猴桃嫁接苗培育----选生长充实，髓部较小的接穗，要求接穗大小与砧木相同，用塑料薄膜嫁接包扎，露出接穗芽即可',
-          imagineSrc:goods
-        },
-        {
-          time:'2018-09-05',
-          details:'猕猴桃分拣装箱----沿植株横向开沟，施入腐熟的有机肥，萌芽前追肥，结合灌水，尿素液进行根外追肥',
-          imagineSrc:goods
-        },
-        {
-          time:'2018-09-20',
-          details:'猕猴桃嫁接苗培育----选生长充实，髓部较小的接穗，要求接穗大小与砧木相同，用塑料薄膜嫁接包扎，露出接穗芽即可',
-          imagineSrc:goods
-        }
-      ]
+      urlParam:"http://172.16.0.87:8081/queryController/queryOriginActionByBatch?id=1903051234324959311",
+      products:[],
+      productDetails:[]
     };
   },
   props: {
   },
   methods: {
+    async getProductData(){
+        let data = await fetch(
+          '/queryController/queryOriginActionByBatch',
+          {
+           urlParam:this.urlParam
+          },
+          "get"
+        );
+        console.log(data.data)
+        for(var i=0;i<data.data.length;i++){
+            var item=data.data[i];
+            //console.log(item)
+            if(item.stepOrde==1){
+              //console.log("入库");
+              this.products=item
+            }else if(item.stepOrde==2){
+              //console.log("检测")
+            }else if(item.stepOrde==3){
+              //console.log("标签申请")
+            }else if(item.stepOrde==4){
+              //console.log("出库")
+            }else{
+              //console.log("物流")
+            }
+        }
+        this.productDetails=data.data
+    },
+    renderTime(date) {
+      var dateee = new Date(date).toJSON();
+      return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+    }
+  },
+  mounted(){
+    this.getProductData();
   },
   watch: {
   },
@@ -193,5 +187,24 @@ export default {
   width:311px;
   margin:0 auto;
 }
+.tableDot{
+  position: relative;
+  img{
+    position: absolute;
+    top:-65px;
+    left:-20px;
+  }
+}
 
+.tableDot:after{
+    content:"";
+    display:inline-block;
+    width:3px;
+    height:49px;
+    float: left;
+    background:rgba(242,242,242,1);
+    position:absolute;
+    top:-49px;
+    left:-13px;
+}
 </style>

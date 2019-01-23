@@ -4,18 +4,19 @@
             <el-col :span="4" class="table-dot">
                 <img class="dot" src="@/assets/imgs/yuan2.png">
             </el-col>
-            <el-col :span="16">
-                <p class="time">{{listData[productIndex].time}}</p>
-                <p class="details">{{listData[productIndex].details}}</p>
+            <el-col :span="16" >
+                <p class="time">{{renderTime(listData[productIndex].ocreateTime)}}</p>
+                <p class="details">{{listData[productIndex].oremark}}</p>
             </el-col>
             <el-col :span="4" class="goodsImg">
-                <img class="goods" :src='listData[productIndex].imagineSrc'>
+                <img class="goods" src='@/assets/imgs/goods.jpg'>
             </el-col>
         </el-row>
     </div>
 
 </template>
 <script>
+
 export default{
     data(){
         return {
@@ -28,21 +29,27 @@ export default{
             default:()=>{
                 return[
                     {
-                        time:'时间',
-                        details:'产品描述',
-                        imagineSrc:''
+                        ocreateTime:'时间',
+                        oremark:'产品描述'
+                        // imagineSrc:goods
                     }
                 ];
             }
         },
         productIndex:{
-
             default:()=>{
                 return []
             }
         }
     },
     mounted(){
+
+    },
+    methods:{
+         renderTime(date) {
+            var dateee = new Date(date).toJSON();
+            return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+        }
 
     }
 }
@@ -89,11 +96,11 @@ export default{
     content:"";
     display:inline-block;
     width:3px;
-    height:150px;
+    height:146px;
     float:left;
     background:rgba(242,242,242,1);
     position:absolute;
-    top:19px;
+    top:22px;
     left:-14px;
 }
 .dot{

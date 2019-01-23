@@ -51,10 +51,14 @@ export default{
 </script>
 
 <style lang="scss">
+    #UpToNow{
+        width:311px;
+        position: relative;
+    }
     .goTo{
-        position:fixed;
-        bottom:-2px;
-        left:443px;
+        position: absolute;;
+        left:165px;
+        bottom:-5px;
         font-size:14px;
         font-family:MicrosoftYaHei;
         font-weight:400;

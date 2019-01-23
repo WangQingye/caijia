@@ -62,4 +62,5 @@ export default {
     margin-top:24px;
     background:rgba(57,172,95,1);
 }
+
 </style>

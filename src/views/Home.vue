@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     clickNav(index) {
-      console.log(index);
+      //console.log(index);
       this.navIndex = index;
     }
   },
