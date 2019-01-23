@@ -4,7 +4,7 @@
             <el-tab-pane label="追溯码" name="first">
                 <el-row :gutter="20">
                     <el-col :span="16">
-                    <el-input v-model="input" placeholder="输入产品追溯码进行查询"></el-input>
+                    <el-input v-model="input" maxlength="19" placeholder="输入产品追溯码进行查询"></el-input>
                     </el-col>
                     <el-col :span="6">
                         <slider></slider>
@@ -145,7 +145,8 @@ export default{
             modelBox.style.overflow="scroll"
             document.body.style.overflow="hidden";
             console.log(this.input)
-            //this.getData()
+            this.getData()
+
         },
         close(){
             var modelBox= document.getElementById("popContainer");
@@ -159,8 +160,10 @@ export default{
                 {
                     inputCode:this.input
                 },
-                "POST"
+                "get"
             );
+            this.productDetails=data.data
+            console.log(data)
 
         },
 

@@ -1,9 +1,8 @@
-import {baseUrl} from '@/config.js';
-
-export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
+import a from '../../main';
+import { Loading } from 'element-ui';
+export default async (url = '', data = {}, type = 'GET', backend = '', method = 'fetch') => {
     type = type.toUpperCase();
-    url = baseUrl + url;
-
+    url = backend == 'user' ? userUrl + url : productUrl + url;
     if (type == 'GET') {
         let dataStr = ''; // 准备拼接请求字符串
         Object.keys(data).forEach(key => {
@@ -17,7 +16,7 @@ export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
 
     if (window.fetch && method == 'fetch') {
         let requestConfig = {
-            // credentials: 'include', // 传Cookie给服务器用以维护登录状态
+            credentials: 'include', // 传Cookie给服务器用以维护登录状态
             method: type,
             headers: {
                 'Accept': 'application/json',
@@ -34,8 +33,18 @@ export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
             })
         }
         try {
+            let loading = Loading.service({ fullscreen: false });
             const response = await fetch(url, requestConfig);
             const responseData = await response.json();
+            loading.close();
+            if (responseData.code !== 0) {
+                console.log('请求错误', responseData);
+                a.$message({
+                    message: responseData.msg || '服务器未知错误',
+                    type: "error"
+                });
+                return false;
+            }
             return responseData;
         } catch (err) {
             throw new Error(err)

@@ -33,17 +33,32 @@ export default new Router({
       component: () => import( /* webpackChunkName: "backend" */ './views/backend/Backend.vue'),
       children: [{
           path: "/",
-          component: () => import( /* webpackChunkName: "page1" */ './views/pages/Page1.vue')
+          component: () => import( /* webpackChunkName: "backmain" */ './views/backend/pages/BackMain.vue')
+        }, {
+          path: "/codemana",
+          component: () => import( /* webpackChunkName: "codemana" */ './views/backend/pages/CodeMana.vue')
         },
         {
-          path: "/page2",
-          component: () => import( /* webpackChunkName: "page2" */ './views/pages/Page2.vue')
+          path: "/sourcefill",
+          component: () => import( /* webpackChunkName: "sourcefill" */ './views/backend/pages/SourceFill.vue')
+        },
+        {
+          path: "/storemana",
+          component: () => import( /* webpackChunkName: "storemana" */ './views/backend/pages/StoreMana.vue')
+        },
+        {
+          path: "/tagmana",
+          component: () => import( /* webpackChunkName: "tagmana" */ './views/backend/pages/TagMana.vue')
+        },
+        {
+          path: "/tagverify",
+          component: () => import( /* webpackChunkName: "tagverify" */ './views/backend/pages/TagVerify.vue')
         }
       ]
     },
     {
       path: '/login',
-      component: () => import( /* webpackChunkName: "phone" */ './views/Login.vue')
+      component: () => import( /* webpackChunkName: "login" */ './views/Login.vue')
     },
     {
       path: '/qrcode',

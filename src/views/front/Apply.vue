@@ -36,22 +36,33 @@
             placeholder="企业类型"
           >
             <el-option
-              label="农企"
-              value="1"
-            ></el-option>
-            <el-option
-              label="检测机构"
-              value="2"
-            ></el-option>
-            <el-option
-              label="物流机构"
-              value="3"
-            ></el-option>
-            <el-option
-              label="仓储机构"
-              value="4"
+              v-for="(com,index) in companyTypes"
+              :key="index"
+              :label="com.name"
+              :value="com.typeCode"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item
+          label="营业执照正/副页"
+          prop="certificate"
+        >
+          <el-upload
+            class="upload-demo"
+            :action="userUrl + '/company/fileUpload'"
+            :on-success="handleFileChange"
+            :file-list="fileList"
+            list-type="picture"
+          >
+            <el-button
+              size="small"
+              type="primary"
+            >点击上传</el-button>
+            <div
+              slot="tip"
+              class="el-upload__tip"
+            >只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
         </el-form-item>
         <el-form-item
           label="联系人"
@@ -75,13 +86,19 @@
           label="密码"
           prop="password"
         >
-          <el-input type="password" v-model="applyForm.password"></el-input>
+          <el-input
+            type="password"
+            v-model="applyForm.password"
+          ></el-input>
         </el-form-item>
         <el-form-item
           label="确认密码"
           prop="repassword"
         >
-          <el-input type="password" v-model="applyForm.repassword"></el-input>
+          <el-input
+            type="password"
+            v-model="applyForm.repassword"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -105,6 +122,7 @@ export default {
         code: "",
         type: "",
         person: "",
+        filePath: "",
         phone: "",
         account: "",
         password: "",
@@ -125,19 +143,35 @@ export default {
         repassword: [
           { required: true, message: "请再次输入密码", trigger: "blur" }
         ]
-      }
+      },
+      fileList: [],
+      companyTypes: [],
+      userUrl: window.userUrl
     };
+  },
+  mounted() {
+    this.getOrgTypes();
   },
   props: {},
   methods: {
+    async getOrgTypes() {
+      let res = await this.$fetch("/companyType/getAllCompanyTypes", {}, 'GET', 'user');
+      console.log(res.code);
+      if (res.code == 0) {
+        this.companyTypes = res.data;
+      }
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.applyForm.password !== this.applyForm.repassword) {
-              this.$message.error('两次密码不一致');
-              return;
+            this.$message.error("两次密码不一致");
+            return;
+          } else if ( this.fileList.length < 2) {
+            this.$message.error("请上传营业执照正、副两页");
+            return;
           }
-          alert("submit!");
+          this.addCompany();
         } else {
           console.log("error submit!!");
           return false;
@@ -146,6 +180,39 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    handleFileChange(res, file, fileList) {
+      if (res.code == 0) {
+        if (this.applyForm.filePath) {
+          this.applyForm.filePath += ",";
+        }
+        this.applyForm.filePath += res.data;
+      }
+      this.fileList = fileList;
+    },
+    async addCompany() {
+      let data = {
+        name: this.applyForm.name,
+        ucode: this.applyForm.code,
+        typeCode: this.applyForm.type,
+        licPic: this.applyForm.filePath,
+        contacts: this.applyForm.person,
+        phone: this.applyForm.phone,
+        account: this.applyForm.account,
+        password: this.applyForm.password,
+        confirmPassword: this.applyForm.repassword
+      };
+      console.log(data);
+      let res = await this.$fetch("/company/addCompany", data, 'POST', 'user');
+      console.log(res);
+      if (res.code === 0) {
+        this.$alert('提交成功，审核通过后将通过电话联系您。', '提交成功', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$router.push({path:'/main'})
+          }
+        });
+      }
     }
   },
   watch: {}
@@ -156,7 +223,7 @@ export default {
 <style lang="scss" scoped>
 .apply {
   padding-top: 50px;
-  padding-bottom: 100px;
+  padding-bottom: 50px;
   box-sizing: border-box;
   .title {
     font-size: 20px;
