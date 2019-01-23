@@ -19,7 +19,6 @@ export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
         let requestConfig = {
             // credentials: 'include', // 传Cookie给服务器用以维护登录状态
             method: type,
-            mode: 'no-cors',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

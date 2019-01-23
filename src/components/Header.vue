@@ -89,17 +89,19 @@ $text-color:#757575;
 $hover-text-color:white;
 .header {
   /* width: 1920px; */
-  width: 100%;
+  width: 1920px;
   height: 60px;
   background: $background;
   z-index: 99;
   box-shadow: 1px 1px 5px #ddd;
+
 }
 .content-wrapper {
   width: 100%;
   height: 60px;
   min-height: 60px;
   min-width: 1200px;
+
 }
 .logo-wrapper {
   display: inline-block;

@@ -119,11 +119,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .footer {
-  width: 100%;
-  min-width: 1000px;
+  min-width: 1920px;
   position: relative;
   height: 300px;
   color: white;
+  margin-top:60px;
   .footer-bg {
     width: 100%;
     height: 300px;
