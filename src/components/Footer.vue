@@ -120,11 +120,12 @@ export default {
 <style lang="scss" scoped>
 .footer {
   z-index: 99;
-  min-width: 1920px;
+  width: 100%;
+  min-width: 1000px;
   position: relative;
   height: 300px;
   color: white;
-  margin-top:60px;
+  margin-top: 60px;
   .footer-bg {
     width: 100%;
     height: 300px;

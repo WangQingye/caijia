@@ -161,7 +161,7 @@ export default {
   background: url('../../src/assets/imgs/bj1.jpg');
   background-repeat: no-repeat;
   background-size: 100% auto;
-  padding-top: 280px;
+  padding-top: 15%;
   box-sizing: border-box;
 }
 .login {
