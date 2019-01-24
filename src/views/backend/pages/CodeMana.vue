@@ -23,7 +23,6 @@
         ref="codeTable"
         :data="codeData"
         style="width: 100%"
-        @selection-change="handleSelectionChange"
       >
         <!-- <el-table-column
           type="selection"
@@ -107,6 +106,7 @@
           <el-select
             v-model="addCodeForm.goodBigType"
             placeholder="请选择农产种类"
+            @change="handleOrgsChange"
           >
             <el-option
               v-for="(type,index) in goodBigTypes"
@@ -223,6 +223,7 @@ export default {
       },
       storeOrgs: [],
       goodBigTypes: [],
+      goodTypesBefore: [],
       goodTypes: []
     };
   },
@@ -246,9 +247,6 @@ export default {
         this.codeData = res.data.data;
       }
     },
-    handleSelectionChange() {
-      console.log(1);
-    },
     /* 获取物流企业，产品类别 */
     async getStoreComps() {
       let res = await this.$fetch("/storeRepertory/getStoreCompany");
@@ -256,8 +254,13 @@ export default {
       if (res.code == 0) {
         this.storeOrgs = res.company;
         this.goodBigTypes = res.kind;
-        this.goodTypes = res.variety;
+        this.goodTypesBefore = res.variety;
       }
+    },
+    handleOrgsChange(selection){
+      this.goodTypes = this.goodTypesBefore.filter(item => {
+        return item.kindCode == selection;
+      })
     },
     manuCode() {
       console.log(1);

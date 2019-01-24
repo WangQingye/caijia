@@ -42,8 +42,6 @@ export default{
         var self = this;
         this.element = document.querySelector('.handler');
         this.getMaxWidth();
-        window.addEventListener('resize',function(){self.getMaxWidth()});
-        window.addEventListener('orientationchange',function(){self.getMaxWidth()});
 
 
           this.element.addEventListener('touchstart',self.touchstartFun,false);
