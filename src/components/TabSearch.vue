@@ -3,14 +3,14 @@
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="追溯码" name="first">
                 <el-row :gutter="20">
-                    <el-col :span="16">
-                    <el-input v-model="input" maxlength="19" placeholder="输入产品追溯码进行查询"></el-input>
+                    <el-col :span="14">
+                    <el-input v-model="input"  maxlength="19" placeholder="输入产品追溯码进行查询"></el-input>
                     </el-col>
                     <el-col :span="6">
-                        <slider ref="confirmSuccess"></slider>
+                        <slider  ref="confirmSuccess"></slider>
                     </el-col>
-                    <el-col :span="2">
-                        <el-button type="primary" @click="open"  icon="el-icon-search">搜索</el-button>
+                    <el-col :span="3">
+                        <el-button type="primary" @click="open" :disabled="isDisabled" icon="el-icon-search">搜索</el-button>
                     </el-col>
                 </el-row>
             </el-tab-pane>
@@ -89,7 +89,8 @@ export default{
             index:'',
             products:[],
             productDetails:[],
-            isOpen:''
+            isOpen:'',
+            isDisabled:false
         }
     },
     props:{
@@ -110,8 +111,6 @@ export default{
                 console.log(this.input)
                 this.getData()
             }
-
-
         },
         close(){
             var modelBox= document.getElementById("popContainer");
@@ -166,7 +165,7 @@ export default{
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 
 .main{
     .tab-search{
@@ -228,6 +227,9 @@ export default{
         margin-bottom: 20px;
         &:last-child {
         margin-bottom: 0;
+        }
+        .el-col-16{
+            width:29%;
         }
     }
     .el-slider__runway{

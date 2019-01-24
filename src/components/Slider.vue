@@ -71,13 +71,13 @@
         position: relative;
         background-color: #e8e8e8;
         width: 100%;
-        height: 34px;
+        height: 42px;
         line-height: 34px;
         text-align: center;
     }
     .handler{
         width: 40px;
-        height: 32px;
+        height: 40px;
         border: 1px solid #ccc;
         cursor: move;
     }
@@ -89,11 +89,13 @@
     }
     .drag_bg{
         background-color: #7ac23c;
-        height: 34px;
+        height: 42px;
         width: 0px;
     }
     .drag_text{
+        line-height: 42px;
         position: absolute;
+        height:42px;
         top: 0px;
         width: 100%;text-align: center;
         -moz-user-select: none;
