@@ -32,7 +32,7 @@
                             <el-pagination
                             background
                             layout="prev, pager, next"
-                            :total="1000">
+                            :total="2">
                             </el-pagination>
                     </el-tab-pane>
                     <!-- <el-tab-pane label="信链资讯">配置管理</el-tab-pane>
@@ -66,6 +66,12 @@ export default {
                     text:'为深入贯彻习近平新时代中国特色社会主义思想，特别是习近平总书记关于质量发展和脱贫攻坚工作的重要指示精神，2018年8月14日...',
                     time:'2018-01-27',
                     route:'/new3'
+                },
+                {
+                    title:'福建省地方标准《食品质量安全追溯码编码技术规范》',
+                    text:'为了深入实施福建省地方标准《食品质量安全追溯码编码技术规范》，扎实推进全省食品安全“一品一码”全过程追溯体系建设，...',
+                    time:'2018-01-27',
+                    route:'/new4'
                 },
                 {
                     title:'福建省地方标准《食品质量安全追溯码编码技术规范》',

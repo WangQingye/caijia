@@ -278,18 +278,15 @@ export default {
          ul.imgsList li div.right-img{
             width:400px;
             height:236px;
-            position:relative;
         }
          ul.imgsList li div.right-img img{
-
             width:400px;
             height:236px;
         }
          ul.imgsList li div.right-img div{
             width:100%;
-            height:50px;
-            background:rgba(0,0,0,1);
-            opacity:0.3;
+            height:58px;
+            background:rgba(87,183,44,0.1);
             font-size:16px;
             font-family:MicrosoftYaHei-Bold;
             font-weight:bold;
@@ -299,8 +296,7 @@ export default {
         }
         ul.imgsList li div.right-img div p{
             margin-left:-267px;
-            margin-top:17px;
-            font-size:16px;
+            margin-top:10px;
             font-family:MicrosoftYaHei-Bold;
             font-weight:bold;
             color:rgba(255,255,255,1);
