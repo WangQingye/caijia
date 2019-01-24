@@ -157,7 +157,8 @@ export default {
 .contanier {
   width: 100%;
   height: 100vh;
-  background: url('../../src/assets/imgs/bj1.png');
+  background: white;
+  background: url('../../src/assets/imgs/bj1.jpg');
   background-repeat: no-repeat;
   background-size: 100% auto;
   padding-top: 280px;
