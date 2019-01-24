@@ -88,7 +88,8 @@ $text-color:#757575;
 $hover-text-color:white;
 .header {
   /* width: 1920px; */
-  width: 1920px;
+  width: 100%;
+  min-width: 1000px;
   height: 60px;
   background: $background;
   z-index: 99;

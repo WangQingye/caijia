@@ -50,7 +50,7 @@
           <i
             :class=" menuCollapse ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"
             @click="menuCollapse = !menuCollapse"
-            :style="'margin-top:50px;font-size:10px'"
+            :style="'margin-top:50px;font-size:10px;color:#2292DD'"
           >{{menuCollapse ? '' : ' 折叠菜单'}}</i>
         </el-menu>
       </el-aside>

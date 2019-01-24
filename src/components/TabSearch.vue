@@ -68,7 +68,11 @@
 
             </div>
         </div>
+        <up-to-now></up-to-now>
+
+      </div>
     </div>
+  </div>
 </template>
 
 
@@ -93,8 +97,17 @@ export default{
             isDisabled:false
         }
     },
-    props:{
-
+    open() {
+      this.isOpen = this.$refs.confirmSuccess.confirmSuccess;
+      //console.log(this.isOpen)
+      var modelBox = document.getElementById("popContainer");
+      if (this.input != "" && this.isOpen) {
+        modelBox.style.visibility = "visible";
+        modelBox.style.overflow = "scroll";
+        document.body.style.overflow = "hidden";
+        console.log(this.input);
+        this.getData();
+      }
     },
     methods: {
         handleClick(tab, event) {
@@ -146,23 +159,24 @@ export default{
             console.log(data)
 
         },
-         renderTime(date) {
-            var dateee = new Date(date).toJSON();
-            return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
-        }
 
-    },
-    watch: {
 
-    },
-    components: {
-        HeadLine,
-        ProductTable,
-        UpToNow,
-        Slider
+    renderTime(date) {
+      var dateee = new Date(date).toJSON();
+      return new Date(+new Date(dateee) + 8 * 3600 * 1000)
+        .toISOString()
+        .replace(/T/g, " ")
+        .replace(/\.[\d]{3}Z/, "");
+    }
+  },
+  watch: {},
+  components: {
+    HeadLine,
+    ProductTable,
+    UpToNow,
+    Slider
   }
-}
-
+};
 </script>
 
 <style lang="scss" >
@@ -210,18 +224,62 @@ export default{
         font-weight:300;
         color:rgba(85,85,85,1);
     }
-    .title-text02{
-        font-size:16px;
-        font-family:MicrosoftYaHeiLight;
-        font-weight:300;
-        color:rgba(187,187,187,1);
+    .productMsg ul {
+      width: 550px;
+      height: 250px;
+      li {
+        height: 42px;
+        text-align: left;
+        padding-left: 70px;
+        font-size: 14px;
+        font-family: MicrosoftYaHei-Bold;
+        font-weight: bold;
+        color: rgba(85, 85, 85, 1);
+        line-height: 55px;
+        border: 1px solid rgba(242, 242, 242, 1);
+        span {
+          font-family: ArialMT;
+          margin-left: 20px;
+          font-weight: 400;
+          color: rgba(117, 117, 117, 1);
+        }
+      }
     }
-    .head-line{
-        width:1000px;
-        margin:0 auto;
-        margin-bottom:64px;
+  }
+  .title-text {
+    font-size: 30px;
+    font-family: SourceHanSerifCN-SemiBold;
+    font-weight: 300;
+    color: rgba(85, 85, 85, 1);
+  }
+  .title-text02 {
+    font-size: 16px;
+    font-family: MicrosoftYaHeiLight;
+    font-weight: 300;
+    color: rgba(187, 187, 187, 1);
+  }
+  .head-line {
+    width: 1000px;
+    margin: 0 auto;
+    margin-bottom: 64px;
+  }
 
+  .el-row {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
     }
+  }
+  .el-slider__runway {
+    width: 100%;
+    height: 42px;
+    background-color: #e4e7ed;
+    border-radius: 3px;
+    position: relative;
+    top: -17px;
+    cursor: pointer;
+    vertical-align: middle;
+  }
 
     .el-row {
         margin-bottom: 20px;
@@ -243,172 +301,93 @@ export default{
         vertical-align: middle;
     }
 
-    .el-slider__bar {
-        height:41px;
-        background-color: #88D58E;
-        border-top-left-radius: 3px;
-        border-bottom-left-radius: 3px;
+
+  .mapImg {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    .map-web {
+      width: 100%;
+      margin: 0 auto;
+    }
+    .location {
+      position: absolute;
+      bottom: 340px;
+      left: 320px;
+      img {
+        position: relative;
+        bottom: -12px;
+      }
+      p {
+        font-size: 16px;
+        font-family: MicrosoftYaHei-Bold;
+        font-weight: bold;
+        color: rgba(85, 85, 85, 1);
+        line-height: 52px;
+      }
+    }
+  }
+  .productMsg {
+    width: 1025px;
+    margin: 0 auto;
+  }
+  .product {
+    width: 1000px;
+    margin: 0 auto;
+    margin-top: 20px;
+  }
+  .table.box {
+    width: 100%;
+  }
+  .table-row {
+    position: relative;
+    .table-dot {
+      position: absolute;
+      left: 200px;
+    }
+    .el-col-16 {
+      position: absolute;
+      left: -88px;
+    }
+    .goodsImg {
+      position: absolute;
+      top: -26px;
+      left: -275px;
+      img {
+        width: 140px;
+        height: 140px;
+      }
+    }
+  }
+  .product-list {
+    padding-top: 30px;
+    .Dot {
+      position: relative;
+      img {
         position: absolute;
+        top: -65px;
+        left: 286px;
+      }
     }
-    .el-slider__bar:after{
-        content:"";
-        color:#fff;
+    .Dot:after {
+      content: "";
+      display: inline-block;
+      width: 3px;
+      height: 49px;
+      float: left;
+      background: rgba(242, 242, 242, 1);
+      position: absolute;
+      top: -49px;
+      left: 292px;
     }
-    .el-slider__button-wrapper {
-        height: 36px;
-        width: 36px;
-        position: absolute;
-        z-index: 1001;
-        top: 1px;
-        -webkit-transform: translateX(-50%);
-        transform: translateX(-50%);
-        background-color: transparent;
-        text-align: center;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        line-height: normal;
+  }
+  .goods-right div.table-row {
+    .el-col-16 {
+      left: 268px;
     }
-    .el-slider__button {
-        width: 30px;
-        height: 36px;
-        background-color: #88D58E;
-        border: solid 2px #88D58E;
-        border-radius: 3%;
-        -webkit-transition: .2s;
-        transition: .2s;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
+    .goodsImg {
+      left: 544px;
     }
-    .el-slider__button:after{
-        content:">>>";
-        display:inline-block;
-        width:30px;
-        height:26px;
-        color:#fff;
-        position:relative;
-        top:10px;
-    }
-    .el-slider__button:hover{
-        transform: scale(1)
-    }
-    .el-slider__button.dragging{
-        transform: scale(1)
-    }
-    //遮罩层
-    #popContainer{
-        //overflow:scroll;
-        visibility:hidden;
-        position: fixed;
-        top:0px;
-        left:0px;
-        width:100% ;
-        height:100%;
-        text-align: center;
-        z-index: 2000;
-        background-color:#333;
-        background-color:rgba(85,85,85,.83);
-        .modalBg{
-            width:1200px;
-            //height:2900px;
-            margin:417px auto;
-            background-color:#fff;
-
-        }
-    }
-
-    .mapImg{
-        width:100%;
-        margin:0 auto;
-        position:relative;
-        .map-web{
-            width:100%;
-            margin:0 auto;
-        }
-        .location{
-            position:absolute;
-            bottom:340px;
-            left:320px;
-            img{
-                position:relative;
-                bottom:-12px;
-            }
-            p{
-                font-size:16px;
-                font-family:MicrosoftYaHei-Bold;
-                font-weight:bold;
-                color:rgba(85,85,85,1);
-                line-height:52px;
-            }
-        }
-
-    }
-    .productMsg{
-        width:1025px;
-        margin:0 auto;
-    }
-    .product{
-        width:1000px;
-        margin:0 auto;
-        margin-top:20px;
-    }
-    .table.box{
-        width:100%;
-    }
-    .table-row{
-        position:relative;
-        .table-dot{
-            position:absolute;
-            left:200px;
-        }
-        .el-col-16{
-            position:absolute;
-            left:-88px;
-        }
-        .goodsImg{
-            position:absolute;
-            top:-26px;
-            left:-275px;
-            img{
-                width:140px;
-                height:140px;
-            }
-        }
-    }
-    .product-list{
-        padding-top:30px;
-        .Dot{
-            position: relative;
-            img{
-                position: absolute;
-                top:-65px;
-                left:286px;
-            }
-        }
-        .Dot:after{
-            content:"";
-            display:inline-block;
-            width:3px;
-            height:49px;
-            float:left;
-            background:rgba(242,242,242,1);
-            position:absolute;
-            top:-49px;
-            left:292px;
-        }
-    }
-    .goods-right div.table-row{
-        .el-col-16{
-            left:268px;
-        }
-        .goodsImg{
-            left:544px;
-        }
-    }
-}
-
+  }
 
 </style>
