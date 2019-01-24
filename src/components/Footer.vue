@@ -62,7 +62,7 @@
         src="@/assets/imgs/slogan.png"
         alt=""
       >
-      <p class="bottom-text">Copyright © 2016 JINTAI INSURANCE COMPANY, All Rights Reserved. 蜀ICP备13000083号</p>
+      <p class="bottom-text">Copyright © 2016 JINTAI INSURANCE COMPANY, All Rights Reserved. 蜀ICP备18030395号</p>
     </section>
   </div>
 </template>

@@ -87,6 +87,8 @@ export default{
                 this.curW = this.currentPos.x = this.maxWidth;
                 this.isDragOk = true;
                 this.text = "验证通过";
+                var drag=document.querySelector("#drag")
+                drag.style.backgroundColor="#67c23a"
             }
         },
         touchendFun(e){

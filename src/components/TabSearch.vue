@@ -7,7 +7,7 @@
                     <el-input v-model="input" maxlength="19" placeholder="输入产品追溯码进行查询"></el-input>
                     </el-col>
                     <el-col :span="6">
-                        <slider></slider>
+                        <slider ref="isDragOk"></slider>
                     </el-col>
                     <el-col :span="2">
                         <el-button type="primary" @click="open"  icon="el-icon-search">搜索</el-button>
@@ -87,7 +87,8 @@ export default{
             stopValue:'',
             index:'',
             products:[],
-            productDetails:[]
+            productDetails:[],
+            isOpen:''
         }
     },
     props:{
@@ -98,8 +99,10 @@ export default{
             //console.log(tab, event);
         },
         open(){
+            this.isOpen=this.$refs.isDragOk.isDragOk;
+            //console.log(this.isOpen)
             var modelBox= document.getElementById("popContainer");
-            if(this.input!=""){
+            if(this.input!="" && this.isOpen){
                 modelBox.style.visibility="visible";
                 modelBox.style.overflow="scroll"
                 document.body.style.overflow="hidden";

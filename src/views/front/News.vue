@@ -10,14 +10,18 @@
             <div class="news-container">
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item :to="{ path: '/main' }">首页</el-breadcrumb-item>
-                    <el-breadcrumb-item>新闻中心</el-breadcrumb-item>
-                    <el-breadcrumb-item>信链资讯</el-breadcrumb-item>
-                    <el-breadcrumb-item>媒体查询</el-breadcrumb-item>
+                     <el-breadcrumb-item>新闻中心</el-breadcrumb-item>
+                    <el-breadcrumb-item>新闻动态</el-breadcrumb-item>
+                    <!--<el-breadcrumb-item>媒体查询</el-breadcrumb-item> -->
                 </el-breadcrumb>
                 <el-tabs :tab-position="tabPosition" style="height: 200px;">
-                    <el-tab-pane label="新闻动态">用户管理</el-tab-pane>
-                    <el-tab-pane label="信链资讯">配置管理</el-tab-pane>
-                    <el-tab-pane label="媒体查询">角色管理</el-tab-pane>
+                    <el-tab-pane label="新闻动态">
+                        <div class="news-active">
+                            新闻动态
+                        </div>
+                    </el-tab-pane>
+                    <!-- <el-tab-pane label="信链资讯">配置管理</el-tab-pane>
+                    <el-tab-pane label="媒体查询">角色管理</el-tab-pane> -->
                 </el-tabs>
             </div>
 
