@@ -33,17 +33,17 @@ export default async (url = '', data = {}, type = 'GET', backend = '', method = 
             })
         }
         try {
-            let loading = Loading.service({ fullscreen: false });
+            // let loading = Loading.service({ fullscreen: false });
             const response = await fetch(url, requestConfig);
             const responseData = await response.json();
-            loading.close();
-            if (responseData.code !== 0) {
+            // loading.close();
+            if (responseData.code !== 0 &&  responseData.code !== 301) {
                 console.log('请求错误', responseData);
                 a.$message({
                     message: responseData.msg || '服务器未知错误',
                     type: "error"
                 });
-                return false;
+                // return false;
             }
             return responseData;
         } catch (err) {

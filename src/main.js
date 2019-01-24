@@ -5,8 +5,10 @@ import router from './router'
 import store from './store'
 import './assets/css/reset.css'
 import fetch from "@/assets/js/fetch";
+import {signData} from "@/assets/js/sign";
 Vue.config.productionTip = false
 Vue.prototype.$fetch = fetch;
+Vue.prototype.$signData = signData;
 let a = new Vue({
   router,
   store,

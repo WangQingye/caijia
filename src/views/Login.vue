@@ -44,6 +44,27 @@
         </el-form-item>
       </el-form>
     </el-card>
+    <el-dialog
+      title="绑定二级密码"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <p :style="'margin-bottom:20px'">此密码用于账户安全，仅输入一次，请务必牢记</p>
+      <el-input
+        v-model="privateKey"
+        placeholder="请输入二级密码"
+      ></el-input>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="applyPk"
+        >确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -57,6 +78,8 @@ export default {
     return {
       isLogin: true,
       loginUser: null,
+      dialogVisible: false,
+      privateKey: "",
       loginForm: {
         account: "",
         password: ""
@@ -76,15 +99,17 @@ export default {
         account: this.loginForm.account,
         password: this.loginForm.password
       };
-      this.loading = true;
-      let res = await fetch("/user/login", data, "POST", 'user');
-      this.loading = false;
-      this.$message({
-        message: "登陆成功",
-        type: "success"
-      });
-      this.$store.commit("saveUserInfo", res.data.data);
-      this.$router.push({ path: "/backend" });
+      let res = await fetch("/user/login", data, "POST", "user");
+      if (res.code == 0){
+        this.$message.success({
+          message: "登陆成功",
+          type: "success"
+        });
+        this.$store.commit("saveUserInfo", res.data);
+        this.$router.push({ path: "/backend" });
+      } else if (res.code == 301) {
+        this.dialogVisible = true;
+      }
     },
     async checkLogin() {
       let res = await fetch("/checkIsLogin");
@@ -102,6 +127,22 @@ export default {
           return false;
         }
       });
+    },
+    async applyPk() {
+      let key = api.apiKeyGen(this.privateKey);
+      let sign = api.apiSign(this.loginForm.account, key.sk);
+      let data = {
+        account: this.loginForm.account,
+        esk: key.esk,
+        password: this.loginForm.password,
+        pk: api.apiGetTransPk(key.pk),
+        sign: api.apiGetTransSign(sign)
+      };
+      let res = await this.$fetch("/user/signAccount", data, "POST", "user");
+      if (res.code == 0) {
+        this.$store.commit("savePrivateKey", api.apiDecESk(this.privateKey,res.data.esk));
+        this.login();
+      }
     }
   },
   watch: {},

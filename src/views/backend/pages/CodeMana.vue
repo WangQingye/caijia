@@ -10,9 +10,13 @@
       <el-button
         type="primary"
         icon="el-icon-search"
+        disabled
       >搜索</el-button>
       <el-row class="mana-buttons">
-        <el-button type="primary" @click="showAddCode=true">添加</el-button>
+        <el-button
+          type="primary"
+          @click="showCodeAdd"
+        >添加</el-button>
         <el-button type="danger">删除</el-button>
       </el-row>
       <el-table
@@ -21,7 +25,7 @@
         style="width: 100%"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column
+        <!-- <el-table-column
           type="selection"
           width="55"
         >
@@ -30,7 +34,7 @@
           type="index"
           width="50"
         >
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           v-for="(item,index) in labels"
           :key="index"
@@ -52,10 +56,12 @@
               @click="manuCode(scope.row)"
               type="text"
               size="small"
+              disabled
             >编辑</el-button>
             <el-button
               type="text"
               size="small"
+              disabled
             >删除</el-button>
           </template>
         </el-table-column>
@@ -81,8 +87,8 @@
             <el-option
               v-for="(org,index) in storeOrgs"
               :key="index"
-              :label="org"
-              :value="org"
+              :label="org.storeCompanyName"
+              :value="org.storeCompanyCode"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -97,8 +103,8 @@
             <el-option
               v-for="(type,index) in goodBigTypes"
               :key="index"
-              :label="type"
-              :value="type"
+              :label="type.kind_name"
+              :value="type.kind_code"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -110,8 +116,8 @@
             <el-option
               v-for="(type,index) in goodTypes"
               :key="index"
-              :label="type"
-              :value="type"
+              :label="type.variety_name"
+              :value="type.variety_code"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -133,6 +139,7 @@
             v-model="addCodeForm.pickTime"
             type="date"
             placeholder="请选择产摘时间"
+            value-format="yyyy-MM-dd"
           >
           </el-date-picker>
         </el-form-item>
@@ -155,67 +162,45 @@
 </template>
 
 <script>
-// import fetch from "@/assets/js/Fetch.js";
 import Pagination from "@/components/Pagination.vue";
 export default {
   data() {
     return {
       searchCode: "",
       showAddCode: false,
-      codeData: [
-        {
-          code: "1",
-          store: "顺丰",
-          storeNum: "A01",
-          type: "红心猕猴桃",
-          desc: "非常好都江堰猕猴桃企业都江堰猕猴桃企业都江堰猕猴桃企业",
-          num: "100吨",
-          company: "都江堰猕猴桃企业",
-          state: "审核中"
-        },
-        {
-          code: "1",
-          store: "顺丰",
-          storeNum: "A01",
-          type: "红心猕猴桃",
-          desc: "非常好",
-          num: "100吨",
-          company: "都江堰猕猴桃企业",
-          state: "审核中"
-        }
-      ],
+      codeData: [],
       labels: [
         {
           name: "批次号",
-          prop: "code"
+          prop: "batchCode"
         },
         {
           name: "仓储机构",
-          prop: "store"
+          prop: "storeCompanyName"
         },
         {
           name: "仓库编号",
-          prop: "storeNum"
+          prop: "repositoryCode"
         },
         {
           name: "农产品种类",
-          prop: "type"
+          prop: "varietyName"
         },
         {
           name: "描述",
-          prop: "desc"
+          prop: "remark"
         },
         {
-          name: "数量",
+          name: "数量 / 吨",
           prop: "num"
         },
         {
           name: "所属企业",
-          prop: "company"
+          prop: "companyName"
         },
         {
           name: "状态",
-          prop: "state"
+          prop: "step"
         }
       ],
       addCodeForm: {
@@ -226,20 +211,45 @@ export default {
         num: "",
         sourcePlace: "",
         pickTime: "",
-        desc: "",
-        company: "都江堰水果公司"
+        desc: ""
       },
-      storeOrgs: ["仓储公司1", "仓储公司2"],
-      goodBigTypes: ["浆果类", "干果类"],
-      goodTypes: ["苹果", "橘子"]
+      storeOrgs: [],
+      goodBigTypes: [],
+      goodTypes: []
     };
   },
   mounted() {
-    // this.getTem();
+    this.getCodeList(1);
   },
   methods: {
+    /* 获取批次号列表 */
+    async getCodeList(page) {
+      let res = await this.$fetch(
+        "/storeRepertory/getAuditOfcompany",
+        {
+          companyCode: this.$store.state.userInfo.companyCode,
+          typeCode: this.$store.state.userInfo.typeCode,
+          limit: 5,
+          page: page
+        },
+        "POST"
+      );
+      if (res.code == 0) {
+        this.codeData = res.data.data;
+      }
+    },
     handleSelectionChange() {
       console.log(1);
+    },
+    /* 获取物流企业，产品类别 */
+    async getStoreComps() {
+      let res = await this.$fetch("/storeRepertory/getStoreCompany");
+      console.log(res);
+      if (res.code == 0) {
+        this.storeOrgs = res.company;
+        this.goodBigTypes = res.kind;
+        this.goodTypes = res.variety;
+      }
     },
     manuCode() {
       console.log(1);
@@ -247,8 +257,83 @@ export default {
     pageChange(page) {
       console.log(page);
     },
-    onAddSubmit(){
-
+    /* 批次号表单验证 */
+    onAddSubmit() {
+      this.addCode();
+    },
+    /* 添加批次号 */
+    async addCode() {
+      // console.log(this.addCodeForm);
+      // console.log(this.addCodeForm.storeOrg);
+      // console.log(this.storeOrgs);
+      // console.log(
+      //   this.findKindName(
+      //     this.addCodeForm.storeCompanyName,
+      //     "storeCompanyCode",
+      //     "storeCompanyName",
+      //     "storeOrgs"
+      //   )
+      // );
+      // return;
+      let data = {
+        account: this.$store.state.userInfo.account,
+        action: "入库",
+        farmCode: this.$store.state.userInfo.companyCode,
+        farmName: this.$store.state.userInfo.companyName,
+        handlerId: this.$store.state.userInfo.id,
+        kindCode: this.addCodeForm.goodBigType,
+        kindName: this.findKindName(
+          this.addCodeForm.goodBigType,
+          "kind_code",
+          "kind_name",
+          "goodBigTypes"
+        ),
+        num: this.addCodeForm.num,
+        origin: this.addCodeForm.sourcePlace,
+        remark: this.addCodeForm.desc,
+        repositoryCode: this.addCodeForm.storeNum,
+        storeCompanyCode: this.addCodeForm.storeOrg,
+        storeCompanyName: this.findKindName(
+          this.addCodeForm.storeOrg,
+          "storeCompanyCode",
+          "storeCompanyName",
+          "storeOrgs"
+        ),
+        storeTime: this.addCodeForm.pickTime,
+        varietyCode: this.addCodeForm.goodType,
+        varietyName: this.findKindName(
+          this.addCodeForm.goodType,
+          "variety_code",
+          "variety_name",
+          "goodTypes"
+        )
+      };
+      let signData = this.$signData(data);
+      if (!signData) return;
+      let res = await this.$fetch("/storeRepertory/save", signData, "POST");
+      console.log(res);
+      if (res.code == 0) {
+        this.$message.success("申请成功");
+        this.showAddCode = false;
+        this.getCodeList(1);
+      }
+    },
+    /* 展示批次号申请界面 */
+    showCodeAdd() {
+      this.showAddCode = true;
+      this.getStoreComps();
+    },
+    /**
+     *  值，对应的标签，要查找的标签
+     */
+    findKindName(value, tag, find, arrName) {
+      let a;
+      this[arrName].forEach(item => {
+        if (item[tag] == value) {
+          a = item[find];
+        }
+      });
+      return a;
     }
   },
   components: {

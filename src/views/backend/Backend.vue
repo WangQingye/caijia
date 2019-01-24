@@ -15,10 +15,10 @@
         >
           <el-menu-item
             index="backend"
-             :style="!menuCollapse?'padding:0 75px':''"
+            :style="!menuCollapse?'padding:0 75px':''"
           >
             <i class="el-icon-menu"></i>
-            <span slot="title" >首页</span>
+            <span slot="title">首页</span>
           </el-menu-item>
           <el-submenu index="trace">
             <template slot="title">
@@ -29,7 +29,9 @@
             <el-menu-item index="storemana">入库信息管理</el-menu-item>
             <el-menu-item index="tagmana">溯源标签管理</el-menu-item>
             <el-menu-item index="tagverify">溯源标签审核</el-menu-item>
-            <el-menu-item index="sourcefill">溯源内容填报</el-menu-item>
+            <el-menu-item index="verifyfill">检测信息填报</el-menu-item>
+            <el-menu-item index="stockoutfill">出库信息填报</el-menu-item>
+            <el-menu-item index="transfill">物流信息填报</el-menu-item>
           </el-submenu>
           <el-menu-item
             index="2"
@@ -45,7 +47,11 @@
             <i class="el-icon-setting"></i>
             <span slot="title">资讯管理</span>
           </el-menu-item>
-        <i :class=" menuCollapse ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"  @click="menuCollapse = !menuCollapse" :style="'margin-top:50px;font-size:10px'">{{menuCollapse ? '' : ' 折叠菜单'}}</i>
+          <i
+            :class=" menuCollapse ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"
+            @click="menuCollapse = !menuCollapse"
+            :style="'margin-top:50px;font-size:10px'"
+          >{{menuCollapse ? '' : ' 折叠菜单'}}</i>
         </el-menu>
       </el-aside>
       <el-main>
@@ -63,6 +69,26 @@
         </el-card>
       </el-main>
     </el-container>
+    <el-dialog
+      title="请输入二级密码后再次操作"
+      :visible.sync="this.$store.state.showPkDialog"
+      width="30%"
+    >
+      <el-input
+        v-model="privateKey"
+        placeholder="请输入二级密码"
+      ></el-input>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="closePkDialog">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="savePrivateKey"
+        >确 定</el-button>
+      </span>
+    </el-dialog>
   </el-container>
 </template>
 
@@ -77,23 +103,35 @@ export default {
       pathName: {
         trace: "溯源数据管理",
         codemana: "批次号管理",
-        sourcefill: "溯源内容填报",
+        transfill: "物流信息填报",
+        verifyfill: "检测信息填报",
+        stockoutfill: "出库信息填报",
         storemana: "入库信息管理",
         tagmana: "溯源标签管理",
         tagverify: "溯源标签审核"
       },
-      paths: []
+      paths: [],
+      privateKey: ""
     };
   },
-  mounted() {
-    console.log(this.$store.state);
-  },
+  mounted() {},
   methods: {
     onMenuSelect(index, indexPath) {
       this.paths = [];
       indexPath.forEach(element => {
         this.paths.push(this.pathName[element]);
       });
+    },
+    closePkDialog() {
+      this.$store.commit("setPkDialogShow", false);
+    },
+    savePrivateKey() {
+      console.log(this.privateKey, this.$store.state.userInfo.esk);
+      this.$store.commit(
+        "savePrivateKey",
+        api.apiDecESk(this.privateKey, this.$store.state.userInfo.esk)
+      );
+      this.$store.commit("setPkDialogShow", false);
     }
   },
   components: {

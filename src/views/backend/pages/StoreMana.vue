@@ -10,6 +10,7 @@
       <el-button
         type="primary"
         icon="el-icon-search"
+        disabled
       >搜索</el-button>
       <el-table
         ref="codeTable"
@@ -17,7 +18,7 @@
         style="width: 100%;margin-top:40px"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column
+        <!-- <el-table-column
           type="selection"
           width="55"
         >
@@ -26,7 +27,7 @@
           type="index"
           width="50"
         >
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           v-for="(item,index) in labels"
           :key="index"
@@ -36,15 +37,23 @@
           :width="'160' || item.width"
           align="center"
         >
+          <!-- <template
+            slot-scope="scope"
+          >
+
+          </template> -->
         </el-table-column>
         <el-table-column
           fixed="right"
           label="操作"
           align="center"
         >
-          <template slot-scope="scope" v-if="scope.row.state == '审核中'">
+          <template
+            slot-scope="scope"
+            v-if="scope.row.step == 1"
+          >
             <el-button
-              @click="manuCode(scope.row)"
+              @click="showDialog(scope.row)"
               type="text"
               size="small"
             >审核</el-button>
@@ -56,6 +65,23 @@
         :page-change="pageChange"
       ></pagination>
     </div>
+    <el-dialog
+      title="审核操作"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <span>是否要通过此条入库审核？</span>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="manuCode(0)">不通过</el-button>
+        <el-button
+          type="primary"
+          @click="manuCode(1)"
+        >通 过</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -67,70 +93,39 @@ export default {
     return {
       searchCode: "",
       showAddCode: false,
-      codeData: [
-        {
-          code: "001",
-          store: "顺丰",
-          storeNum: "A01",
-          type: "红心猕猴桃",
-          desc: "非常好都江堰猕猴桃企业都江堰猕猴桃企业都江堰猕猴桃企业",
-          num: "100吨",
-          company: "都江堰猕猴桃企业",
-          state: "审核中"
-        },
-        {
-          code: "002",
-          store: "顺丰",
-          storeNum: "A01",
-          type: "红心猕猴桃",
-          desc: "非常好都江堰猕猴桃企业都江堰猕猴桃企业都江堰猕猴桃企业",
-          num: "100吨",
-          company: "都江堰猕猴桃企业",
-          state: "已入库"
-        },
-        {
-          code: "003",
-          store: "顺丰",
-          storeNum: "A01",
-          type: "红心猕猴桃",
-          desc: "非常好都江堰猕猴桃企业都江堰猕猴桃企业都江堰猕猴桃企业",
-          num: "100吨",
-          company: "都江堰猕猴桃企业",
-          state: "已出库"
-        }
-      ],
+      codeData: [],
       labels: [
         {
           name: "批次号",
-          prop: "code"
+          prop: "batchCode"
         },
         {
           name: "仓储机构",
-          prop: "store"
+          prop: "storeCompanyName"
         },
         {
           name: "仓库编号",
-          prop: "storeNum"
+          prop: "repositoryCode"
         },
         {
           name: "农产品种类",
-          prop: "type"
+          prop: "varietyName"
         },
         {
           name: "描述",
-          prop: "desc"
+          prop: "remark"
         },
         {
-          name: "数量",
+          name: "数量 / 吨",
           prop: "num"
         },
         {
           name: "所属企业",
-          prop: "company"
+          prop: "companyName"
         },
         {
           name: "状态",
-          prop: "state"
+          prop: "step"
         }
       ],
       addTagForm: {
@@ -144,18 +139,59 @@ export default {
         phone: ""
       },
       codes: ["001", "002"],
-      getTypes: ["快递", "自行打印"]
+      getTypes: ["快递", "自行打印"],
+      dialogVisible: false,
+      nowRow: null
     };
   },
   mounted() {
     // this.getTem();
+    this.getStoreList(1);
   },
   methods: {
+    async getStoreList(page) {
+      let res = await this.$fetch(
+        "/storeRepertory/getAudit",
+        {
+          page: 1,
+          limit: 5,
+          typeCode: this.$store.state.userInfo.typeCode,
+          storeCompanyCode: this.$store.state.userInfo.companyCode
+        },
+        "POST"
+      );
+      console.log(res);
+      if (res.code == 0) {
+        this.codeData = res.data.data;
+      }
+    },
     handleSelectionChange() {
       console.log(1);
     },
-    manuCode() {
-      console.log(1);
+    showDialog(row) {
+      console.log(row);
+      this.dialogVisible = true;
+      this.nowRow = row;
+    },
+    async manuCode(flag) {
+      let data = {
+        account: this.$store.state.userInfo.account,
+        action: "审核入库",
+        actionId: this.nowRow.actionId,
+        flowId: this.nowRow.flowId,
+        companyCode: this.nowRow.companyCode,
+        storeCompanyCode: this.nowRow.storeCompanyCode,
+        storeCompanyName: this.nowRow.storeCompanyName,
+        storeUserId: this.$store.state.userInfo.id,
+        storeTime: this.nowRow.storeTime
+      };
+      let signData = this.$signData(data);
+      if (!signData) return;
+      let res = await this.$fetch("/storeRepertory/audit", signData, "POST");
+      if (res.code == 0) {
+        this.dialogVisible = false;
+        this.getStoreList(1);
+      }
     },
     pageChange(page) {
       console.log(page);
