@@ -41,12 +41,12 @@
                     </div>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="信链资讯" name="second">信链资讯</el-tab-pane>
-            <el-tab-pane label="媒体视角" name="third">媒体视角</el-tab-pane>
+            <!-- <el-tab-pane label="信链资讯" name="second">信链资讯</el-tab-pane>
+            <el-tab-pane label="媒体视角" name="third">媒体视角</el-tab-pane> -->
           </el-tabs>
         </div>
         <!-- 理赔公示 -->
-        <head-line :text="'理赔公示'" :text02="'INSURANCE  INDEMNITY'"></head-line>
+        <!-- <head-line :text="'理赔公示'" :text02="'INSURANCE  INDEMNITY'"></head-line>
         <div class="indemnity">
             <router-link to="/">更多理赔></router-link>
              <el-table :data="publicityData">
@@ -59,14 +59,14 @@
                 >
                 </el-table-column>
             </el-table>
-        </div>
+        </div> -->
   </div>
 </template>
 
 <script>
 import TabSearch from '@/components/TabSearch.vue'
 import HeadLine from '@/components/HeadLine.vue'
-
+import Slider from '@/components/Slider.vue'
 export default {
   name: "mainPage",
   data() {
@@ -183,7 +183,8 @@ export default {
   },
   components: {
     TabSearch,
-    HeadLine
+    HeadLine,
+    Slider
   }
 };
 </script>
@@ -194,6 +195,17 @@ export default {
 .main{
   .nav{
     position:relative;
+  }
+  .head-line{
+      width:1100px;
+      margin:0 auto;
+      .title-text{
+        font-size:30px;
+        font-weight:600;
+      }
+      .title-text02{
+          font-size:16px;
+      }
   }
   .news-center{
     width:1200px;
@@ -269,7 +281,7 @@ export default {
             position:relative;
         }
          ul.imgsList li div.right-img img{
-            border:1px solid yellow;
+
             width:400px;
             height:236px;
         }
@@ -306,38 +318,38 @@ export default {
         font-weight:bold;
         color:rgba(57,172,95,1);
     }
+    .el-table{
+        thead tr th{
+        background-color:rgba(85,85,85,0.1);
+        .cell{
+            font-size:14px;
+            font-family:MicrosoftYaHei-Bold;
+            font-weight:bold;
+            color:rgba(85,85,85,1);
+            line-height:25px;
+        }
+        }
+        tbody tr td div.cell{
+            font-size:14px;
+            font-family:ArialMT;
+            font-weight:400;
+            color:rgba(117,117,117,1);
+            line-height:25px;
+        }
+    }
+    .el-table tr{
+        background-color:rgba(0,0,0,0.03);
+    }
+    .cell {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap !important;
+        // word-break: break-all;
+        // max-height: 20px;
+    }
 
  }
 
+}
 
-}
-.el-table{
-    thead tr th{
-       background-color:rgba(85,85,85,0.1);
-       .cell{
-           font-size:14px;
-           font-family:MicrosoftYaHei-Bold;
-           font-weight:bold;
-           color:rgba(85,85,85,1);
-           line-height:25px;
-       }
-    }
-    tbody tr td div.cell{
-        font-size:14px;
-        font-family:ArialMT;
-        font-weight:400;
-        color:rgba(117,117,117,1);
-        line-height:25px;
-    }
-}
-.el-table tr{
-    background-color:rgba(0,0,0,0.03);
-}
-.cell {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap !important;
-  // word-break: break-all;
-  // max-height: 20px;
-}
 </style>
