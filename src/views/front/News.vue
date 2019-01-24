@@ -81,7 +81,7 @@ export default {
 </script>
 <style lang="scss" >
 .news{
-    height:100%;
+    height:1400px;
     .nav{
         width:100%;
         min-width:1200px;
