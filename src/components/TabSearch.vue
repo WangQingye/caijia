@@ -33,33 +33,21 @@
                             产品编号<span>1234678945613465</span>
                         </li>
                         <li>
-                            产品品牌<span>徐香猕猴桃</span>
+                            产地<span>{{products.sorigin}}</span>
                         </li>
                         <li>
-                            单果重量<span>75-135g</span>
-                        </li>
-                        <li>
-                            产品等级<span>一等</span>
-                        </li>
-                        <li>
-                            采摘时间<span>2018年2月30日</span>
+                            农产种类<span>{{products.skindName}}</span>
                         </li>
                     </ul>
                     <ul class="ul2">
                         <li>
-                            原产地<span>四川。蒲江</span>
+                            农产品种<span>{{products.svarietyName}}</span>
                         </li>
                         <li>
-                            生产单位<span>成都市猕猴桃基地</span>
+                            采摘时间<span>{{renderTime(products.sstoreTime)}}</span>
                         </li>
                         <li>
-                            农残指标<span>合格</span>
-                        </li>
-                        <li>
-                            承包单位<span>锦泰保险</span>
-                        </li>
-                        <li>
-                            储藏条件<span>0-10度条件下30天</span>
+                            企业<span>{{products.sstoreCompanyName}}</span>
                         </li>
                     </ul>
                 </div>
@@ -98,38 +86,8 @@ export default{
             tabValue: 0,
             stopValue:'',
             index:'',
-            productDetails:[
-                {
-                time:'2012-03-02',
-                details:'猕猴桃嫁接苗培育----选生长充实，髓部较小的接穗，要求接穗大小与砧木相同，用塑料薄膜嫁接包扎，露出接穗芽即可',
-                imagineSrc:goods,
-                index:1
-                },
-                {
-                time:'2017-10-20',
-                details:'施肥管理----沿植株横向开沟，施入腐熟的有机肥，萌芽前追肥，结合灌水，尿素液进行根外追肥',
-                imagineSrc:goods,
-                index:2
-                },
-                {
-                time:'2018-09-02',
-                details:'猕猴桃嫁接苗培育----选生长充实，髓部较小的接穗，要求接穗大小与砧木相同，用塑料薄膜嫁接包扎，露出接穗芽即可',
-                imagineSrc:goods,
-                index:3
-                },
-                {
-                time:'2018-09-05',
-                details:'猕猴桃分拣装箱----沿植株横向开沟，施入腐熟的有机肥，萌芽前追肥，结合灌水，尿素液进行根外追肥',
-                imagineSrc:goods,
-                index:4
-                },
-                {
-                time:'2018-09-20',
-                details:'猕猴桃嫁接苗培育----选生长充实，髓部较小的接穗，要求接穗大小与砧木相同，用塑料薄膜嫁接包扎，露出接穗芽即可',
-                imagineSrc:goods,
-                index:5
-                }
-            ]
+            products:[],
+            productDetails:[]
         }
     },
     props:{
@@ -141,11 +99,14 @@ export default{
         },
         open(){
             var modelBox= document.getElementById("popContainer");
-            modelBox.style.visibility="visible";
-            modelBox.style.overflow="scroll"
-            document.body.style.overflow="hidden";
-            console.log(this.input)
-            this.getData()
+            if(this.input!=""){
+                modelBox.style.visibility="visible";
+                modelBox.style.overflow="scroll"
+                document.body.style.overflow="hidden";
+                console.log(this.input)
+                this.getData()
+            }
+
 
         },
         close(){
@@ -162,11 +123,30 @@ export default{
                 },
                 "get"
             );
+            for(var i=0;i<data.data.length;i++){
+                var item=data.data[i];
+                //console.log(item)
+                if(item.stepOrde==1){
+                //console.log("入库");
+                this.products=item
+                }else if(item.stepOrde==2){
+                //console.log("检测")
+                }else if(item.stepOrde==3){
+                //console.log("标签申请")
+                }else if(item.stepOrde==4){
+                //console.log("出库")
+                }else{
+                //console.log("物流")
+                }
+            }
             this.productDetails=data.data
             console.log(data)
 
         },
-
+         renderTime(date) {
+            var dateee = new Date(date).toJSON();
+            return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+        }
 
     },
     computed:{
@@ -184,7 +164,7 @@ export default{
 
 </script>
 
-<style lang="scss" >
+<style lang="scss" scoped>
 
 .main{
     .tab-search{

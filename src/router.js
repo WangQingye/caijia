@@ -22,6 +22,10 @@ export default new Router({
           path: '/apply',
           name: 'apply',
           component: () => import( /* webpackChunkName: "apply" */ './views/front/Apply.vue')
+        },{
+          path: '/news',
+          name: 'news',
+          component: () => import( /* webpackChunkName: "apply" */ './views/front/News.vue')
         }
       ]
     },

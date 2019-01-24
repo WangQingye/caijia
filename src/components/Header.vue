@@ -37,7 +37,7 @@ export default {
     return {
       navs: [
         { name: "首页", url: "/main" },
-        { name: "新闻中心", url: "/main" },
+        { name: "新闻中心", url: "/news" },
         { name: "申请入驻", url: "/apply" },
         { name: "联系我们", url: "/main" },
         { name: "后台登陆", url: "/login" }

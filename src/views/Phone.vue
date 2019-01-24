@@ -14,27 +14,27 @@
         <ul>
           <li>
             <span class="pro-title">产品编码</span>
-            <span class="pro-details">121212</span>
+            <span class="pro-details">{{parseQRCode(urlParam)}}</span>
           </li>
           <li>
             <span class="pro-title">产地</span>
-            <span class="pro-details">{{this.products.sorigin}}</span>
+            <span class="pro-details">{{products.sorigin}}</span>
           </li>
           <li>
             <span class="pro-title">农产种类</span>
-            <span class="pro-details">{{this.products.skindName}}</span>
+            <span class="pro-details">{{products.skindName}}</span>
           </li>
           <li>
             <span class="pro-title">农产品种</span>
-            <span class="pro-details">{{this.products.svarietyName}}</span>
+            <span class="pro-details">{{products.svarietyName}}</span>
           </li>
            <li>
             <span class="pro-title">采摘时间</span>
-            <span class="pro-details">{{renderTime(this.products.sstoreTime)}}</span>
+            <span class="pro-details">{{renderTime(products.sstoreTime)}}</span>
           </li>
           <li>
             <span class="pro-title">企业</span>
-            <span class="pro-details">{{this.products.sstoreCompanyName}}</span>
+            <span class="pro-details">{{products.sstoreCompanyName}}</span>
           </li>
         </ul>
       </div>
@@ -45,7 +45,11 @@
             <img src="@/assets/imgs/yuan1.png">
           </el-col>
         </el-row>
-        <product-table :listData="productDetails" v-for="(item,index) in productDetails " :key="index" :productIndex="index"></product-table>
+        <product-table
+        :listData="productDetails"
+        v-for="(item,index) in productDetails "
+        :key="index" :productIndex="index">
+        </product-table>
       </div>
       <up-to-now></up-to-now>
     </div>
@@ -57,11 +61,12 @@ import HeadLine from '@/components/HeadLine.vue'
 import ProductTable from '@/components/ProductTable.vue'
 import UpToNow from '@/components/UpToNow.vue'
 import goods from "@/assets/imgs/goods.jpg";
+
 export default {
   name: "phone",
   data() {
     return {
-      urlParam:"http://172.16.0.87:8081/queryController/queryOriginActionByBatch?id=1903051234324959311",
+      urlParam:"id=0105051234123111111",
       products:[],
       productDetails:[]
     };
@@ -70,6 +75,7 @@ export default {
   },
   methods: {
     async getProductData(){
+      //console.log("当前参数：" + this.urlParam)
         let data = await fetch(
           '/queryController/queryOriginActionByBatch',
           {
@@ -99,10 +105,21 @@ export default {
     renderTime(date) {
       var dateee = new Date(date).toJSON();
       return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+    },
+    parseQRCode(codeURL){
+      var code = codeURL.split("id=");
+      return code[1];
+    },
+    getUrlParam(){
+      this.urlParam=location.href;
+      var num=this.urlParam.indexOf("?");
+      this.urlParam=this.urlParam.substr(num+10)
+      alert(this.urlParam)
     }
   },
   mounted(){
     this.getProductData();
+    //his.getUrlParam();
   },
   watch: {
   },
@@ -123,88 +140,89 @@ export default {
       width:375px;
       margin:0 auto;
     }
-}
-.map{
-  width:375px;
-  margin:0 auto;
-  position:relative;
-  .map-wap{
+    .map{
+      width:375px;
+      margin:0 auto;
+      position:relative;
+      .map-wap{
+        width:375px;
+        margin:0 auto;
+      }
+      .location{
+        position:absolute;
+        top:69px;
+        left:95px;
+        img{
+          width:50%;
+        }
+          p{
+          font-size:10px;
+          font-family:MicrosoftYaHei;
+          font-weight:400;
+          color:rgba(85,85,85,1);
+          line-height:20px;
+        }
+      }
+
+  }
+  .product-msg{
     width:375px;
     margin:0 auto;
+    border:1px solid rgba(242, 242, 242, 1);
+    ul{
+      li{
+        width:100%;
+        height:42px;
+        border-bottom:1px solid rgba(242, 242, 242, 1);
+        position:relative;
+        span{
+          line-height:45px;
+        }
+        span.pro-title{
+          font-size:14px;
+          font-family:MicrosoftYaHei-Bold;
+          font-weight:bold;
+          color:rgba(85,85,85,1);
+          line-height:55px;
+          position:absolute;
+          left:55px;
+        }
+        span.pro-details{
+          position:absolute;
+          left:140px;
+          font-size:14px;
+          font-family:ArialMT;
+          font-weight:400;
+          color:rgba(117,117,117,1);
+          line-height:55px;
+        }
+      }
+    }
   }
-  .location{
-    position:absolute;
-    top:69px;
-    left:95px;
+  .product{
+    width:311px;
+    margin:0 auto;
+  }
+  .tableDot{
+    position: relative;
     img{
-      width:50%;
-    }
-      p{
-      font-size:10px;
-      font-family:MicrosoftYaHei;
-      font-weight:400;
-      color:rgba(85,85,85,1);
-      line-height:20px;
+      position: absolute;
+      top:-65px;
+      left:-20px;
     }
   }
 
-}
-.product-msg{
-  width:375px;
-  margin:0 auto;
-  border:1px solid rgba(242, 242, 242, 1);
-  ul{
-    li{
-      width:100%;
-      height:42px;
-      border-bottom:1px solid rgba(242, 242, 242, 1);
-      position:relative;
-      span{
-        line-height:45px;
-      }
-      span.pro-title{
-        font-size:14px;
-        font-family:MicrosoftYaHei-Bold;
-        font-weight:bold;
-        color:rgba(85,85,85,1);
-        line-height:55px;
-        position:absolute;
-        left:55px;
-      }
-      span.pro-details{
-        position:absolute;
-        left:140px;
-        font-size:14px;
-        font-family:ArialMT;
-        font-weight:400;
-        color:rgba(117,117,117,1);
-        line-height:55px;
-      }
-    }
-  }
-}
-.product{
-  width:311px;
-  margin:0 auto;
-}
-.tableDot{
-  position: relative;
-  img{
-    position: absolute;
-    top:-65px;
-    left:-20px;
+  .tableDot:after{
+      content:"";
+      display:inline-block;
+      width:3px;
+      height:49px;
+      float: left;
+      background:rgba(242,242,242,1);
+      position:absolute;
+      top:-49px;
+      left:-13px;
   }
 }
 
-.tableDot:after{
-    content:"";
-    display:inline-block;
-    width:3px;
-    height:49px;
-    float: left;
-    background:rgba(242,242,242,1);
-    position:absolute;
-    top:-49px;
-    left:-13px;
-}
 </style>
