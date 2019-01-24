@@ -153,9 +153,6 @@ export default{
         }
 
     },
-    computed:{
-
-    },
     watch: {
 
     },
