@@ -64,7 +64,7 @@
                     :key="index" :productIndex="index">
                     </product-table>
                 </div>
-
+                <up-to-now></up-to-now>
 
             </div>
         </div>
@@ -77,6 +77,7 @@ import fetch from '@/assets/js/fetch.js'
 import HeadLine from '@/components/HeadLine.vue'
 import ProductTable from '@/components/ProductTable.vue'
 import Slider from '@/components/Slider.vue'
+import UpToNow from '@/components/UpToNow.vue'
 import goods from "@/assets/imgs/goods.jpg"
 export default{
     data(){
@@ -161,6 +162,7 @@ export default{
     components: {
         HeadLine,
         ProductTable,
+        UpToNow,
         Slider
   }
 }

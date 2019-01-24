@@ -60,7 +60,7 @@ import fetch from "@/assets/js/fetch.js";
 import HeadLine from '@/components/HeadLine.vue'
 import ProductTable from '@/components/ProductTable.vue'
 import UpToNow from '@/components/UpToNow.vue'
-import goods from "@/assets/imgs/goods.jpg";
+
 
 export default {
   name: "phone",
@@ -134,7 +134,7 @@ export default {
 <style lang="scss" scoped>
 
 .phone {
-    width: 750px;
+    width: 100%;
     margin: 0 auto;
     .banner-wap{
       width:375px;
