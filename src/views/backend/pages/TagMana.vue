@@ -119,7 +119,7 @@
           </el-select>
         </el-form-item>
         <el-form-item
-          v-if="addTagForm.getType == '快递'"
+          v-if="addTagForm.getType == 1"
           label="收货地址"
         >
           <el-input
@@ -128,7 +128,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item
-          v-if="addTagForm.getType == '快递'"
+          v-if="addTagForm.getType == 1"
           label="联系人"
         >
           <el-input
@@ -137,7 +137,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item
-          v-if="addTagForm.getType == '快递'"
+          v-if="addTagForm.getType == 1"
           label="电话号码"
         >
           <el-input
@@ -223,24 +223,26 @@ export default {
     async applyTag() {
       let data = {
         action: "申请标签",
+        companyCode: this.$store.state.userInfo.companyCode,
+        companyName: this.$store.state.userInfo.companyName,
+        varietyCode: this.addTagForm.kindCode,
+        varietyName: this.addTagForm.goodType,
         batchCode: this.addTagForm.code,
         boxNum: this.addTagForm.boxNum,
-        companyCode: this.$store.state.userInfo.companyCode,
+        perNum: this.addTagForm.singleNum,
+        recType: this.addTagForm.getType,
+        contacts: this.addTagForm.contact,
+        recAddr: this.addTagForm.address,
+        phone: this.addTagForm.phone,
+        account:  this.$store.state.userInfo.account,
         flowId: this.addTagForm.flowId,
         handlerId: this.$store.state.userInfo.id,
-        kindCode: this.addTagForm.kindCode,
-        perNum: this.addTagForm.singleNum,
-        contacts: this.addTagForm.contact,
-        phone: this.addTagForm.phone,
-        recAddr: this.addTagForm.address,
-        recType: this.addTagForm.getType,
-        remark: ""
       };
-      let signData = this.$signData(data);
+      let signData = this.$signData(data,13);
       if (!signData) return;
-      let res = this.$fetch("/label/apply", data, "POST");
+      let res = await this.$fetch("/label/apply", signData, "POST");
       if (res.code == 0) {
-        this.$Message.success("申请成功，请等待审核");
+        this.$message.success("申请成功，请等待审核");
         this.showAddCode = false;
         this.getApplyList();
       }

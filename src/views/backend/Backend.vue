@@ -136,6 +136,19 @@ export default {
   },
   components: {
     BackHeader
+  },
+  beforeRouteEnter(to, from, next) {
+    next(async vm => {
+      // 通过 `vm` 访问组件实例
+      if (!vm.$store.state.userInfo.id) {
+        let res = await vm.$fetch("/user/login", {}, "POST", "user");
+        if (res.code == 0) {
+          this.$store.commit("saveUserInfo", res.data);
+        } else {
+          vm.$router.push({ path: "/login" });
+        }
+      }
+    });
   }
 };
 </script>

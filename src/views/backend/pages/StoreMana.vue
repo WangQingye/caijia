@@ -175,20 +175,20 @@ export default {
     },
     async manuCode(flag) {
       let data = {
-        account: this.$store.state.userInfo.account,
         action: "审核入库",
+        storeCompanyCode: this.nowRow.storeCompanyCode,
+        storeCompanyName: this.nowRow.storeCompanyName,
+        account: this.$store.state.userInfo.account,
         actionId: this.nowRow.actionId,
         flowId: this.nowRow.flowId,
         companyCode: this.nowRow.companyCode,
-        storeCompanyCode: this.nowRow.storeCompanyCode,
-        storeCompanyName: this.nowRow.storeCompanyName,
-        storeUserId: this.$store.state.userInfo.id,
-        storeTime: this.nowRow.storeTime
+        storeUserId: this.$store.state.userInfo.id
       };
-      let signData = this.$signData(data);
+      let signData = this.$signData(data,4);
       if (!signData) return;
       let res = await this.$fetch("/storeRepertory/audit", signData, "POST");
       if (res.code == 0) {
+        this.$message.success('审核成功');
         this.dialogVisible = false;
         this.getStoreList(1);
       }

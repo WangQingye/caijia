@@ -121,14 +121,14 @@ export default {
     },
     async addTransInfo() {
       let data = this.$signData({
-        actionId: this.rowData.id,
         batchCode: this.rowData.batchCode,
         startBoxNum: this.stockOutForm.boxNumStart,
         endBoxNum: this.stockOutForm.boxNumEnd,
         action: "产品出库",
         transferCompanyCode: this.stockOutForm.logisticsCompany,
-        outTime: this.stockOutForm.date,
-      });
+        outTime: this.stockOutForm.date.getTime(),
+        actionId: this.rowData.id,
+      },6);
       if (!data) return;
       console.log(data);
       let res = await this.$fetch("/out/outRepertory", data, 'POST');

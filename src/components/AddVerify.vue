@@ -74,7 +74,7 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="责任人">
-        <p>{{rowData.companyName}}</p>
+        <p>{{this.$store.state.userInfo.companyName}}</p>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -116,21 +116,21 @@ export default {
   methods: {
     async onAddSubmit() {
       let data = {
-        account: this.$store.state.userInfo.account,
         action: "检测",
-        actionId: this.rowData.actionId,
-        batchCode: this.rowData.batchCode,
         checkCompanyCode: this.$store.state.userInfo.companyCode,
         checkCompanyName: this.$store.state.userInfo.companyName,
-        checkTime: this.stockOutForm.date,
         farmCode: this.rowData.companyCode,
         farmName: this.rowData.companyName,
+        remark: this.stockOutForm.desc,
+        picList: '',
+        checkTime: this.stockOutForm.date,
+        account: this.$store.state.userInfo.account,
+        actionId: this.rowData.actionId,
+        batchCode: this.rowData.batchCode,
         flowId: this.rowData.flowId,
         handlerId: this.$store.state.userInfo.id,
-        picList: '',
-        remark: this.stockOutForm.desc
       };
-      let signData = this.$signData(data);
+      let signData = this.$signData(data,9);
       if (!signData) return;
       let res = await this.$fetch('/check/save', signData,'POST');
       console.log(res);
@@ -140,7 +140,7 @@ export default {
       }
     },
     back() {
-      this.$emit("back");
+      this.$emit("back", true);
     },
     handleFileChange() {}
   },
