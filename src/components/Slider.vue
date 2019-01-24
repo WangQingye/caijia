@@ -32,9 +32,9 @@ export default{
                     window.mozRequestAnimationFrame    ||
                     window.oRequestAnimationFrame      ||
                     window.msRequestAnimationFrame     ||
-                    function(/* function */ callback, /* DOMElement */ element){
-                        window.setInterval(callback, 1000 / 60);
-                    };
+        function(/* function */ callback, /* DOMElement */ element){
+            window.setInterval(callback, 1000 / 60);
+        };
 
         })();
     },
@@ -119,7 +119,7 @@ export default{
             }
         },
         getMaxWidth(){
-            // this.maxWidth = document.querySelector("#drag").clientWidth - document.querySelector(".handler").scrollWidth;
+            this.maxWidth = document.querySelector("#drag").clientWidth - document.querySelector(".handler").scrollWidth;
         }
     },
 

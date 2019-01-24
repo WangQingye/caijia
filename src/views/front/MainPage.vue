@@ -23,7 +23,7 @@
                         </ul>
                     </div>
                     <div class="active-right">
-                      <router-link to="/">更多新闻></router-link>
+                      <router-link to="/news">更多新闻></router-link>
                         <ul class="imgsList">
                             <li>
                                 <div class="right-img">
@@ -34,7 +34,7 @@
                             <li>
                                 <div class="right-img">
                                     <img src="@/assets/imgs/news-2.png">
-                                    <div><p></p></div>
+                                    <div><p>舌尖上的安全</p></div>
                                 </div>
                             </li>
                         </ul>
@@ -190,7 +190,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
+<style lang="scss">
 
 .main{
   .nav{
@@ -298,8 +298,12 @@ export default {
             bottom:0px;
         }
         ul.imgsList li div.right-img div p{
-            margin-left:20px;
+            margin-left:-267px;
             margin-top:17px;
+            font-size:16px;
+            font-family:MicrosoftYaHei-Bold;
+            font-weight:bold;
+            color:rgba(255,255,255,1);
         }
 
 

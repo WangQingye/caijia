@@ -10,14 +10,13 @@
             </el-col>
             <el-col :span="4" class="goodsImg">
                 <!-- <img class="goods" src='@/assets/imgs/goods.jpg'> -->
-                 <img class="goods" :src="'@assets/imgs/'+listData[productIndex].stepOrde+'.jpg'">
+                 <img class="goods" :src="'@/assets/imgs/'+listData[productIndex].stepOrde+'.png'">
             </el-col>
         </el-row>
     </div>
 
 </template>
 <script>
-
 export default{
     data(){
         return {
