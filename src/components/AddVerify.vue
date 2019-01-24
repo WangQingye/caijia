@@ -51,9 +51,10 @@
       <el-form-item label="检测报告">
         <el-upload
           class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :on-change="handleFileChange"
+          :action="productUrl + '/list/upload'"
+          :on-success="handleFileChange"
           :file-list="fileList"
+          list-type="picture"
         >
           <el-button
             size="small"
@@ -98,11 +99,13 @@ export default {
         boxNumEnd: "",
         logisticsCompany: "",
         date: "",
-        desc: ""
+        desc: "",
+        filePath: ""
       },
       codes: ["001", "002"],
       companys: ["农企1", "农企2"],
-      fileList: []
+      fileList: [],
+      productUrl: window.productUrl
     };
   },
   props: {
@@ -122,7 +125,7 @@ export default {
         farmCode: this.rowData.companyCode,
         farmName: this.rowData.companyName,
         remark: this.stockOutForm.desc,
-        picList: '',
+        picList: this.stockOutForm.filePath,
         checkTime: this.stockOutForm.date,
         account: this.$store.state.userInfo.account,
         actionId: this.rowData.actionId,
@@ -142,7 +145,16 @@ export default {
     back() {
       this.$emit("back", true);
     },
-    handleFileChange() {}
+    handleFileChange(res, file, fileList) {
+      console.log(res.data);
+      if (res.code == 0) {
+        if (this.stockOutForm.filePath) {
+          this.stockOutForm.filePath += ",";
+        }
+        this.stockOutForm.filePath += res.data[0];
+      }
+      this.fileList = fileList;
+    }
   },
   watch: {}
 };

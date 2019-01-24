@@ -37,11 +37,16 @@
           :width="'160' || item.width"
           align="center"
         >
-          <!-- <template
+          <template
             slot-scope="scope"
           >
-
-          </template> -->
+            <p v-if="item.prop == 'step'">
+              {{scope.row.step == 2 ? '审核完成' : '待审核'}}
+            </p>
+            <p v-else>
+              {{scope.row[item.prop]}}
+            </p>
+          </template>
         </el-table-column>
         <el-table-column
           fixed="right"

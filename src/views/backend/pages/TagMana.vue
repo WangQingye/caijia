@@ -44,6 +44,17 @@
           :width="'160' || item.width"
           align="center"
         >
+          <template slot-scope="scope">
+            <p v-if="item.prop == 'tagNum'">
+              {{scope.row.boxNum * scope.row.perNum}}
+            </p>
+            <p v-else-if="item.prop == 'step'">
+              {{scope.row.step == 4 ? '待审核' : '审核完成'}}
+            </p>
+            <p v-else>
+              {{scope.row[item.prop]}}
+            </p>
+          </template>
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -55,10 +66,12 @@
               @click="manuCode(scope.row)"
               type="text"
               size="small"
+              :disabled="true"
             >编辑</el-button>
             <el-button
               type="text"
               size="small"
+              :disabled="true"
             >删除</el-button>
           </template>
         </el-table-column>
@@ -165,8 +178,7 @@ export default {
     return {
       searchCode: "",
       showAddCode: false,
-      codeData: [
-      ],
+      codeData: [],
       labels: [
         {
           name: "批次号",
@@ -234,11 +246,11 @@ export default {
         contacts: this.addTagForm.contact,
         recAddr: this.addTagForm.address,
         phone: this.addTagForm.phone,
-        account:  this.$store.state.userInfo.account,
+        account: this.$store.state.userInfo.account,
         flowId: this.addTagForm.flowId,
-        handlerId: this.$store.state.userInfo.id,
+        handlerId: this.$store.state.userInfo.id
       };
-      let signData = this.$signData(data,13);
+      let signData = this.$signData(data, 13);
       if (!signData) return;
       let res = await this.$fetch("/label/apply", signData, "POST");
       if (res.code == 0) {
@@ -251,11 +263,11 @@ export default {
       let res = await this.$fetch(
         "/label/getAuditOfcompany",
         {
-          batchCode: '',
+          batchCode: "",
           companyCode: this.$store.state.userInfo.companyCode,
           typeCode: this.$store.state.userInfo.typeCode,
           limit: 5,
-          page: 1,
+          page: 1
         },
         "POST"
       );

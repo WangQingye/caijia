@@ -44,6 +44,14 @@
           width="160"
           align="center"
         >
+          <template slot-scope="scope">
+            <p v-if="item.prop == 'step'">
+              {{calStatus(scope.row.step)}}
+            </p>
+            <p v-else>
+              {{scope.row[item.prop]}}
+            </p>
+          </template>
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -296,7 +304,7 @@ export default {
         account: this.$store.state.userInfo.account,
         handlerId: this.$store.state.userInfo.id
       };
-      let signData = this.$signData(data,15);
+      let signData = this.$signData(data, 15);
       if (!signData) return;
       let res = await this.$fetch("/storeRepertory/save", signData, "POST");
       console.log(res);
@@ -322,6 +330,33 @@ export default {
         }
       });
       return a;
+    },
+    calStatus(step) {
+      let text;
+      switch (step) {
+        case 1:
+          text = '入库待审核';
+          break;
+        case 2:
+          text = '入库审核完成';
+          break;
+        case 3:
+          text = '检测完成';
+          break;
+        case 4:
+          text = '申请标签待审核';
+          break;
+        case 5:
+          text = '标签审核完成';
+          break;
+        case 6:
+          text = '出库中';
+          break;
+        case 7:
+          text = '出库完成';
+          break;
+      }
+      return text;
     }
   },
   components: {

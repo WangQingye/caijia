@@ -25,13 +25,13 @@
               <i class="el-icon-location"></i>
               <span slot="title">溯源数据管理</span>
             </template>
-            <el-menu-item index="codemana">批次号管理</el-menu-item>
-            <el-menu-item index="storemana">入库信息管理</el-menu-item>
-            <el-menu-item index="tagmana">溯源标签管理</el-menu-item>
-            <el-menu-item index="tagverify">溯源标签审核</el-menu-item>
-            <el-menu-item index="verifyfill">检测信息填报</el-menu-item>
-            <el-menu-item index="stockoutfill">出库信息填报</el-menu-item>
-            <el-menu-item index="transfill">物流信息填报</el-menu-item>
+            <el-menu-item v-if="this.$store.state.userInfo.typeCode == 2 || this.$store.state.userInfo.typeCode == 1" index="codemana">批次号管理</el-menu-item>
+            <el-menu-item v-if="this.$store.state.userInfo.typeCode == 4 || this.$store.state.userInfo.typeCode == 1" index="storemana">入库信息管理</el-menu-item>
+            <el-menu-item v-if="this.$store.state.userInfo.typeCode == 2 || this.$store.state.userInfo.typeCode == 1" index="tagmana">溯源标签管理</el-menu-item>
+            <el-menu-item v-if="this.$store.state.userInfo.typeCode == 3 || this.$store.state.userInfo.typeCode == 1" index="tagverify">溯源标签审核</el-menu-item>
+            <el-menu-item v-if="this.$store.state.userInfo.typeCode == 3 || this.$store.state.userInfo.typeCode == 1" index="verifyfill">检测信息填报</el-menu-item>
+            <el-menu-item v-if="this.$store.state.userInfo.typeCode == 2 || this.$store.state.userInfo.typeCode == 1" index="stockoutfill">出库信息填报</el-menu-item>
+            <el-menu-item v-if="this.$store.state.userInfo.typeCode == 5 || this.$store.state.userInfo.typeCode == 1" index="transfill">物流信息填报</el-menu-item>
           </el-submenu>
           <el-menu-item
             index="2"
@@ -155,8 +155,8 @@ export default {
 <style lang="scss" scoped>
 .backend {
   width: 100%;
-  min-height: 130px;
-  // background: #87CEFA;
+  min-height: 100vh;
+  background: rgb(248, 248, 248);
 }
 .aside-menu {
   margin: 20px 0 0 20px;
