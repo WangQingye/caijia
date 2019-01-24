@@ -9,8 +9,8 @@
                 <p class="details">{{listData[productIndex].oremark}}</p>
             </el-col>
             <el-col :span="4" class="goodsImg">
-                <img class="goods" src='@/assets/imgs/goods.jpg'>
-                <!-- <img class="goods" :src="'@assets/imgs/'+listData[productIndex].stepOrde+'.jpg'"> -->
+                <!-- <img class="goods" src='@/assets/imgs/goods.jpg'> -->
+                 <img class="goods" :src="'@assets/imgs/'+listData[productIndex].stepOrde+'.jpg'">
             </el-col>
         </el-row>
     </div>
@@ -39,11 +39,6 @@ export default{
             }
         },
         productIndex:{
-            default:()=>{
-                return []
-            }
-        },
-        productImgs:{
             default:()=>{
                 return []
             }

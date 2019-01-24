@@ -66,7 +66,7 @@ export default {
   name: "phone",
   data() {
     return {
-      urlParam:"id=0105051234123111111",
+      urlParam:"id=0102010003000100211",
       products:[],
       productDetails:[]
     };
@@ -114,12 +114,12 @@ export default {
       this.urlParam=location.href;
       var num=this.urlParam.indexOf("?");
       this.urlParam=this.urlParam.substr(num+10)
-      alert(this.urlParam)
+      //lert(this.urlParam)
     }
   },
   mounted(){
     this.getProductData();
-    //his.getUrlParam();
+    this.getUrlParam();
   },
   watch: {
   },

@@ -30,7 +30,7 @@
                 <div class="productMsg">
                     <ul class="ul1">
                         <li>
-                            产品编号<span>1234678945613465</span>
+                            产品编号<span>{{input}}</span>
                         </li>
                         <li>
                             产地<span>{{products.sorigin}}</span>
