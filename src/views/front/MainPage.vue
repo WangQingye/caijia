@@ -299,7 +299,7 @@ export default {
         }
         ul.imgsList li div.right-img div p{
             margin-left:-267px;
-            margin-top:9px;
+            margin-top:17px;
             font-size:16px;
             font-family:MicrosoftYaHei-Bold;
             font-weight:bold;
