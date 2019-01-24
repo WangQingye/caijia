@@ -25,16 +25,16 @@
         icon="el-icon-search"
         disabled
       >搜索</el-button>
-      <el-row class="mana-buttons">
+      <!-- <el-row class="mana-buttons">
         <el-button
           type="primary"
           @click="showSourceFill"
         >填报信息</el-button>
-      </el-row>
+      </el-row> -->
       <el-table
         ref="codeTable"
         :data="codeData"
-        style="width: 100%"
+        style="width: 100%;margin-top:40px"
         @selection-change="handleSelectionChange"
       >
         <el-table-column
@@ -47,7 +47,10 @@
           align="center"
         >
           <template slot-scope="scope">
-            <p v-if="!scope.row[item.prop]">无</p>
+            <p v-if="item.prop == 'step'">
+              {{calStatus(scope.row.step)}}
+            </p>
+            <p v-else-if="!scope.row[item.prop]">无</p>
             <p v-else>{{scope.row[item.prop]}}</p>
           </template>
         </el-table-column>
@@ -56,7 +59,10 @@
           label="操作"
           align="center"
         >
-          <template slot-scope="scope" v-if="scope.row.step !== 3">
+          <template
+            slot-scope="scope"
+            v-if="scope.row.step !== 3"
+          >
             <el-button
               @click="showSourceFill(scope.row)"
               type="text"
@@ -152,7 +158,7 @@ export default {
           prop: "boxNum"
         },
         {
-          name: "溯源类别",
+          name: "溯源状态",
           prop: "step"
         },
         {
@@ -170,7 +176,7 @@ export default {
         },
         {
           name: "责任人",
-          prop: "person"
+          prop: "userName"
         }
       ],
       codes: ["001", "002"],
@@ -183,12 +189,16 @@ export default {
   },
   methods: {
     async getList() {
-      let res = await this.$fetch("/check/noCheckList", {
-        page: 1,
-        limit: 5,
-        companyCode: this.$store.state.userInfo.companyCode,
-        typeCode: this.$store.state.userInfo.typeCode
-      },'POST');
+      let res = await this.$fetch(
+        "/check/noCheckList",
+        {
+          page: 1,
+          limit: 5,
+          companyCode: this.$store.state.userInfo.companyCode,
+          typeCode: this.$store.state.userInfo.typeCode
+        },
+        "POST"
+      );
       if (res.code == 0) {
         this.codeData = res.data.data;
       }
@@ -207,11 +217,38 @@ export default {
       console.log(page);
     },
     onAddSubmit() {},
-    onFillBack(flag){
+    onFillBack(flag) {
       this.showAddCode = false;
       if (flag) {
         this.getList();
       }
+    },
+    calStatus(step) {
+      let text;
+      switch (step) {
+        case 1:
+          text = "入库待审核";
+          break;
+        case 2:
+          text = "入库审核完成";
+          break;
+        case 3:
+          text = "检测完成";
+          break;
+        case 4:
+          text = "申请标签待审核";
+          break;
+        case 5:
+          text = "标签审核完成";
+          break;
+        case 6:
+          text = "出库中";
+          break;
+        case 7:
+          text = "出库完成";
+          break;
+      }
+      return text;
     }
   },
   components: {

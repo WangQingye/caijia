@@ -47,7 +47,11 @@
           align="center"
         >
           <template slot-scope="scope">
-            <p v-if="!scope.row[item.prop]"> </p>
+            <p v-if="item.prop == 'boxNum'">
+              {{`${scope.row.startBoxNum}-${scope.row.endBoxNum}`}}
+            </p>
+            <p v-else-if="item.prop == 'step'">{{calStatus(scope.row.step)}}</p>
+            <p v-else-if="!scope.row[item.prop]">无</p>
             <p v-else>{{scope.row[item.prop]}}</p>
           </template>
         </el-table-column>
@@ -111,8 +115,8 @@ export default {
           prop: "boxNum"
         },
         {
-          name: "溯源类别",
-          prop: "action"
+          name: "溯源状态",
+          prop: "step"
         },
         {
           name: "描述",
@@ -164,7 +168,34 @@ export default {
     pageChange(page) {
       console.log(page);
     },
-    onAddSubmit() {}
+    onAddSubmit() {},
+    calStatus(step) {
+      let text;
+      switch (step) {
+        case 1:
+          text = "入库待审核";
+          break;
+        case 2:
+          text = "入库审核完成";
+          break;
+        case 3:
+          text = "检测完成";
+          break;
+        case 4:
+          text = "申请标签待审核";
+          break;
+        case 5:
+          text = "标签审核完成";
+          break;
+        case 6:
+          text = "出库中";
+          break;
+        case 7:
+          text = "出库完成";
+          break;
+      }
+      return text;
+    }
   },
   components: {
     Pagination,

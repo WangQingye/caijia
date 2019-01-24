@@ -1,6 +1,12 @@
 <template>
   <div class="back-header">
-    <p class="logo"><i class="el-icon-setting"></i> 电科信链溯源后台管理系统</p>
+
+    <p class="logo">
+      <img
+        class="logo-img"
+        src="@/assets/imgs/single-logo.png"
+        alt=""
+      >电科信链溯源后台管理系统</p>
     <div class="header-right">
       <router-link
         to="/"
@@ -51,14 +57,19 @@ export default {
   margin-top: 8px;
 }
 .logo {
-  padding-top: 20px;
+  padding-top: 15px;
   font-size: 20px;
   font-weight: bold;
+  .logo-img {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    margin-right: 5px;
+  }
 }
 .header-right {
-    display: flex;
+  display: flex;
   padding-top: 10px;
-
 }
 .back-main {
   padding-top: 10px;
@@ -66,14 +77,14 @@ export default {
   margin-right: 50px;
 }
 .user-info {
-    .el-dropdown-link{
-        cursor: pointer;
-        font-size: 16px;
-    }
-    .user-company {
-        color: #777;
-        font-size: 12px;
-        text-align: left;
-    }
+  .el-dropdown-link {
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .user-company {
+    color: #777;
+    font-size: 12px;
+    text-align: left;
+  }
 }
 </style>

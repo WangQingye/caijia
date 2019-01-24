@@ -37,6 +37,17 @@
           :width="'160' || item.width"
           align="center"
         >
+          <template slot-scope="scope">
+            <p v-if="item.prop == 'tagNum'">
+              {{scope.row.boxNum * scope.row.perNum}}
+            </p>
+            <p v-else-if="item.prop == 'step'">
+              {{scope.row.step == 4 ? '待审核' : '审核完成'}}
+            </p>
+            <p v-else>
+              {{scope.row[item.prop]}}
+            </p>
+          </template>
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -55,6 +66,7 @@
               type="text"
               size="small"
               v-else
+              :disabled="true"
             >查看</el-button>
           </template>
         </el-table-column>
@@ -175,7 +187,7 @@ export default {
         companyCode: this.nowRow.companyCode,
         labelUserId: this.$store.state.userInfo.id
       };
-      let signData = this.$signData(data,4);
+      let signData = this.$signData(data, 4);
       if (!signData) return;
       let res = await this.$fetch("/label/audit", signData, "POST");
       if (res.code == 0) {
