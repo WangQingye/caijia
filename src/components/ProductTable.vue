@@ -10,17 +10,24 @@
             </el-col>
             <el-col :span="4" class="goodsImg">
                 <!-- <img class="goods" src='@/assets/imgs/goods.jpg'> -->
-                 <img class="goods" :src="'@/assets/imgs/'+listData[productIndex].stepOrde+'.png'">
+                 <img class="goods" :src="imgs[listData[productIndex].stepOrde-1]">
             </el-col>
         </el-row>
     </div>
 
 </template>
 <script>
+import step1 from '@/assets/imgs/1.png'
+import step2 from '@/assets/imgs/2.png'
+import step3 from '@/assets/imgs/3.png'
+import step4 from '@/assets/imgs/4.png'
+import step5 from '@/assets/imgs/5.png'
 export default{
     data(){
         return {
-
+            imgs:[
+                step1,step2,step3,step4,step5
+            ]
         }
     },
     props:{
@@ -93,6 +100,9 @@ export default{
     }
     .table-row{
         position:relative;
+    }
+    .table-dot{
+        position: relative;
     }
     .table-dot:after{
         content:"";

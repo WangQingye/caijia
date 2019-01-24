@@ -2,7 +2,7 @@
   <div class="main">
     <!-- 头部 -->
     <div class="nav">
-      <img src="@/assets/imgs/bj1.png">
+      <img class="bj" src="@/assets/imgs/bj1.png">
       <tab-search></tab-search>
     </div>
     <!-- 新闻中心 -->
@@ -211,7 +211,7 @@ export default {
 .main {
   .nav {
     position: relative;
-    img {
+    img.bj {
       width: 100%;
       min-width: 1000px;
     }

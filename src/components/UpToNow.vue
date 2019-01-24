@@ -53,11 +53,12 @@ export default{
 <style lang="scss">
     #UpToNow{
         width:311px;
+        margin:0 auto;
         position: relative;
     }
     .goTo{
         position: absolute;;
-        left:165px;
+        left:-60px;
         bottom:-5px;
         font-size:14px;
         font-family:MicrosoftYaHei;

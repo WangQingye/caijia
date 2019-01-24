@@ -68,7 +68,33 @@ export default {
     return {
       urlParam:"id=0102010003000100211",
       products:[],
-      productDetails:[]
+      productDetails:[
+        {
+              ocreateTime:'2018-12-02',
+              oremark:'入库',
+              stepOrde:1
+          },
+           {
+              ocreateTime:'2018-12-02',
+              oremark:'检测',
+              stepOrde:2
+          },
+           {
+              ocreateTime:'2018-12-02',
+              oremark:'申请',
+              stepOrde:3
+          },
+           {
+              ocreateTime:'2018-12-02',
+              oremark:'出库',
+              stepOrde:4
+          },
+           {
+              ocreateTime:'2018-12-02',
+              oremark:'物流',
+              stepOrde:5
+          },
+      ]
     };
   },
   props: {
@@ -183,7 +209,7 @@ export default {
           font-family:MicrosoftYaHei-Bold;
           font-weight:bold;
           color:rgba(85,85,85,1);
-          line-height:55px;
+          line-height:42px;
           position:absolute;
           left:55px;
         }
@@ -202,6 +228,7 @@ export default {
   .product{
     width:311px;
     margin:0 auto;
+    padding-top:30px;
   }
   .tableDot{
     position: relative;
