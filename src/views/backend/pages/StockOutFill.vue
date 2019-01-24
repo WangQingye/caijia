@@ -34,7 +34,7 @@
       <el-table
         ref="codeTable"
         :data="codeData"
-        style="width: 100%"
+        style="width: 100%; margin-top:40px"
         @selection-change="handleSelectionChange"
       >
         <el-table-column

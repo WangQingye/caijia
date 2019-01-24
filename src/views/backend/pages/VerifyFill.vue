@@ -71,17 +71,9 @@
       ></pagination>
     </div>
     <div v-if="showAddCode">
-      <add-logistics
-        v-if="userType == 1"
-        @back="showAddCode=false"
-      ></add-logistics>
-      <add-stock-out
-        v-if="userType == 2"
-        @back="showAddCode=false"
-      ></add-stock-out>
       <add-verify
         v-if="userType == 3"
-        @back="showAddCode=false"
+        @back="onFillBack"
         :rowData="nowRow"
       ></add-verify>
     </div>
@@ -214,7 +206,13 @@ export default {
     pageChange(page) {
       console.log(page);
     },
-    onAddSubmit() {}
+    onAddSubmit() {},
+    onFillBack(flag){
+      this.showAddCode = false;
+      if (flag) {
+        this.getList();
+      }
+    }
   },
   components: {
     Pagination,

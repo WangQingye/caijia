@@ -106,6 +106,10 @@ export default {
           type: "success"
         });
         this.$store.commit("saveUserInfo", res.data);
+        console.log(this.privateKey);
+        if (this.privateKey) {
+          this.$store.commit("savePrivateKey", api.apiDecESk(this.privateKey,res.data.esk));
+        }
         this.$router.push({ path: "/backend" });
       } else if (res.code == 301) {
         this.dialogVisible = true;
@@ -140,7 +144,6 @@ export default {
       };
       let res = await this.$fetch("/user/signAccount", data, "POST", "user");
       if (res.code == 0) {
-        this.$store.commit("savePrivateKey", api.apiDecESk(this.privateKey,res.data.esk));
         this.login();
       }
     }
@@ -151,11 +154,19 @@ export default {
 </script>
 
 <style scoped>
+.contanier {
+  width: 100%;
+  height: 100vh;
+  background: url('../../src/assets/imgs/bj1.png');
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  padding-top: 280px;
+  box-sizing: border-box;
+}
 .login {
   width: 500px;
   height: 300px;
   margin: 0 auto;
-  margin-top: 200px;
 }
 .title {
   font-size: 20px;

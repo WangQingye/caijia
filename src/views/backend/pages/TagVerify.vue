@@ -45,17 +45,17 @@
         >
           <template slot-scope="scope">
             <el-button
+              type="text"
+              size="small"
+              v-if="scope.row.step == 4"
+              @click="showAuditConfirm(scope.row)"
+            >审核</el-button>
+            <el-button
               @click="manuCode(scope.row)"
               type="text"
               size="small"
-              v-if="scope.row.state == '审核通过'"
-            >查看</el-button>
-            <el-button
-              type="text"
-              size="small"
               v-else
-              @click="showAuditConfirm(scope.row)"
-            >审核</el-button>
+            >查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -85,7 +85,6 @@
 </template>
 
 <script>
-// import fetch from "@/assets/js/Fetch.js";
 import Pagination from "@/components/Pagination.vue";
 export default {
   data() {
@@ -93,8 +92,7 @@ export default {
       searchCode: "",
       showAddCode: false,
       dialogVisible: false,
-      codeData: [
-      ],
+      codeData: [],
       labels: [
         {
           name: "农企",
@@ -168,23 +166,23 @@ export default {
     async auditApply(flag) {
       console.log(this.nowRow);
       let data = {
-        account: this.$store.state.userInfo.account,
         action: "审核标签",
+        labelCompanyCode: this.$store.state.userInfo.companyCode,
+        labelCompanyName: this.$store.state.userInfo.companyName,
+        account: this.$store.state.userInfo.account,
         actionId: this.nowRow.actionId,
         flowId: this.nowRow.flowId,
         companyCode: this.nowRow.companyCode,
-        labelCompanyCode: this.$store.state.userInfo.companyCode,
-        labelCompanyName: this.$store.state.userInfo.companyName,
-        labelUserId: this.$store.state.userInfo.id,
+        labelUserId: this.$store.state.userInfo.id
       };
-      let signData = this.$signData(data);
+      let signData = this.$signData(data,4);
       if (!signData) return;
-      let res = await this.$fetch('/label/audit', signData, 'POST');
+      let res = await this.$fetch("/label/audit", signData, "POST");
       if (res.code == 0) {
         this.dialogVisible = false;
-        this.$Message.success('操作成功！');
+        this.$message.success("操作成功！");
         this.getApplyList();
-      };
+      }
     },
     handleSelectionChange() {
       console.log(1);

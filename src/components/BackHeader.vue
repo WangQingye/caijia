@@ -18,7 +18,7 @@
             <el-dropdown-item>退出登陆</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <p class="user-company">{{this.$store.state.userInfo.companyTypeName}}</p>
+        <p class="user-company">{{this.$store.state.userInfo.companyName}}</p>
       </div>
     </div>
   </div>

@@ -109,23 +109,22 @@ export default {
     },
     async addTransInfo() {
       let data = this.$signData({
-        action: "物流信息",
-        actionId: this.rowData.id,
         batchCode: this.rowData.batchCode,
-        destAddr: this.logisticsForm.endPlace,
-        endBoxNum: this.logisticsForm.boxNumEnd,
-        srcAddr: this.logisticsForm.startPlace,
         startBoxNum: this.logisticsForm.boxNumStart,
-        transferTime: this.logisticsForm.date
-      });
+        endBoxNum: this.logisticsForm.boxNumEnd,
+        action: "物流信息",
+        srcAddr: this.logisticsForm.startPlace,
+        destAddr: this.logisticsForm.endPlace,
+        transferTime: this.logisticsForm.date,
+        actionId: this.rowData.id,
+      },7);
       if (!data) return;
       console.log(data);
       let res = await this.$fetch("/transfer/addTransfer", data, "POST");
-      console.log(res);
-      // if (res.code == 0) {
-      //   this.$message.success("添加成功");
-      //   this.$emit("back");
-      // }
+      if (res.code == 0) {
+        this.$message.success("添加成功");
+        this.$emit("back");
+      }
     }
   },
   watch: {

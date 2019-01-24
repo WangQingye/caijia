@@ -103,8 +103,8 @@
             <el-option
               v-for="(type,index) in goodBigTypes"
               :key="index"
-              :label="type.kind_name"
-              :value="type.kind_code"
+              :label="type.kindName"
+              :value="type.kindCode"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -116,8 +116,8 @@
             <el-option
               v-for="(type,index) in goodTypes"
               :key="index"
-              :label="type.variety_name"
-              :value="type.variety_code"
+              :label="type.varietyName"
+              :value="type.varietyCode"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -263,35 +263,8 @@ export default {
     },
     /* 添加批次号 */
     async addCode() {
-      // console.log(this.addCodeForm);
-      // console.log(this.addCodeForm.storeOrg);
-      // console.log(this.storeOrgs);
-      // console.log(
-      //   this.findKindName(
-      //     this.addCodeForm.storeCompanyName,
-      //     "storeCompanyCode",
-      //     "storeCompanyName",
-      //     "storeOrgs"
-      //   )
-      // );
-      // return;
       let data = {
-        account: this.$store.state.userInfo.account,
         action: "入库",
-        farmCode: this.$store.state.userInfo.companyCode,
-        farmName: this.$store.state.userInfo.companyName,
-        handlerId: this.$store.state.userInfo.id,
-        kindCode: this.addCodeForm.goodBigType,
-        kindName: this.findKindName(
-          this.addCodeForm.goodBigType,
-          "kind_code",
-          "kind_name",
-          "goodBigTypes"
-        ),
-        num: this.addCodeForm.num,
-        origin: this.addCodeForm.sourcePlace,
-        remark: this.addCodeForm.desc,
-        repositoryCode: this.addCodeForm.storeNum,
         storeCompanyCode: this.addCodeForm.storeOrg,
         storeCompanyName: this.findKindName(
           this.addCodeForm.storeOrg,
@@ -299,16 +272,31 @@ export default {
           "storeCompanyName",
           "storeOrgs"
         ),
-        storeTime: this.addCodeForm.pickTime,
+        repositoryCode: this.addCodeForm.storeNum,
+        kindCode: this.addCodeForm.goodBigType,
+        kindName: this.findKindName(
+          this.addCodeForm.goodBigType,
+          "kindCode",
+          "kindName",
+          "goodBigTypes"
+        ),
         varietyCode: this.addCodeForm.goodType,
         varietyName: this.findKindName(
           this.addCodeForm.goodType,
-          "variety_code",
-          "variety_name",
+          "varietyCode",
+          "varietyName",
           "goodTypes"
-        )
+        ),
+        num: this.addCodeForm.num,
+        origin: this.addCodeForm.sourcePlace,
+        storeTime: this.addCodeForm.pickTime,
+        remark: this.addCodeForm.desc,
+        farmCode: this.$store.state.userInfo.companyCode,
+        farmName: this.$store.state.userInfo.companyName,
+        account: this.$store.state.userInfo.account,
+        handlerId: this.$store.state.userInfo.id
       };
-      let signData = this.$signData(data);
+      let signData = this.$signData(data,15);
       if (!signData) return;
       let res = await this.$fetch("/storeRepertory/save", signData, "POST");
       console.log(res);

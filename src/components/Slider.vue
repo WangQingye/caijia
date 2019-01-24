@@ -117,7 +117,7 @@ export default{
             }
         },
         getMaxWidth(){
-            this.maxWidth = document.querySelector("#drag").clientWidth - document.querySelector(".handler").scrollWidth;
+            // this.maxWidth = document.querySelector("#drag").clientWidth - document.querySelector(".handler").scrollWidth;
         }
     },
 
