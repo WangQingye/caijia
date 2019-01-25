@@ -25,13 +25,34 @@
               <i class="el-icon-location"></i>
               <span slot="title">溯源数据管理</span>
             </template>
-            <el-menu-item v-if="this.$store.state.userInfo.typeCode == 2 || this.$store.state.userInfo.typeCode == 1" index="codemana">批次号管理</el-menu-item>
-            <el-menu-item v-if="this.$store.state.userInfo.typeCode == 4 || this.$store.state.userInfo.typeCode == 1" index="storemana">入库信息管理</el-menu-item>
-            <el-menu-item v-if="this.$store.state.userInfo.typeCode == 2 || this.$store.state.userInfo.typeCode == 1" index="tagmana">溯源标签管理</el-menu-item>
-            <el-menu-item v-if="this.$store.state.userInfo.typeCode == 3 || this.$store.state.userInfo.typeCode == 1" index="tagverify">溯源标签审核</el-menu-item>
-            <el-menu-item v-if="this.$store.state.userInfo.typeCode == 3 || this.$store.state.userInfo.typeCode == 1" index="verifyfill">检测信息填报</el-menu-item>
-            <el-menu-item v-if="this.$store.state.userInfo.typeCode == 2 || this.$store.state.userInfo.typeCode == 1" index="stockoutfill">出库信息填报</el-menu-item>
-            <el-menu-item v-if="this.$store.state.userInfo.typeCode == 5 || this.$store.state.userInfo.typeCode == 1" index="transfill">物流信息填报</el-menu-item>
+            <el-menu-item
+              v-if="this.$store.state.userInfo.typeCode == 2 || this.$store.state.userInfo.typeCode == 1"
+              index="codemana"
+            >批次号管理</el-menu-item>
+            <el-menu-item
+              v-if="this.$store.state.userInfo.typeCode == 4 || this.$store.state.userInfo.typeCode == 1"
+              index="storemana"
+            >入库信息管理</el-menu-item>
+            <el-menu-item
+              v-if="this.$store.state.userInfo.typeCode == 2 || this.$store.state.userInfo.typeCode == 1"
+              index="tagmana"
+            >溯源标签管理</el-menu-item>
+            <el-menu-item
+              v-if="this.$store.state.userInfo.typeCode == 3 || this.$store.state.userInfo.typeCode == 1"
+              index="tagverify"
+            >溯源标签审核</el-menu-item>
+            <el-menu-item
+              v-if="this.$store.state.userInfo.typeCode == 3 || this.$store.state.userInfo.typeCode == 1"
+              index="verifyfill"
+            >检测信息填报</el-menu-item>
+            <el-menu-item
+              v-if="this.$store.state.userInfo.typeCode == 2 || this.$store.state.userInfo.typeCode == 1"
+              index="stockoutfill"
+            >出库信息填报</el-menu-item>
+            <el-menu-item
+              v-if="this.$store.state.userInfo.typeCode == 5 || this.$store.state.userInfo.typeCode == 1"
+              index="transfill"
+            >物流信息填报</el-menu-item>
           </el-submenu>
           <el-menu-item
             index="2"
@@ -70,10 +91,15 @@
       </el-main>
     </el-container>
     <el-dialog
-      title="请输入二级密码后再次操作"
       :visible.sync="this.$store.state.showPkDialog"
       width="30%"
+      :show-close="false"
     >
+      <p
+        slot="title"
+      >
+      请输入二级密码后，<span style='color:red;font-weight:bold;font-size:15px'>再次操作</span>
+      </p>
       <el-input
         v-model="privateKey"
         placeholder="请输入二级密码"
@@ -114,7 +140,8 @@ export default {
       privateKey: ""
     };
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
     onMenuSelect(index, indexPath) {
       this.paths = [];
@@ -126,7 +153,24 @@ export default {
       this.$store.commit("setPkDialogShow", false);
     },
     savePrivateKey() {
-      console.log(this.privateKey, this.$store.state.userInfo.esk);
+      try {
+        let sign = api.apiSign(
+          { a: 1 },
+          api.apiDecESk(this.privateKey, this.$store.state.userInfo.esk)
+        );
+        var rr = api.apiVerify(
+          { a: 1 },
+          api.apiGetPk(this.$store.state.userInfo.pk),
+          sign
+        );
+        if (rr !== 0) {
+          this.$message.error("二级密码错误");
+          return;
+        }
+      } catch (error) {
+        this.$message.error("二级密码错误");
+        return;
+      }
       this.$store.commit(
         "savePrivateKey",
         api.apiDecESk(this.privateKey, this.$store.state.userInfo.esk)

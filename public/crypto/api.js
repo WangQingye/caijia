@@ -133,6 +133,14 @@
 			tpk = tpk + y;
 			return tpk;
 		}
+		
+		this.apiGetPk = function (tpk){
+			
+			var pkeyx = tpk.substring(2,2+64);
+			var pkeyy = tpk.substring(2+64,2+64+64);
+			var pk = {pkeyx:pkeyx,pkeyy:pkeyy};
+			return pk;
+		}
 
 		this.apiGetTransSign = function (s){
 			var sign = "30";

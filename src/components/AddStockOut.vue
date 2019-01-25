@@ -55,6 +55,7 @@
           v-model="stockOutForm.date"
           type="date"
           placeholder="请选择时间"
+          value-format="timestamp"
         >
         </el-date-picker>
       </el-form-item>
@@ -126,7 +127,7 @@ export default {
         endBoxNum: this.stockOutForm.boxNumEnd,
         action: "产品出库",
         transferCompanyCode: this.stockOutForm.logisticsCompany,
-        outTime: this.stockOutForm.date.getTime(),
+        outTime: this.stockOutForm.date,
         actionId: this.rowData.id,
       },6);
       if (!data) return;

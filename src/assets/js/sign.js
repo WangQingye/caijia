@@ -1,4 +1,5 @@
 import v from '../../main';
+
 function signData(data, num) {
     if (!v.$store.state.privateKey) {
         v.$store.commit("setPkDialogShow", true);
@@ -14,10 +15,9 @@ function signData(data, num) {
                 }
             }
         }
-        data1 = data1.substring(0,data1.length - 1);
-        console.log('data',data1);
+        data1 = data1.substring(0, data1.length - 1);
+        console.log(data1);
         let sign = api.apiSign(data1, v.$store.state.privateKey);
-        console.log('sign',sign);
         let ret = Object.assign(data, {
             sign: api.apiGetTransSign(sign)
         })

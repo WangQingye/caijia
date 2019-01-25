@@ -1,5 +1,7 @@
 import a from '../../main';
-import { Loading } from 'element-ui';
+import {
+    Loading
+} from 'element-ui';
 export default async (url = '', data = {}, type = 'GET', backend = '', method = 'fetch') => {
     type = type.toUpperCase();
     url = backend == 'user' ? userUrl + url : productUrl + url;
@@ -33,14 +35,24 @@ export default async (url = '', data = {}, type = 'GET', backend = '', method = 
             })
         }
         try {
-            // let loading = Loading.service({ fullscreen: false });
+            let loading = Loading.service({
+                fullscreen: false
+            });
+            let timer = setTimeout(() => {
+                loading.close();
+                a.$message({
+                    message: '连接超时',
+                    type: "error"
+                });
+            }, 10000)
             const response = await fetch(url, requestConfig);
             const responseData = await response.json();
-            // loading.close();
-            if (responseData.code !== 0 &&  responseData.code !== 301) {
+            clearTimeout(timer);
+            loading.close();
+            if (responseData.code !== 0 && responseData.code !== 301) {
                 console.log('请求错误', responseData);
                 a.$message({
-                    message: responseData.msg || '服务器未知错误',
+                    message: responseData.msg || '系统错误，请稍后再试',
                     type: "error"
                 });
                 // return false;
