@@ -34,7 +34,7 @@
           </li>
           <li>
             <span class="pro-title">企业</span>
-            <span class="pro-details">{{products.sstoreCompanyName}}</span>
+            <span class="pro-details">{{products.ocompanyName}}</span>
           </li>
         </ul>
       </div>
@@ -66,35 +66,9 @@ export default {
   name: "phone",
   data() {
     return {
-      urlParam:"id=0102010003000100211",
+      urlParam:"",
       products:[],
-      productDetails:[
-        {
-              ocreateTime:'2018-12-02',
-              oremark:'入库',
-              stepOrde:1
-          },
-           {
-              ocreateTime:'2018-12-02',
-              oremark:'检测',
-              stepOrde:2
-          },
-           {
-              ocreateTime:'2018-12-02',
-              oremark:'申请',
-              stepOrde:3
-          },
-           {
-              ocreateTime:'2018-12-02',
-              oremark:'出库',
-              stepOrde:4
-          },
-           {
-              ocreateTime:'2018-12-02',
-              oremark:'物流',
-              stepOrde:5
-          },
-      ]
+      productDetails:[]
     };
   },
   props: {
@@ -106,46 +80,52 @@ export default {
           '/queryController/queryOriginActionByBatch',
           {
            urlParam:this.urlParam
-          },
-          "get"
+          }
         );
         console.log(data.data)
-        for(var i=0;i<data.data.length;i++){
+        if(data.code == 0){
+          //alert(data.data.length)
+          for(var i=0;i<data.data.length;i++){
             var item=data.data[i];
-            //console.log(item)
+            console.log(item.stepOrde)
             if(item.stepOrde==1){
               //console.log("入库");
               this.products=item
-            }else if(item.stepOrde==2){
-              //console.log("检测")
-            }else if(item.stepOrde==3){
-              //console.log("标签申请")
-            }else if(item.stepOrde==4){
-              //console.log("出库")
-            }else{
-              //console.log("物流")
             }
-        }
+            // else if(item.stepOrde==2){
+            //   //console.log("检测")
+            // }else if(item.stepOrde==3){
+            //   //console.log("标签申请")
+            // }else if(item.stepOrde==4){
+            //   //console.log("出库")
+            // }else{
+            //   //console.log("物流")
+            // }
+          }
+          //alert(this.products)
         this.productDetails=data.data
+        }
+
     },
     renderTime(date) {
       var dateee = new Date(date).toJSON();
       return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
     },
     parseQRCode(codeURL){
-      var code = codeURL.split("id=");
+      var code = codeURL.split("id%3D");
       return code[1];
     },
     getUrlParam(){
       this.urlParam=location.href;
       var num=this.urlParam.indexOf("?");
       this.urlParam=this.urlParam.substr(num+10)
-      //lert(this.urlParam)
+      //alert(this.urlParam)
     }
   },
   mounted(){
-    this.getProductData();
     this.getUrlParam();
+    this.getProductData();
+
   },
   watch: {
 
@@ -164,15 +144,15 @@ export default {
     width: 100%;
     margin: 0 auto;
     .banner-wap{
-      width:375px;
+      width:100%;
       margin:0 auto;
     }
     .map{
-      width:375px;
+      width:100%;
       margin:0 auto;
       position:relative;
       .map-wap{
-        width:375px;
+        width:100%;
         margin:0 auto;
       }
       .location{
@@ -193,7 +173,7 @@ export default {
 
   }
   .product-msg{
-    width:375px;
+    width:100%;
     margin:0 auto;
     border:1px solid rgba(242, 242, 242, 1);
     ul{
@@ -221,22 +201,23 @@ export default {
           font-family:ArialMT;
           font-weight:400;
           color:rgba(117,117,117,1);
-          line-height:55px;
+          line-height:42px;
         }
       }
     }
   }
   .product{
-    width:311px;
+    width:100%;
     margin:0 auto;
     padding-top:30px;
+     position: relative;
   }
   .tableDot{
     position: relative;
     img{
       position: absolute;
       top:-65px;
-      left:-20px;
+      left:15px;
     }
   }
 
@@ -249,7 +230,7 @@ export default {
       background:rgba(242,242,242,1);
       position:absolute;
       top:-49px;
-      left:-13px;
+      left:21px;
   }
 }
 

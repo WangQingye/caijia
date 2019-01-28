@@ -92,20 +92,12 @@ export default {
       ],
       friendsLinks: [
         {
-          name: "恒大集团",
-          path: "https://www.baidu.com"
+          name: "信链官网",
+          path: "https://www.cetcxl.com"
         },
         {
-          name: "中垠官网",
-          path: "https://www.baidu.com"
-        },
-        {
-          name: "万联社区",
-          path: "https://www.baidu.com"
-        },
-        {
-          name: "万科周刊",
-          path: "https://www.baidu.com"
+          name: "智能合约快速开发平台",
+          path: "https://devplatform.cetcxl.com"
         }
       ]
     };
