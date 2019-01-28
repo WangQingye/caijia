@@ -148,6 +148,7 @@ export default {
     this.getUrlParam();
   },
   watch: {
+
   },
   components: {
     HeadLine,

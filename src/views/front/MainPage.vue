@@ -235,7 +235,7 @@ export default {
       position: relative;
     }
     .active-content {
-      width: 600px;
+      width: 790px;
     }
     .active-content ul {
       border-top: 1px solid rgba(242, 242, 242, 1);
@@ -272,7 +272,7 @@ export default {
     }
     .active-content ul li div.new-text span {
       float: right;
-      margin-top: -17px;
+      margin-top: -19px;
       font-size: 16px;
       font-family: MicrosoftYaHei;
       font-weight: 400;

@@ -12,7 +12,7 @@ export default{
     data(){
         return {
             scrollTop:'',
-            toShow:false
+            toShow:true
         }
     },
     methods:{
@@ -50,7 +50,7 @@ export default{
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     #UpToNow{
         width:311px;
         margin:0 auto;
@@ -58,7 +58,7 @@ export default{
     }
     .goTo{
         position: absolute;;
-        left:-60px;
+        left:-24px;
         bottom:-5px;
         font-size:14px;
         font-family:MicrosoftYaHei;

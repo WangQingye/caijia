@@ -8,7 +8,7 @@
         label="追溯码"
         name="first"
       >
-        <el-row :gutter="20">
+        <el-row :gutter="24">
           <el-col :span="14">
             <el-input
               v-model="input"
@@ -16,10 +16,10 @@
               placeholder="输入产品追溯码进行查询"
             ></el-input>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="7">
             <slider ref="confirmSuccess"></slider>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="3" style="padding:0;margin:0">
             <el-button
               type="primary"
               @click="open"
@@ -103,6 +103,7 @@
           :productIndex="index"
         >
         </product-table>
+
       </div>
       <up-to-now></up-to-now>
     </el-dialog>
@@ -154,8 +155,8 @@ export default {
               stepOrde:5
           }
       ],
-      isOpen: "",
-      isDisabled: false,
+      isDrag: false,
+      isDisabled: true,
       isModalshow:false
     };
   },
@@ -164,12 +165,10 @@ export default {
       //console.log(tab, event);
     },
     open() {
-      this.isOpen = this.$refs.confirmSuccess.confirmSuccess;
-      //console.log(this.isOpen)
-      if (this.input != "" && this.isOpen) {
-          this.isModalshow=true;
-
-        console.log(this.input);
+      this.isDrag = this.$refs.confirmSuccess.confirmSuccess;
+      if (this.input != "" && this.isDrag) {
+        this.isModalshow=true;
+        this.input=""
         this.getData();
       }
     },
@@ -181,6 +180,9 @@ export default {
         },
         "get"
       );
+      if(data.code=0){
+
+      }
       for (var i = 0; i < data.data.length; i++) {
         var item = data.data[i];
         //console.log(item)
@@ -209,7 +211,23 @@ export default {
         .replace(/\.[\d]{3}Z/, "");
     }
   },
-  watch: {},
+  computed:{
+
+  },
+  watch: {
+    input:{
+      handler(){
+        //console.log("input改变了")
+        this.isDisabled=false;
+      }
+    },
+    isModalshow:{
+      handler(){
+        //console.log("模态框改变了");
+        this.isDisabled=true;
+      }
+    }
+  },
   components: {
     HeadLine,
     ProductTable,
@@ -264,129 +282,144 @@ export default {
         padding:0;
     }
   }
-    .title-text {
-  font-size: 30px;
-  font-family: SourceHanSerifCN-SemiBold;
-  font-weight: 300;
-  color: rgba(85, 85, 85, 1);
-}
-.title-text02 {
-  font-size: 16px;
-  font-family: MicrosoftYaHeiLight;
-  font-weight: 300;
-  color: rgba(187, 187, 187, 1);
-}
-.head-line {
-  width: 1000px;
-  margin: 0 auto;
-  margin-bottom: 64px;
-}
-
-.el-row {
-  margin-bottom: 20px;
-  &:last-child {
-    margin-bottom: 0;
+  .title-text {
+    font-size: 30px;
+    font-family: SourceHanSerifCN-SemiBold;
+    font-weight: 300;
+    color: rgba(85, 85, 85, 1);
   }
-}
-.el-slider__runway {
-  width: 100%;
-  height: 42px;
-  background-color: #e4e7ed;
-  border-radius: 3px;
-  position: relative;
-  top: -17px;
-  cursor: pointer;
-  vertical-align: middle;
-}
+  .title-text02 {
+    font-size: 16px;
+    font-family: MicrosoftYaHeiLight;
+    font-weight: 300;
+    color: rgba(187, 187, 187, 1);
+  }
+  .head-line {
+    width: 1000px;
+    margin: 0 auto;
+    margin-bottom: 64px;
+  }
 
-.mapImg {
-  width: 100%;
-  margin: 0 auto;
-  position: relative;
-  .map-web {
-    width: 80%;
+  .el-row {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .el-col-4{
+      padding:0;
+
+    }
+  }
+  .el-slider__runway {
+    width: 100%;
+    height: 42px;
+    background-color: #e4e7ed;
+    border-radius: 3px;
+    position: relative;
+    top: -17px;
+    cursor: pointer;
+    vertical-align: middle;
+  }
+
+  .mapImg {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    .map-web {
+      width: 80%;
+      margin: 0 auto;
+    }
+    .location {
+      position: absolute;
+      bottom: 340px;
+      left: 320px;
+      img {
+        position: relative;
+        bottom: -12px;
+      }
+      p {
+        font-size: 16px;
+        font-family: MicrosoftYaHei-Bold;
+        font-weight: bold;
+        color: rgba(85, 85, 85, 1);
+        line-height: 52px;
+      }
+    }
+  }
+  .productMsg {
+    width: 1025px;
     margin: 0 auto;
   }
-  .location {
-    position: absolute;
-    bottom: 340px;
-    left: 320px;
-    img {
-      position: relative;
-      bottom: -12px;
-    }
-    p {
-      font-size: 16px;
-      font-family: MicrosoftYaHei-Bold;
-      font-weight: bold;
-      color: rgba(85, 85, 85, 1);
-      line-height: 52px;
-    }
+  .product {
+    width: 1000px;
+    margin: 0 auto;
+    margin-top: 20px;
   }
-}
-.productMsg {
-  width: 1025px;
-  margin: 0 auto;
-}
-.product {
-  width: 1000px;
-  margin: 0 auto;
-  margin-top: 20px;
-}
-.table.box {
-  width: 100%;
-}
-.table-row {
-  position: relative;
-  .table-dot {
-    position: absolute;
-    left: 200px;
+  .table.box {
+    width: 100%;
   }
-  .el-col-16 {
-    position: absolute;
-    left: -88px;
-  }
-  .goodsImg {
-    position: absolute;
-    top: -26px;
-    left: -275px;
-    img {
-      width: 140px;
-      height: 140px;
-    }
-  }
-}
-.product-list {
-  padding-top: 95px;
-  .Dot {
+  .table-row {
     position: relative;
-    img {
+    .table-dot {
       position: absolute;
-      top: -65px;
-      left: 286px;
+      left: 200px;
+    }
+    .el-col-16 {
+      position: absolute;
+      left: -88px;
+    }
+    .goodsImg {
+      position: absolute;
+      top: -26px;
+      left: -275px;
+      img {
+        width: 140px;
+        height: 140px;
+      }
     }
   }
-  .Dot:after {
-    content: "";
-    display: inline-block;
-    width: 3px;
-    height: 49px;
-    float: left;
-    background: rgba(242, 242, 242, 1);
-    position: absolute;
-    top: -49px;
-    left: 292px;
+  .product-list {
+    padding-top: 95px;
+    .Dot {
+      position: relative;
+      img {
+        position: absolute;
+        top: -65px;
+        left: 286px;
+      }
+    }
+    .Dot:after {
+      content: "";
+      display: inline-block;
+      width: 3px;
+      height: 49px;
+      float: left;
+      background: rgba(242, 242, 242, 1);
+      position: absolute;
+      top: -49px;
+      left: 292px;
+    }
   }
-}
-.goods-right div.table-row {
-  .el-col-16 {
-    left: 268px;
+  .goods-right div.table-row {
+    .el-col-16 {
+      left: 268px;
+    }
+    .goodsImg {
+      left: 544px;
+    }
   }
-  .goodsImg {
-    left: 544px;
+  #UpToNow{
+    width:1200px;
+    height:20px;
+    .goTo[data-v-15e02a80]{
+      width:311px;
+      margin:0 auto;
+      display:block;
+      position: absolute;
+      bottom:18px;
+      left:440px;
+    }
   }
-}
-
 }
 
 </style>
