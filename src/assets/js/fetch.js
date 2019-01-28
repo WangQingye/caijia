@@ -21,7 +21,7 @@ export default async (url = '', data = {}, type = 'GET', backend = '', method = 
             credentials: 'include', // 传Cookie给服务器用以维护登录状态
             method: type,
             headers: {
-                'Accept': 'application/json',
+                'Accept': 'application/json,text/html',
                 'Content-Type': 'application/json'
             },
             cache: 'no-cache'
@@ -46,16 +46,21 @@ export default async (url = '', data = {}, type = 'GET', backend = '', method = 
                 });
             }, 10000)
             const response = await fetch(url, requestConfig);
-            const responseData = await response.json();
             clearTimeout(timer);
             loading.close();
-            if (responseData.code !== 0 && responseData.code !== 301) {
-                console.log('请求错误', responseData);
-                a.$message({
-                    message: responseData.msg || '系统错误，请稍后再试',
-                    type: "error"
-                });
-                // return false;
+            let responseData;
+            if (url.indexOf('download') !== -1) {
+                responseData = await response.blob();
+            } else {
+                responseData = await response.json();
+                if (responseData.code !== 0 && responseData.code !== 301) {
+                    console.log('请求错误', responseData);
+                    a.$message({
+                        message: responseData.msg || '系统错误，请稍后再试',
+                        type: "error"
+                    });
+                    return false;
+                }
             }
             return responseData;
         } catch (err) {

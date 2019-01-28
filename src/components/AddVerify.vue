@@ -6,43 +6,21 @@
       :model="stockOutForm"
       label-width="80px"
       class="form"
+      :rules="rules"
     >
-      <!-- <el-form-item label="农企">
-        <el-select
-          v-model="stockOutForm.company"
-          placeholder="请选择批次号"
-        >
-          <el-option
-            v-for="(com,index) in companys"
-            :key="index"
-            :label="com"
-            :value="com"
-          ></el-option>
-        </el-select>
-      </el-form-item> -->
       <el-form-item label="农企">
         <p>{{rowData.companyName}}</p>
       </el-form-item>
       <el-form-item label="批次号">
         <p>{{rowData.batchCode}}</p>
       </el-form-item>
-      <!-- <el-form-item label="批次号">
-        <el-select
-          v-model="stockOutForm.codes"
-          placeholder="请选择批次号"
-        >
-          <el-option
-            v-for="(code,index) in codes"
-            :key="index"
-            :label="code"
-            :value="code"
-          ></el-option>
-        </el-select>
-      </el-form-item> -->
       <el-form-item label="溯源类别">
         <p>检测</p>
       </el-form-item>
-      <el-form-item label="描述">
+      <el-form-item
+        label="描述"
+        prop="desc"
+      >
         <el-input
           type="textarea"
           v-model="stockOutForm.desc"
@@ -66,7 +44,10 @@
           >只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
       </el-form-item>
-      <el-form-item label="时间">
+      <el-form-item
+        label="时间"
+        prop="date"
+      >
         <el-date-picker
           v-model="stockOutForm.date"
           type="date"
@@ -103,6 +84,14 @@ export default {
         desc: "",
         filePath: ""
       },
+      rules: {
+        desc: [
+          { required: true, message: "请输入检测结果描述", trigger: "blur" }
+        ],
+        date: [
+          { required: true, message: "请选择检测日期", trigger: "blur" }
+        ]
+      },
       codes: ["001", "002"],
       companys: ["农企1", "农企2"],
       fileList: [],
@@ -126,20 +115,20 @@ export default {
         farmCode: this.rowData.companyCode,
         farmName: this.rowData.companyName,
         remark: this.stockOutForm.desc,
-        picList: this.stockOutForm.filePath,
         checkTime: this.stockOutForm.date,
         account: this.$store.state.userInfo.account,
         actionId: this.rowData.actionId,
+        picList: this.stockOutForm.filePath,
         batchCode: this.rowData.batchCode,
         flowId: this.rowData.flowId,
-        handlerId: this.$store.state.userInfo.id,
+        handlerId: this.$store.state.userInfo.id
       };
-      let signData = this.$signData(data,9);
+      let signData = this.$signData(data, 8);
       if (!signData) return;
-      let res = await this.$fetch('/check/save', signData,'POST');
+      let res = await this.$fetch("/check/save", signData, "POST");
       console.log(res);
       if (res.code == 0) {
-        this.$message.success('信息填报成功');
+        this.$message.success("信息填报成功");
         this.back();
       }
     },

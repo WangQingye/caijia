@@ -92,48 +92,7 @@ export default {
       searchBoxNum: "",
       userType: 3,
       showAddCode: false,
-      codeData: [
-        {
-          company: "都江堰猕猴桃企业",
-          code: "1",
-          boxNum: "",
-          type: "入库",
-          desc: "猕猴桃采摘时间",
-          report: "无",
-          date: "2018-12-26",
-          person: "小张"
-        },
-        {
-          company: "都江堰猕猴桃企业",
-          code: "1",
-          boxNum: "",
-          type: "检测",
-          desc: "欧陆分析农产品检测，检测结果：合格",
-          report: "无",
-          date: "2018-12-26",
-          person: "小张"
-        },
-        {
-          company: "都江堰猕猴桃企业",
-          code: "1",
-          boxNum: "0001-0002",
-          type: "出库",
-          desc: "物流企业:物流企业1",
-          report: "无",
-          date: "2018-12-26",
-          person: "小张"
-        },
-        {
-          company: "都江堰猕猴桃企业",
-          code: "1",
-          boxNum: "0001-0002",
-          type: "物流",
-          desc: "始发地:成都 目的地:北京",
-          report: "无",
-          date: "2018-12-26",
-          person: "小张"
-        }
-      ],
+      codeData: [],
       labels: [
         {
           name: "农企",
@@ -158,7 +117,7 @@ export default {
         {
           name: "描述",
           prop: "remark",
-          width: "auto"
+          width: "160"
         },
         {
           name: "报告",
