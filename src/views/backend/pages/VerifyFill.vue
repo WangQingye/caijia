@@ -61,7 +61,7 @@
         >
           <template
             slot-scope="scope"
-            v-if="scope.row.step !== 3"
+            v-if="1< scope.row.step < 6"
           >
             <el-button
               @click="showSourceFill(scope.row)"

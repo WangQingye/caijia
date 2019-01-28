@@ -147,7 +147,7 @@
             v-model="addCodeForm.pickTime"
             type="date"
             placeholder="请选择产摘时间"
-            value-format="yyyy-MM-dd"
+            value-format="timestamp"
           >
           </el-date-picker>
         </el-form-item>
@@ -258,9 +258,10 @@ export default {
       }
     },
     handleOrgsChange(selection){
+      this.addCodeForm.goodType = '';
       this.goodTypes = this.goodTypesBefore.filter(item => {
         return item.kindCode == selection;
-      })
+      });
     },
     manuCode() {
       console.log(1);

@@ -15,13 +15,13 @@
         <p><i class="el-icon-menu"></i> 回到首页</p>
       </router-link>
       <div class="user-info">
-        <el-dropdown>
+        <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
             {{this.$store.state.userInfo.account}}<i class="el-icon-caret-bottom el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>修改密码</el-dropdown-item>
-            <el-dropdown-item>退出登陆</el-dropdown-item>
+            <el-dropdown-item command="0">修改密码</el-dropdown-item>
+            <el-dropdown-item command="1">退出登陆</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <p class="user-company">{{this.$store.state.userInfo.companyName}}</p>
@@ -37,7 +37,21 @@ export default {
     return {};
   },
   props: {},
-  methods: {},
+  methods: {
+    async logOut(){
+      let res = await this.$fetch('/user/logout', {}, 'POST', 'user');
+      if (res.code == 0) {
+        this.$message.success('退出登陆成功');
+        this.$router.push({path:'/login'});
+      };
+    },
+    handleCommand(c) {
+      console.log(c);
+      if (c == 1) {
+        this.logOut();
+      }
+    }
+  },
   watch: {}
 };
 </script>

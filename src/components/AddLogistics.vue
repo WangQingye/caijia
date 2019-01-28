@@ -54,6 +54,7 @@
           v-model="logisticsForm.date"
           type="date"
           placeholder="请选择时间"
+          value-format="timestamp"
         >
         </el-date-picker>
       </el-form-item>
