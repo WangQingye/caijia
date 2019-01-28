@@ -75,6 +75,12 @@ export default {
         document.getElementsByClassName("handler")[0].style.left = 0 + "px";
         document.getElementsByClassName("drag_bg")[0].style.width = 0 + "px";
       }
+    },
+    resetSlider(){
+      this.confirmSuccess = false;
+      this.confirmWords = "拖动滑块验证";
+      document.getElementsByClassName("handler")[0].style.left = 0 + "px";
+      document.getElementsByClassName("drag_bg")[0].style.width = 0 + "px";
     } //mouseup事件
   },
   mounted() {
@@ -86,6 +92,10 @@ export default {
     document
       .getElementsByTagName("html")[0]
       .addEventListener("mouseup", this.moseUpFn);
+      this.$emit('clickChange',this.resetSlider())
+  },
+  watch:{
+
   },
   destroyed() {
     document

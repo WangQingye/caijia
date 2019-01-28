@@ -17,7 +17,7 @@
             ></el-input>
           </el-col>
           <el-col :span="7">
-            <slider ref="confirmSuccess"></slider>
+            <slider ref="confirmSuccess" @changeEvent="changeSlider"></slider>
           </el-col>
           <el-col :span="3" style="padding:0;margin:0">
             <el-button
@@ -105,7 +105,7 @@
         </product-table>
 
       </div>
-      <up-to-now></up-to-now>
+
     </el-dialog>
 
   </div>
@@ -170,6 +170,20 @@ export default {
         this.isModalshow=true;
         this.input=""
         this.getData();
+
+        //console.log(this.isModalshow)
+      }else if(this.input.length !==19){
+        this.$message({
+          showClose: true,
+          message: '溯源码输入有误，请确认后重新输入！！',
+          type: 'error'
+        });
+      }else if(!this.isDrag){
+        this.$message({
+          showClose: true,
+          message: '请拖动滑片来验证！！',
+          type: 'error'
+        });
       }
     },
     async getData() {
@@ -202,7 +216,9 @@ export default {
       this.productDetails = data.data;
       console.log(data);
     },
+    changeSlider(){
 
+    },
     renderTime(date) {
       var dateee = new Date(date).toJSON();
       return new Date(+new Date(dateee) + 8 * 3600 * 1000)
@@ -212,6 +228,9 @@ export default {
     }
   },
   computed:{
+
+  },
+  mounted(){
 
   },
   watch: {

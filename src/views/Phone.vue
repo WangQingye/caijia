@@ -66,10 +66,10 @@ export default {
   name: "phone",
   data() {
     return {
-      urlParam:"id=0102010003000100211",
+      urlParam:"",
       products:[],
       productDetails:[
-        {
+ {
               ocreateTime:'2018-12-02',
               oremark:'入库',
               stepOrde:1
@@ -93,7 +93,7 @@ export default {
               ocreateTime:'2018-12-02',
               oremark:'物流',
               stepOrde:5
-          },
+          }
       ]
     };
   },
@@ -106,11 +106,11 @@ export default {
           '/queryController/queryOriginActionByBatch',
           {
            urlParam:this.urlParam
-          },
-          "get"
+          }
         );
         console.log(data.data)
-        for(var i=0;i<data.data.length;i++){
+        if(data.code==0){
+          for(var i=0;i<data.data.length;i++){
             var item=data.data[i];
             //console.log(item)
             if(item.stepOrde==1){
@@ -125,27 +125,30 @@ export default {
             }else{
               //console.log("物流")
             }
-        }
+          }
         this.productDetails=data.data
+        }
+
     },
     renderTime(date) {
       var dateee = new Date(date).toJSON();
       return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
     },
     parseQRCode(codeURL){
-      var code = codeURL.split("id=");
+      var code = codeURL.split("id%3D");
       return code[1];
     },
     getUrlParam(){
       this.urlParam=location.href;
       var num=this.urlParam.indexOf("?");
       this.urlParam=this.urlParam.substr(num+10)
-      //lert(this.urlParam)
+      //alert(this.urlParam)
     }
   },
   mounted(){
-    this.getProductData();
     this.getUrlParam();
+    this.getProductData();
+
   },
   watch: {
 
@@ -221,7 +224,7 @@ export default {
           font-family:ArialMT;
           font-weight:400;
           color:rgba(117,117,117,1);
-          line-height:55px;
+          line-height:42px;
         }
       }
     }
