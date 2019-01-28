@@ -8,7 +8,7 @@
                 <p class="time">{{renderTime(listData[productIndex].ocreateTime)}}</p>
                 <p class="details">{{listData[productIndex].oremark}}</p>
             </el-col>
-            <el-col :span="4" class="goodsImg">
+            <el-col :span="4" class="goodsImg" style="padding:0">
                 <!-- <img class="goods" src='@/assets/imgs/goods.jpg'> -->
                  <img class="goods" :src="imgs[listData[productIndex].stepOrde-1]">
             </el-col>
@@ -66,10 +66,11 @@ export default{
 <style lang="scss">
 
 .table-box{
-    width:375px;
+    width:311px;
     height:191px;
     margin:0 auto;
     margin-top:-25px;
+    position: relative;
 
     .el-row {
         margin-bottom: 20px;
@@ -113,11 +114,11 @@ export default{
         background:rgba(242,242,242,1);
         position:absolute;
         top:22px;
-        left:-14px;
+        left:-4px;
     }
     .dot{
         position:absolute;
-        left:-21px;
+        left:-11px;
     }
     .time{
         font-size:18px;
@@ -143,7 +144,7 @@ export default{
             height:70px;
             position:absolute;
             top:32px;
-            left:18px;
+            left:24px;
         }
 
     }
