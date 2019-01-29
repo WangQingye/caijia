@@ -106,7 +106,7 @@ export default {
       let res = await this.$fetch("/transfer/boxCountByCode", {
         actionId: this.rowData.id
       });
-      this.logisticsForm.boxNumStart = (res.data.curBoxNum || 0) + 1;
+      this.logisticsForm.boxNumStart = res.data.curBoxNum || 0;
       this.logisticsForm.boxNumEnd = res.data.endBoxNum;
     },
     async addTransInfo() {
