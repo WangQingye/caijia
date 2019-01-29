@@ -81,6 +81,14 @@ export default {
     resetSlider(){
       this.confirmSuccess = false;
       this.confirmWords = "拖动滑块验证";
+      this.mouseMoveStata = false;
+      document.getElementsByClassName("drag_text")[0].style.color = "black";
+          document
+      .getElementsByTagName("html")[0]
+      .addEventListener("mousemove", this.mouseMoveFn);
+    document
+      .getElementsByTagName("html")[0]
+      .addEventListener("mouseup", this.moseUpFn);
       document.getElementsByClassName("handler")[0].style.left = 0 + "px";
       document.getElementsByClassName("drag_bg")[0].style.width = 0 + "px";
     } //mouseup事件
