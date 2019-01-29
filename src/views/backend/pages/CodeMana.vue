@@ -17,23 +17,12 @@
           type="primary"
           @click="showCodeAdd"
         >添加</el-button>
-        <el-button type="danger">删除</el-button>
       </el-row>
       <el-table
         ref="codeTable"
         :data="codeData"
         style="width: 100%"
       >
-        <!-- <el-table-column
-          type="selection"
-          width="55"
-        >
-        </el-table-column>
-        <el-table-column
-          type="index"
-          width="50"
-        >
-        </el-table-column> -->
         <el-table-column
           v-for="(item,index) in labels"
           :key="index"
@@ -81,12 +70,16 @@
     <div v-if="showAddCode">
       <p class="title">批次号申请</p>
       <el-form
+        :rules="rules"
         ref="addCodeForm"
         :model="addCodeForm"
         label-width="80px"
         class="addCodeForm"
       >
-        <el-form-item label="仓储机构">
+        <el-form-item
+          label="仓储机构"
+          prop="storeOrg"
+        >
           <el-select
             v-model="addCodeForm.storeOrg"
             placeholder="请选择仓储机构"
@@ -99,10 +92,16 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="仓库编号">
+        <el-form-item
+          label="仓库编号"
+          prop="storeNum"
+        >
           <el-input v-model="addCodeForm.storeNum"></el-input>
         </el-form-item>
-        <el-form-item label="农产种类">
+        <el-form-item
+          label="农产种类"
+          prop="goodBigType"
+        >
           <el-select
             v-model="addCodeForm.goodBigType"
             placeholder="请选择农产种类"
@@ -116,7 +115,10 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="农产品种">
+        <el-form-item
+          label="农产品种"
+          prop="goodType"
+        >
           <el-select
             v-model="addCodeForm.goodType"
             placeholder="请选择农产品种"
@@ -129,20 +131,29 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="数量">
+        <el-form-item
+          label="数量"
+          prop="num"
+        >
           <el-input
             type="number"
             v-model="addCodeForm.num"
             :style="'display:inline-block;width:200px'"
           ></el-input><span> 吨</span>
         </el-form-item>
-        <el-form-item label="产地">
+        <el-form-item
+          label="产地"
+          prop="sourcePlace"
+        >
           <el-input
             placeholder="请输入产品产地"
             v-model="addCodeForm.sourcePlace"
           ></el-input>
         </el-form-item>
-        <el-form-item label="产摘时间">
+        <el-form-item
+          label="产摘时间"
+          prop="pickTime"
+        >
           <el-date-picker
             v-model="addCodeForm.pickTime"
             type="date"
@@ -151,7 +162,10 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="描述">
+        <el-form-item
+          label="描述"
+          prop="desc"
+        >
           <el-input
             type="textarea"
             v-model="addCodeForm.desc"
@@ -221,6 +235,27 @@ export default {
         pickTime: "",
         desc: ""
       },
+      rules: {
+        storeOrg: [
+          { required: true, message: "请选择仓储机构", trigger: "blur" }
+        ],
+        storeNum: [
+          { required: true, message: "请输入仓库编号", trigger: "blur" }
+        ],
+        goodBigType: [
+          { required: true, message: "请选择农产品种类", trigger: "blur" }
+        ],
+        goodType: [
+          { required: true, message: "请选择农产品品种", trigger: "blur" }
+        ],
+        num: [{ required: true, message: "请输入入库数量", trigger: "blur" }],
+        sourcePlace: [
+          { required: true, message: "请输入产地", trigger: "blur" }
+        ],
+        pickTime: [
+          { required: true, message: "请选择产摘时间", trigger: "blur" }
+        ]
+      },
       storeOrgs: [],
       goodBigTypes: [],
       goodTypesBefore: [],
@@ -257,8 +292,8 @@ export default {
         this.goodTypesBefore = res.variety;
       }
     },
-    handleOrgsChange(selection){
-      this.addCodeForm.goodType = '';
+    handleOrgsChange(selection) {
+      this.addCodeForm.goodType = "";
       this.goodTypes = this.goodTypesBefore.filter(item => {
         return item.kindCode == selection;
       });
@@ -275,48 +310,52 @@ export default {
     },
     /* 添加批次号 */
     async addCode() {
-      let data = {
-        action: "入库",
-        storeCompanyCode: this.addCodeForm.storeOrg,
-        storeCompanyName: this.findKindName(
-          this.addCodeForm.storeOrg,
-          "storeCompanyCode",
-          "storeCompanyName",
-          "storeOrgs"
-        ),
-        repositoryCode: this.addCodeForm.storeNum,
-        kindCode: this.addCodeForm.goodBigType,
-        kindName: this.findKindName(
-          this.addCodeForm.goodBigType,
-          "kindCode",
-          "kindName",
-          "goodBigTypes"
-        ),
-        varietyCode: this.addCodeForm.goodType,
-        varietyName: this.findKindName(
-          this.addCodeForm.goodType,
-          "varietyCode",
-          "varietyName",
-          "goodTypes"
-        ),
-        num: this.addCodeForm.num,
-        origin: this.addCodeForm.sourcePlace,
-        storeTime: this.addCodeForm.pickTime,
-        remark: this.addCodeForm.desc,
-        farmCode: this.$store.state.userInfo.companyCode,
-        farmName: this.$store.state.userInfo.companyName,
-        account: this.$store.state.userInfo.account,
-        handlerId: this.$store.state.userInfo.id
-      };
-      let signData = this.$signData(data, 15);
-      if (!signData) return;
-      let res = await this.$fetch("/storeRepertory/save", signData, "POST");
-      console.log(res);
-      if (res.code == 0) {
-        this.$message.success("申请成功");
-        this.showAddCode = false;
-        this.getCodeList(1);
-      }
+      this.$refs.addCodeForm.validate(async valid => {
+        if (valid) {
+          let data = {
+            action: "入库",
+            storeCompanyCode: this.addCodeForm.storeOrg,
+            storeCompanyName: this.findKindName(
+              this.addCodeForm.storeOrg,
+              "storeCompanyCode",
+              "storeCompanyName",
+              "storeOrgs"
+            ),
+            repositoryCode: this.addCodeForm.storeNum,
+            kindCode: this.addCodeForm.goodBigType,
+            kindName: this.findKindName(
+              this.addCodeForm.goodBigType,
+              "kindCode",
+              "kindName",
+              "goodBigTypes"
+            ),
+            varietyCode: this.addCodeForm.goodType,
+            varietyName: this.findKindName(
+              this.addCodeForm.goodType,
+              "varietyCode",
+              "varietyName",
+              "goodTypes"
+            ),
+            num: this.addCodeForm.num,
+            origin: this.addCodeForm.sourcePlace,
+            storeTime: this.addCodeForm.pickTime,
+            remark: this.addCodeForm.desc,
+            farmCode: this.$store.state.userInfo.companyCode,
+            farmName: this.$store.state.userInfo.companyName,
+            account: this.$store.state.userInfo.account,
+            handlerId: this.$store.state.userInfo.id
+          };
+          let signData = this.$signData(data, 15);
+          if (!signData) return;
+          let res = await this.$fetch("/storeRepertory/save", signData, "POST");
+          console.log(res);
+          if (res.code == 0) {
+            this.$message.success("申请成功");
+            this.showAddCode = false;
+            this.getCodeList(1);
+          }
+        }
+      });
     },
     /* 展示批次号申请界面 */
     showCodeAdd() {
@@ -339,25 +378,25 @@ export default {
       let text;
       switch (step) {
         case 1:
-          text = '入库待审核';
+          text = "入库待审核";
           break;
         case 2:
-          text = '入库审核完成';
+          text = "入库审核完成";
           break;
         case 3:
-          text = '检测完成';
+          text = "检测完成";
           break;
         case 4:
-          text = '申请标签待审核';
+          text = "申请标签待审核";
           break;
         case 5:
-          text = '标签审核完成';
+          text = "标签审核完成";
           break;
         case 6:
-          text = '出库中';
+          text = "出库中";
           break;
         case 7:
-          text = '出库完成';
+          text = "出库完成";
           break;
       }
       return text;

@@ -17,7 +17,6 @@
           type="primary"
           @click="showAddCode=true"
         >申请</el-button>
-        <el-button type="danger">删除</el-button>
       </el-row>
       <el-table
         ref="codeTable"
@@ -63,11 +62,11 @@
         >
           <template slot-scope="scope">
             <el-button
-              @click="manuCode(scope.row)"
+              @click="downCode(scope.row)"
               type="text"
               size="small"
-              :disabled="true"
-            >编辑</el-button>
+              v-if="scope.row.step == 5"
+            >下载溯源码</el-button>
             <el-button
               type="text"
               size="small"
@@ -88,8 +87,12 @@
         :model="addTagForm"
         label-width="80px"
         class="addTagForm"
+        :rules="rules"
       >
-        <el-form-item label="批次号">
+        <el-form-item
+          label="批次号"
+          prop="code"
+        >
           <el-select
             v-model="addTagForm.code"
             placeholder="请选择批次号"
@@ -103,22 +106,37 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="农产种类">
+        <el-form-item
+          label="农产种类"
+          prop="goodType"
+        >
           {{addTagForm.goodType}}
         </el-form-item>
-        <el-form-item label="箱码数量">
+        <el-form-item
+          label="箱码数量"
+          prop="boxNum"
+        >
           <el-input
             type="number"
             v-model="addTagForm.boxNum"
+            placeholder="请输入箱码数量"
           ></el-input>
         </el-form-item>
-        <el-form-item label="果码数量">
+        <el-form-item
+          label="果码数量"
+          prop="singleNum"
+        >
           <el-input
             type="number"
             v-model="addTagForm.singleNum"
+            placeholder="请输入每箱的果码数量"
           ></el-input>
+          <p :style="'font-size:10px;color:gray'">标签数 = 箱码数 X 果码数，单次申请不能超过100万个。</p>
         </el-form-item>
-        <el-form-item label="取码方式">
+        <el-form-item
+          label="取码方式"
+          prop="getType"
+        >
           <el-select
             v-model="addTagForm.getType"
             placeholder="请选择取码方式"
@@ -134,6 +152,7 @@
         <el-form-item
           v-if="addTagForm.getType == 1"
           label="收货地址"
+          prop="address"
         >
           <el-input
             placeholder="请输入收货地址"
@@ -143,6 +162,7 @@
         <el-form-item
           v-if="addTagForm.getType == 1"
           label="联系人"
+          prop="contact"
         >
           <el-input
             placeholder="请输入联系人"
@@ -152,6 +172,7 @@
         <el-form-item
           v-if="addTagForm.getType == 1"
           label="电话号码"
+          prop="phone"
         >
           <el-input
             placeholder="请输入电话号码"
@@ -217,6 +238,25 @@ export default {
         kindCode: "",
         flowId: ""
       },
+      rules: {
+        code: [{ required: true, message: "请选择批次号", trigger: "blur" }],
+        boxNum: [
+          { required: true, message: "请输入箱码数量", trigger: "blur" }
+        ],
+        singleNum: [
+          { required: true, message: "请选择农产品种类", trigger: "blur" }
+        ],
+        address: [
+          { required: true, message: "请选择农产品品种", trigger: "blur" }
+        ],
+        contact: [
+          { required: true, message: "请输入入库数量", trigger: "blur" }
+        ],
+        sourcePlace: [
+          { required: true, message: "请输入产地", trigger: "blur" }
+        ],
+        phone: [{ required: true, message: "请选择产摘时间", trigger: "blur" }]
+      },
       codes: [],
       getTypes: [{ name: "快递", code: 1 }, { name: "自行打印", code: 0 }]
     };
@@ -233,31 +273,40 @@ export default {
       this.codes = res.data;
     },
     async applyTag() {
-      let data = {
-        action: "申请标签",
-        companyCode: this.$store.state.userInfo.companyCode,
-        companyName: this.$store.state.userInfo.companyName,
-        varietyCode: this.addTagForm.kindCode,
-        varietyName: this.addTagForm.goodType,
-        batchCode: this.addTagForm.code,
-        boxNum: this.addTagForm.boxNum,
-        perNum: this.addTagForm.singleNum,
-        recType: this.addTagForm.getType,
-        contacts: this.addTagForm.contact,
-        recAddr: this.addTagForm.address,
-        phone: this.addTagForm.phone,
-        account: this.$store.state.userInfo.account,
-        flowId: this.addTagForm.flowId,
-        handlerId: this.$store.state.userInfo.id
-      };
-      let signData = this.$signData(data, 13);
-      if (!signData) return;
-      let res = await this.$fetch("/label/apply", signData, "POST");
-      if (res.code == 0) {
-        this.$message.success("申请成功，请等待审核");
-        this.showAddCode = false;
-        this.getApplyList();
-      }
+      this.$refs.addTagForm.validate(async valid => {
+        if (
+          valid &&
+          this.addTagForm.boxNum * this.addTagForm.singleNum < 1000000
+        ) {
+          let data = {
+            action: "申请标签",
+            companyCode: this.$store.state.userInfo.companyCode,
+            companyName: this.$store.state.userInfo.companyName,
+            varietyCode: this.addTagForm.kindCode,
+            varietyName: this.addTagForm.goodType,
+            batchCode: this.addTagForm.code,
+            boxNum: this.addTagForm.boxNum,
+            perNum: this.addTagForm.singleNum,
+            recType: this.addTagForm.getType,
+            contacts: this.addTagForm.contact,
+            recAddr: this.addTagForm.address,
+            phone: this.addTagForm.phone,
+            account: this.$store.state.userInfo.account,
+            flowId: this.addTagForm.flowId,
+            handlerId: this.$store.state.userInfo.id
+          };
+          let signData = this.$signData(data, 13);
+          if (!signData) return;
+          let res = await this.$fetch("/label/apply", signData, "POST");
+          if (res.code == 0) {
+            this.$message.success("申请成功，请等待审核");
+            this.showAddCode = false;
+            this.getApplyList();
+          }
+        } else {
+          this.$message.error("标签数量过大，请分批申请");
+        }
+      });
     },
     async getApplyList() {
       let res = await this.$fetch(
@@ -287,8 +336,17 @@ export default {
     handleSelectionChange() {
       console.log(1);
     },
-    manuCode() {
-      console.log(1);
+    async downCode(row) {
+      let res = await this.$fetch("/label/download", {
+        companyCode: row.companyCode,
+        batch: row.batchCode
+      });
+      var a = document.createElement("a");
+      var url = window.URL.createObjectURL(res);
+      a.href = url;
+      a.download = `溯源码${row.batchCode}.zip`;
+      a.click();
+      window.URL.revokeObjectURL(url);
     },
     pageChange(page) {
       console.log(page);
