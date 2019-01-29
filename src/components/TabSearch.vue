@@ -151,8 +151,7 @@ export default {
       ],
       isDrag: false,
       isDisabled: true,
-      isModalshow:false,
-      codeMsg:400
+      isModalshow:false
     };
   },
   methods: {
@@ -160,26 +159,9 @@ export default {
       //console.log(tab, event);
     },
     open() {
-      this.getData();
-      console.log(this.codeMsg)
       this.isDrag = this.$refs.confirmSuccess.confirmSuccess;
-      if (this.codeMsg ==0) {
-        this.isModalshow=true;
-        this.inputText =this.input;
-       //console.log(this.isModalshow)
-      }else if(this.input.length !==19){
-        this.$message({
-          showClose: true,
-          message: '溯源码输入有误，请确认后重新输入！！',
-          type: 'error'
-        });
-      }else if(!this.isDrag){
-        this.$message({
-          showClose: true,
-          message: '请拖动滑片来验证！！',
-          type: 'error'
-        });
-      }
+      this.inputText =this.input;
+      this.getData();
     },
     async getData() {
       let data = await fetch(
@@ -190,9 +172,8 @@ export default {
         "get"
       );
       console.log(data)
+
       if(data.code==0){
-        this.codeMsg=data.code
-        console.log(this.codeMsg)
         for (var i = 0; i < data.data.length; i++) {
           var item = data.data[i];
           //console.log(item)
@@ -210,13 +191,20 @@ export default {
           }
         }
         this.productDetails = data.data;
+        this.isModalshow=true;
         //console.log(data);
-      }else {
-        return this.$message({
+      }else if(data.code!==0){
+         this.$message({
           showClose: true,
           message: '溯源码输入有误，请确认后重新输入！！',
           type: 'error'
         });
+      }else if(!this.isDrag){
+         this.$message({
+            showClose: true,
+            message: '请拖动滑片来验证！！',
+            type: 'error'
+          });
       }
 
     },
