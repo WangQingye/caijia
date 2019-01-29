@@ -31,9 +31,8 @@
       </el-tab-pane>
     </el-tabs>
     <el-dialog
-    show-close
+      show-close
       :visible.sync="isModalshow"
-      :width="'63%'"
     >
       <img src="@/assets/imgs/bj-web.png" class="bj-web"/>
       <head-line
@@ -441,39 +440,60 @@ export default {
   }
   .el-dialog__wrapper{
       width:100%;
-      min-width:1000px;
+      //min-width:1000px;
       .el-dialog{
-        width:100%;
-        min-width:1000px;
+        width:50%;
+        //min-width:1000px;
         .el-dialog__body{
           width:100%;
-          min-width:1000px;
+          //min-width:1000px;
           img.bj-web{
             width:100%;
-            min-width:1000px;
+            //min-width:1000px;
           }
           .head-line{
             width:100%;
-            min-width:1000px;
+            //min-width:1000px;
           }
           .mapImg{
             width:100%;
-            min-width:1000px;
+            //min-width:1000px;
           }
           .productMsg{
             width:100%;
-            min-width:1000px;
+            //min-width:1000px;
             ul{
               width:50%;
             }
           }
           .table-box{
             width:100%;
-            max-width:311px;
+            //max-width:311px;
           }
         }
       }
 
+  }
+
+
+  /* Small devices (portrait tablets and large phones, 600px and up) */
+  @media only screen and (min-width: 600px) {
+      .example {background: green;}
+  }
+
+  /* Medium devices (landscape tablets, 768px and up) */
+  @media only screen and (min-width: 768px) {
+      .example {background: blue;}
+  }
+
+  /* Large devices (laptops/desktops, 992px and up) */
+  @media only screen and (min-width: 992px) {
+      .example {background: orange;}
+  }
+
+  /* Extra large devices (large laptops and desktops, 1200px and up) */
+  @media only screen and (min-width: 1200px) {
+      .example {background: pink;}
   }
 }
 

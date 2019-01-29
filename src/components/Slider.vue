@@ -108,7 +108,7 @@ export default {
     modalEvent:{
       handler(val,newval){
         //console.log("变化了")
-        console.log("原数值"+val,"新数值"+newval)
+        //console.log("原数值"+val,"新数值"+newval)
         if(val){
           this.resetSlider();
         }
