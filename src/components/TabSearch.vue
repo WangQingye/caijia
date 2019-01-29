@@ -196,7 +196,7 @@ export default {
         },
         "get"
       );
-      if(data.code=0){
+      if(data.code==0){
         for (var i = 0; i < data.data.length; i++) {
         var item = data.data[i];
         //console.log(item)
