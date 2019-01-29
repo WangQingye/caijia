@@ -126,6 +126,7 @@ export default {
         let res = await this.$fetch("/transfer/addTransfer", data, "POST");
         if (res.code == 0) {
           this.$message.success("添加成功");
+          this.$refs.logisticsForm.resetFields();
           this.$emit("back");
         }
       });

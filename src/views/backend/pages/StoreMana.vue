@@ -1,6 +1,6 @@
 <template>
   <div class="codeMana">
-    <div v-if="!showAddCode">
+    <div>
       <p class="text">批次号</p>
       <el-input
         class="search-input"
@@ -95,7 +95,6 @@ export default {
   data() {
     return {
       searchCode: "",
-      showAddCode: false,
       codeData: [],
       labels: [
         {

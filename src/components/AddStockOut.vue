@@ -137,6 +137,8 @@ export default {
         let res = await this.$fetch("/out/outRepertory", data, "POST");
         if (res.code == 0) {
           this.$message.success("添加成功");
+          this.$refs.stockOutForm.resetFields();
+          this.getBoxNum();
           this.$emit("back");
         }
       });

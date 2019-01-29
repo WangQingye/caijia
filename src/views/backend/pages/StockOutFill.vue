@@ -119,15 +119,6 @@ export default {
           prop: "step"
         },
         {
-          name: "描述",
-          prop: "remark",
-          width: "auto"
-        },
-        {
-          name: "报告",
-          prop: "report"
-        },
-        {
           name: "时间",
           prop: "createTime"
         },

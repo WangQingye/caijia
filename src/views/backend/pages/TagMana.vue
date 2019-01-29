@@ -302,6 +302,7 @@ export default {
             let res = await this.$fetch("/label/apply", signData, "POST");
             if (res.code == 0) {
               this.$message.success("申请成功，请等待审核");
+              this.$refs.addTagForm.resetFields();
               this.showAddCode = false;
               this.getApplyList();
             }
