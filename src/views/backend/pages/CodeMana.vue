@@ -63,8 +63,8 @@
         </el-table-column>
       </el-table>
       <pagination
-        :total="codeData.length"
-        :page-change="pageChange"
+        :total="dataTotalLength"
+        @page-change="pageChange"
       ></pagination>
     </div>
     <div v-if="showAddCode">
@@ -185,7 +185,9 @@
 
 <script>
 import Pagination from "@/components/Pagination.vue";
+import PageMixin from "@/assets/js/pageMixin";
 export default {
+  mixins: [PageMixin],
   data() {
     return {
       searchCode: "",
@@ -273,13 +275,14 @@ export default {
         {
           companyCode: this.$store.state.userInfo.companyCode,
           typeCode: this.$store.state.userInfo.typeCode,
-          limit: 5,
+          limit: this.pageLimit,
           page: page
         },
         "POST"
       );
       if (res.code == 0) {
         this.codeData = res.data.data;
+        this.dataTotalLength = res.data.countSize;
       }
     },
     /* 获取物流企业，产品类别 */
@@ -300,9 +303,6 @@ export default {
     },
     manuCode() {
       console.log(1);
-    },
-    pageChange(page) {
-      console.log(page);
     },
     /* 批次号表单验证 */
     onAddSubmit() {
@@ -345,7 +345,7 @@ export default {
             account: this.$store.state.userInfo.account,
             handlerId: this.$store.state.userInfo.id
           };
-          this.$checkSign(data, async (signData) => {
+          this.$checkSign(data, async signData => {
             if (!signData) {
               signData = this.$signData(data, 15);
             }

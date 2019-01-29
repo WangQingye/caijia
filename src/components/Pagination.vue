@@ -2,7 +2,7 @@
   <el-pagination
     @current-change="handleCurrentChange"
     :current-page.sync="currentPage"
-    :page-size="10"
+    :page-size="pageLimit"
     layout="prev, pager, next, jumper"
     :total="total"
     class="pagination"
@@ -11,11 +11,13 @@
 </template>
 
 <script>
+import PageMixin from "@/assets/js/pageMixin";
 export default {
+  mixins: [PageMixin],
   name: "Header",
   data() {
     return {
-        currentPage:1
+      currentPage: 1
     };
   },
   props: {
@@ -26,7 +28,7 @@ export default {
   },
   methods: {
     handleCurrentChange(page) {
-      this.$emit('page-change', page)
+      this.$emit("page-change", page);
     }
   }
 };
@@ -35,7 +37,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .pagination {
-    text-align: center;
-    margin: 20px 0
+  text-align: center;
+  margin: 20px 0;
 }
 </style>

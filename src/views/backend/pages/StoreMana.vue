@@ -64,8 +64,8 @@
         </el-table-column>
       </el-table>
       <pagination
-        :total="codeData.length"
-        :page-change="pageChange"
+        :total="dataTotalLength"
+        @page-change="pageChange"
       ></pagination>
     </div>
     <el-dialog
@@ -91,7 +91,9 @@
 <script>
 // import fetch from "@/assets/js/Fetch.js";
 import Pagination from "@/components/Pagination.vue";
+import PageMixin from "@/assets/js/pageMixin";
 export default {
+  mixins: [PageMixin],
   data() {
     return {
       searchCode: "",
@@ -147,24 +149,23 @@ export default {
     };
   },
   mounted() {
-    // this.getTem();
-    this.getStoreList(1);
+    this.getCodeList(1);
   },
   methods: {
-    async getStoreList(page) {
+    async getCodeList(page) {
       let res = await this.$fetch(
         "/storeRepertory/getAudit",
         {
-          page: 1,
-          limit: 5,
+          page: page,
+          limit: this.pageLimit,
           typeCode: this.$store.state.userInfo.typeCode,
           storeCompanyCode: this.$store.state.userInfo.companyCode
         },
         "POST"
       );
-      console.log(res);
       if (res.code == 0) {
         this.codeData = res.data.data;
+        this.dataTotalLength = res.data.countSize;
       }
     },
     handleSelectionChange() {
@@ -197,9 +198,6 @@ export default {
           this.getStoreList(1);
         }
       });
-    },
-    pageChange(page) {
-      console.log(page);
     },
     onAddSubmit() {}
   },
