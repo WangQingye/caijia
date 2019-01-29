@@ -22,3 +22,18 @@ button {
 }
 /* 布局(grids)(.g-) */
 /* 页面 */
+
+@media only screen and (max-width: 800px) {
+    .tab-search .el-dialog__wrapper{
+      width:500px;
+    }
+    .tab-search .el-dialog__wrapper  .el-dialog{
+        width:500px;
+      }
+      .main .el-dialog__wrapper .el-dialog .el-dialog__body{
+          width:500px;
+      }
+      .main .el-dialog__wrapper .el-dialog .el-dialog__body img.bj-web{
+          width:50%;
+      }
+  }
