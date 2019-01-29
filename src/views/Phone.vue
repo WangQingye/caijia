@@ -68,7 +68,33 @@ export default {
     return {
       urlParam:"",
       products:[],
-      productDetails:[]
+      productDetails:[
+        // {
+        //       ocreateTime:'2018-12-02',
+        //       oremark:'入库',
+        //       stepOrde:1
+        //   },
+        //    {
+        //       ocreateTime:'2018-12-02',
+        //       oremark:'检测',
+        //       stepOrde:2
+        //   },
+        //    {
+        //       ocreateTime:'2018-12-02',
+        //       oremark:'申请',
+        //       stepOrde:3
+        //   },
+        //    {
+        //       ocreateTime:'2018-12-02',
+        //       oremark:'出库',
+        //       stepOrde:4
+        //   },
+        //    {
+        //       ocreateTime:'2018-12-02',
+        //       oremark:'物流',
+        //       stepOrde:5
+        //   }
+      ]
     };
   },
   props: {

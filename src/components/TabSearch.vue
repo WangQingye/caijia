@@ -130,31 +130,31 @@ export default {
       index: "",
       products: [],
       productDetails: [
-          {
-              ocreateTime:'2018-12-02',
-              oremark:'入库',
-              stepOrde:1
-          },
-           {
-              ocreateTime:'2018-12-02',
-              oremark:'检测',
-              stepOrde:2
-          },
-           {
-              ocreateTime:'2018-12-02',
-              oremark:'申请',
-              stepOrde:3
-          },
-           {
-              ocreateTime:'2018-12-02',
-              oremark:'出库',
-              stepOrde:4
-          },
-           {
-              ocreateTime:'2018-12-02',
-              oremark:'物流',
-              stepOrde:5
-          }
+          // {
+          //     ocreateTime:'2018-12-02',
+          //     oremark:'入库',
+          //     stepOrde:1
+          // },
+          //  {
+          //     ocreateTime:'2018-12-02',
+          //     oremark:'检测',
+          //     stepOrde:2
+          // },
+          //  {
+          //     ocreateTime:'2018-12-02',
+          //     oremark:'申请',
+          //     stepOrde:3
+          // },
+          //  {
+          //     ocreateTime:'2018-12-02',
+          //     oremark:'出库',
+          //     stepOrde:4
+          // },
+          //  {
+          //     ocreateTime:'2018-12-02',
+          //     oremark:'物流',
+          //     stepOrde:5
+          // }
       ],
       isDrag: false,
       isDisabled: true,
@@ -381,17 +381,18 @@ export default {
     position: relative;
     .table-dot {
       position: absolute;
-      left: 200px;
+      left: 168px;
     }
     .el-col-16 {
       position: absolute;
-      left: -88px;
+      left: -108px;
     }
     .goodsImg {
       position: absolute;
       top: -26px;
-      left: -275px;
+      left: -317px;
       img {
+        left:0px;
         width: 140px;
         height: 140px;
       }
@@ -404,7 +405,7 @@ export default {
       img {
         position: absolute;
         top: -65px;
-        left: 286px;
+        left: 297px;
       }
     }
     .Dot:after {
@@ -416,15 +417,15 @@ export default {
       background: rgba(242, 242, 242, 1);
       position: absolute;
       top: -49px;
-      left: 292px;
+      left: 304px;
     }
   }
   .goods-right div.table-row {
     .el-col-16 {
-      left: 268px;
+      left: 219px;
     }
     .goodsImg {
-      left: 544px;
+      left: 510px;
     }
   }
   #UpToNow{
