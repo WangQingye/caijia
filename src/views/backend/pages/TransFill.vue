@@ -48,6 +48,7 @@
         >
           <template slot-scope="scope">
             <p v-if="!scope.row[item.prop]">无</p>
+            <p v-else-if="item.prop == 'endBoxNum'"> {{scope.row.endBoxNum-scope.row.startBoxNum+1}}</p>
             <p v-else>{{scope.row[item.prop]}}</p>
           </template>
         </el-table-column>
@@ -61,7 +62,8 @@
               @click="showSourceFill(scope.row)"
               type="text"
               size="small"
-            >填报物流</el-button>
+              :disabled="Boolean(scope.row.isComplete)"
+            >{{ scope.row.isComplete ? '填报完成':'填报物流' }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -107,7 +109,7 @@ export default {
           prop: "varietyName"
         },
         {
-          name: "箱码",
+          name: "箱数",
           prop: "endBoxNum"
         },
         {
@@ -118,10 +120,6 @@ export default {
           name: "描述",
           prop: "remark",
           width: "160"
-        },
-        {
-          name: "报告",
-          prop: "report"
         },
         {
           name: "时间",

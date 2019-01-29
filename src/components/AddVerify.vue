@@ -1,9 +1,9 @@
 <template>
-  <div class="add-stock-out">
+  <div class="add-verify">
     <p class="title">检测机构 - 检测信息填报</p>
     <el-form
-      ref="stockOutForm"
-      :model="stockOutForm"
+      ref="addVerifyForm"
+      :model="addVerifyForm"
       label-width="80px"
       class="form"
       :rules="rules"
@@ -23,7 +23,7 @@
       >
         <el-input
           type="textarea"
-          v-model="stockOutForm.desc"
+          v-model="addVerifyForm.desc"
         ></el-input>
       </el-form-item>
       <el-form-item label="检测报告">
@@ -49,7 +49,7 @@
         prop="date"
       >
         <el-date-picker
-          v-model="stockOutForm.date"
+          v-model="addVerifyForm.date"
           type="date"
           placeholder="请选择时间"
           value-format="timestamp"
@@ -72,10 +72,10 @@
 
 <script>
 export default {
-  name: "add-stock-out",
+  name: "add-verify",
   data() {
     return {
-      stockOutForm: {
+      addVerifyForm: {
         code: "",
         boxNumStart: "",
         boxNumEnd: "",
@@ -112,11 +112,11 @@ export default {
         checkCompanyName: this.$store.state.userInfo.companyName,
         farmCode: this.rowData.companyCode,
         farmName: this.rowData.companyName,
-        remark: this.stockOutForm.desc,
-        checkTime: this.stockOutForm.date,
+        remark: this.addVerifyForm.desc,
+        checkTime: this.addVerifyForm.date,
         account: this.$store.state.userInfo.account,
         actionId: this.rowData.actionId,
-        picList: this.stockOutForm.filePath,
+        picList: this.addVerifyForm.filePath,
         batchCode: this.rowData.batchCode,
         flowId: this.rowData.flowId,
         handlerId: this.$store.state.userInfo.id
@@ -128,6 +128,7 @@ export default {
         let res = await this.$fetch("/check/save", signData, "POST");
         if (res.code == 0) {
           this.$message.success("信息填报成功");
+          this.$refs.addVerifyForm.resetFields();
           this.back();
         }
       });
@@ -138,10 +139,10 @@ export default {
     handleFileChange(res, file, fileList) {
       console.log(res.data);
       if (res.code == 0) {
-        if (this.stockOutForm.filePath) {
-          this.stockOutForm.filePath += ",";
+        if (this.addVerifyForm.filePath) {
+          this.addVerifyForm.filePath += ",";
         }
-        this.stockOutForm.filePath += res.data[0];
+        this.addVerifyForm.filePath += res.data[0];
       }
       this.fileList = fileList;
     }

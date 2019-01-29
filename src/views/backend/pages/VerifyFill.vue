@@ -113,10 +113,6 @@ export default {
           prop: "varietyName"
         },
         {
-          name: "箱码",
-          prop: "boxNum"
-        },
-        {
           name: "溯源状态",
           prop: "step"
         },

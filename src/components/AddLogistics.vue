@@ -22,11 +22,12 @@
         <p>{{rowData.batchCode}}</p>
       </el-form-item>
       <el-form-item label="箱码">
-        <el-input
+        <!-- <el-input
           type="number"
           v-model="logisticsForm.boxNumStart"
           class="box-num"
-        ></el-input>
+        ></el-input> -->
+        <p class="box-num" :style="'width:20px'">{{logisticsForm.boxNumStart}}</p>
         <span> ~ </span>
         <el-input
           type="number"
@@ -37,19 +38,19 @@
       <el-form-item label="溯源类别">
         <p>物流</p>
       </el-form-item>
-      <el-form-item label="始发地">
+      <el-form-item label="始发地" prop="startPlace">
         <el-input
           placeholder="请输入物流始发地"
           v-model="logisticsForm.startPlace"
         ></el-input>
       </el-form-item>
-      <el-form-item label="目的地">
+      <el-form-item label="目的地" prop="endPlace">
         <el-input
           placeholder="请输入物流目的地"
           v-model="logisticsForm.endPlace"
         ></el-input>
       </el-form-item>
-      <el-form-item label="时间">
+      <el-form-item label="时间" prop="date">
         <el-date-picker
           v-model="logisticsForm.date"
           type="date"
@@ -126,6 +127,8 @@ export default {
         let res = await this.$fetch("/transfer/addTransfer", data, "POST");
         if (res.code == 0) {
           this.$message.success("添加成功");
+          this.$refs.logisticsForm.resetFields();
+          this.getBoxNum();
           this.$emit("back");
         }
       });
@@ -159,5 +162,6 @@ export default {
 }
 .box-num {
   width: 100px;
+  display: inline-block;
 }
 </style>
