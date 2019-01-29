@@ -17,7 +17,7 @@
             ></el-input>
           </el-col>
           <el-col :span="7">
-            <slider ref="confirmSuccess" @changeEvent="changeSlider"></slider>
+            <slider ref="confirmSuccess" :modalEvent="isModalshow"></slider>
           </el-col>
           <el-col :span="3" style="padding:0;margin:0">
             <el-button
@@ -57,7 +57,7 @@
       <div class="productMsg">
         <ul class="ul1">
           <li>
-            产品编号<span>{{input}}</span>
+            产品编号<span>{{inputText}}</span>
           </li>
           <li>
             产地<span>{{products.sorigin}}</span>
@@ -124,6 +124,7 @@ export default {
     return {
       activeName: "first",
       input: "",
+      inputText:"",
       tabValue: 0,
       stopValue: "",
       index: "",
@@ -157,7 +158,8 @@ export default {
       ],
       isDrag: false,
       isDisabled: true,
-      isModalshow:false
+      isModalshow:false,
+      isClick:false
     };
   },
   methods: {
@@ -168,10 +170,10 @@ export default {
       this.isDrag = this.$refs.confirmSuccess.confirmSuccess;
       if (this.input != "" && this.isDrag) {
         this.isModalshow=true;
-        this.input=""
+         this.inputText =this.input;
+         this.isClick=true;
         this.getData();
-
-        //console.log(this.isModalshow)
+       //console.log(this.isModalshow)
       }else if(this.input.length !==19){
         this.$message({
           showClose: true,
@@ -190,14 +192,12 @@ export default {
       let data = await fetch(
         "/queryController/queryOriginActionByCode",
         {
-          inputCode: this.input
+          inputCode: this.inputText
         },
         "get"
       );
       if(data.code=0){
-
-      }
-      for (var i = 0; i < data.data.length; i++) {
+        for (var i = 0; i < data.data.length; i++) {
         var item = data.data[i];
         //console.log(item)
         if (item.stepOrde == 1) {
@@ -214,9 +214,8 @@ export default {
         }
       }
       this.productDetails = data.data;
-      console.log(data);
-    },
-    changeSlider(){
+      //console.log(data);
+      }
 
     },
     renderTime(date) {
@@ -244,6 +243,7 @@ export default {
       handler(){
         //console.log("模态框改变了");
         this.isDisabled=true;
+        this.input="";
       }
     }
   },

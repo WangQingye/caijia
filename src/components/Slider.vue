@@ -26,6 +26,7 @@ export default {
       confirmSuccess: false /*验证成功判断*/
     };
   },
+  props:["modalEvent"],
   methods: {
     mousedownFn: function(e) {
       if (!this.confirmSuccess) {
@@ -33,6 +34,7 @@ export default {
         this.mouseMoveStata = true;
         this.beginClientX = e.clientX;
       }
+      //console.log(this.modalEvent)
     }, //mousedoen 事件
     successFunction() {
       this.confirmSuccess = true;
@@ -84,6 +86,7 @@ export default {
     } //mouseup事件
   },
   mounted() {
+     //console.log(this.modalEvent)
     this.maxwidth =
       this.$refs.dragDiv.clientWidth - this.$refs.moveDiv.clientWidth;
     document
@@ -92,10 +95,18 @@ export default {
     document
       .getElementsByTagName("html")[0]
       .addEventListener("mouseup", this.moseUpFn);
-      this.$emit('clickChange',this.resetSlider())
   },
   watch:{
+    modalEvent:{
+      handler(val,newval){
+        //console.log("变化了")
+        console.log("原数值"+val,"新数值"+newval)
+        if(val){
+          this.resetSlider();
+        }
 
+      }
+    }
   },
   destroyed() {
     document
