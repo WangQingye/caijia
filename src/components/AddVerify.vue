@@ -88,9 +88,7 @@ export default {
         desc: [
           { required: true, message: "请输入检测结果描述", trigger: "blur" }
         ],
-        date: [
-          { required: true, message: "请选择检测日期", trigger: "blur" }
-        ]
+        date: [{ required: true, message: "请选择检测日期", trigger: "blur" }]
       },
       codes: ["001", "002"],
       companys: ["农企1", "农企2"],
@@ -123,14 +121,16 @@ export default {
         flowId: this.rowData.flowId,
         handlerId: this.$store.state.userInfo.id
       };
-      let signData = this.$signData(data, 8);
-      if (!signData) return;
-      let res = await this.$fetch("/check/save", signData, "POST");
-      console.log(res);
-      if (res.code == 0) {
-        this.$message.success("信息填报成功");
-        this.back();
-      }
+      this.$checkSign(data, async signData => {
+        if (!signData) {
+          signData = this.$signData(data, 8);
+        }
+        let res = await this.$fetch("/check/save", signData, "POST");
+        if (res.code == 0) {
+          this.$message.success("信息填报成功");
+          this.back();
+        }
+      });
     },
     back() {
       this.$emit("back", true);

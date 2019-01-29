@@ -345,15 +345,35 @@ export default {
             account: this.$store.state.userInfo.account,
             handlerId: this.$store.state.userInfo.id
           };
-          let signData = this.$signData(data, 15);
-          if (!signData) return;
-          let res = await this.$fetch("/storeRepertory/save", signData, "POST");
-          console.log(res);
-          if (res.code == 0) {
-            this.$message.success("申请成功");
-            this.showAddCode = false;
-            this.getCodeList(1);
-          }
+          // let signData = this.$signData(data, 15);
+          // this.$checkSign(signData, async () => {
+          //   let reSignData = this.$signData(data, 15);
+          //   let res = await this.$fetch(
+          //     "/storeRepertory/save",
+          //     reSignData,
+          //     "POST"
+          //   );
+          //   if (res.code == 0) {
+          //     this.$message.success("申请成功");
+          //     this.showAddCode = false;
+          //     this.getCodeList(1);
+          //   }
+          // });
+          this.$checkSign(data, async (signData) => {
+            if (!signData) {
+              signData = this.$signData(data, 15);
+            }
+            let res = await this.$fetch(
+              "/storeRepertory/save",
+              signData,
+              "POST"
+            );
+            if (res.code == 0) {
+              this.$message.success("申请成功");
+              this.showAddCode = false;
+              this.getCodeList(1);
+            }
+          });
         }
       });
     },

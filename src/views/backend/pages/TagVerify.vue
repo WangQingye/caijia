@@ -187,14 +187,18 @@ export default {
         companyCode: this.nowRow.companyCode,
         labelUserId: this.$store.state.userInfo.id
       };
-      let signData = this.$signData(data, 4);
-      if (!signData) return;
-      let res = await this.$fetch("/label/audit", signData, "POST");
-      if (res.code == 0) {
-        this.dialogVisible = false;
-        this.$message.success("操作成功！");
-        this.getApplyList();
-      }
+      this.$checkSign(data, async signData => {
+        console.log(data);
+        if (!signData) {
+          signData = this.$signData(data, 4);
+        }
+        let res = await this.$fetch("/label/audit", signData, "POST");
+        if (res.code == 0) {
+          this.dialogVisible = false;
+          this.$message.success("操作成功！");
+          this.getApplyList();
+        }
+      });
     },
     handleSelectionChange() {
       console.log(1);

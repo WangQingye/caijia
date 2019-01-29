@@ -105,11 +105,11 @@ export default {
       let res = await this.$fetch("/transfer/boxCountByCode", {
         actionId: this.rowData.id
       });
-      this.logisticsForm.boxNumStart = this.rowData.curBoxNum || 0;
-      this.logisticsForm.boxNumEnd = this.rowData.endBoxNum;
+      this.logisticsForm.boxNumStart = (res.data.curBoxNum || 0) + 1;
+      this.logisticsForm.boxNumEnd = res.data.endBoxNum;
     },
     async addTransInfo() {
-      let data = this.$signData({
+      let data = {
         batchCode: this.rowData.batchCode,
         startBoxNum: this.logisticsForm.boxNumStart,
         endBoxNum: this.logisticsForm.boxNumEnd,
@@ -117,15 +117,18 @@ export default {
         srcAddr: this.logisticsForm.startPlace,
         destAddr: this.logisticsForm.endPlace,
         transferTime: this.logisticsForm.date,
-        actionId: this.rowData.id,
-      },7);
-      if (!data) return;
-      console.log(data);
-      let res = await this.$fetch("/transfer/addTransfer", data, "POST");
-      if (res.code == 0) {
-        this.$message.success("添加成功");
-        this.$emit("back");
-      }
+        actionId: this.rowData.id
+      };
+      this.$checkSign(data, async signData => {
+        if (!signData) {
+          signData = this.$signData(data, 7);
+        }
+        let res = await this.$fetch("/transfer/addTransfer", data, "POST");
+        if (res.code == 0) {
+          this.$message.success("添加成功");
+          this.$emit("back");
+        }
+      });
     }
   },
   watch: {

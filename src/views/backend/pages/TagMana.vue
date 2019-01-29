@@ -295,14 +295,17 @@ export default {
             flowId: this.addTagForm.flowId,
             handlerId: this.$store.state.userInfo.id
           };
-          let signData = this.$signData(data, 13);
-          if (!signData) return;
-          let res = await this.$fetch("/label/apply", signData, "POST");
-          if (res.code == 0) {
-            this.$message.success("申请成功，请等待审核");
-            this.showAddCode = false;
-            this.getApplyList();
-          }
+          this.$checkSign(data, async signData => {
+            if (!signData) {
+              signData = this.$signData(data, 13);
+            }
+            let res = await this.$fetch("/label/apply", signData, "POST");
+            if (res.code == 0) {
+              this.$message.success("申请成功，请等待审核");
+              this.showAddCode = false;
+              this.getApplyList();
+            }
+          });
         } else {
           this.$message.error("标签数量过大，请分批申请");
         }

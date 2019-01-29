@@ -98,7 +98,7 @@
       <p
         slot="title"
       >
-      请输入二级密码后，<span style='color:red;font-weight:bold;font-size:15px'>再次操作</span>
+      此操作需要二级密码
       </p>
       <el-input
         v-model="privateKey"
@@ -176,6 +176,7 @@ export default {
         api.apiDecESk(this.privateKey, this.$store.state.userInfo.esk)
       );
       this.$store.commit("setPkDialogShow", false);
+      this.$store.state.pkCallBack();
     }
   },
   components: {
