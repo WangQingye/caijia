@@ -35,7 +35,6 @@
         ref="codeTable"
         :data="codeData"
         style="width: 100%; margin-top:40px"
-        @selection-change="handleSelectionChange"
       >
         <el-table-column
           v-for="(item,index) in labels"
@@ -76,7 +75,8 @@
     </div>
     <div v-show="showAddCode">
       <add-stock-out
-        @back="showAddCode=false"
+        ref="stockOut"
+        @back="stockOutBack"
         :rowData="nowRow"
       ></add-stock-out>
     </div>
@@ -133,10 +133,10 @@ export default {
   },
   mounted() {
     // this.getTem();
-    this.getList();
+    this.getCodeList();
   },
   methods: {
-    async getList() {
+    async getCodeList() {
       let res = await this.$fetch("/list/queryOriginAction", {
         page: 1,
         limit: 5
@@ -148,10 +148,12 @@ export default {
     showSourceFill(row) {
       this.showAddCode = true;
       this.nowRow = row;
+      this.$refs.stockOut.getBoxNum(row.batchCode);
       // console.log(this.nowRow);
     },
-    handleSelectionChange() {
-      console.log(1);
+    stockOutBack(){
+      this.showAddCode = false;
+      this.getCodeList();
     },
     manuCode() {
       console.log(1);
@@ -190,9 +192,7 @@ export default {
   },
   components: {
     Pagination,
-    AddLogistics,
-    AddStockOut,
-    AddVerify
+    AddStockOut
   }
 };
 </script>

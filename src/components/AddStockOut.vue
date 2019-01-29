@@ -97,14 +97,17 @@ export default {
       type: Object
     }
   },
+  mounted(){
+    this.getTransCom();
+  },
   methods: {
     onAddSubmit() {},
     back() {
       this.$emit("back");
     },
-    async getBoxNum() {
+    async getBoxNum(code) {
       let res = await this.$fetch("/out/boxCountByCode", {
-        batchCode: this.rowData.batchCode
+        batchCode: code || this.rowData.batchCode
       });
       if (res.code == 0) {
         this.stockOutForm.boxNumStart = (res.data.curBoxNum || 0) + 1;
@@ -138,7 +141,6 @@ export default {
         if (res.code == 0) {
           this.$message.success("添加成功");
           this.$refs.stockOutForm.resetFields();
-          this.getBoxNum();
           this.$emit("back");
         }
       });
@@ -148,8 +150,8 @@ export default {
     "rowData.batchCode": {
       // immediate: true,
       handler: function(val) {
-        this.getBoxNum();
-        this.getTransCom();
+        // this.getBoxNum();
+        // this.getTransCom();
       }
     }
   }
