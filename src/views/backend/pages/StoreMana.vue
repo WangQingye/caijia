@@ -195,7 +195,7 @@ export default {
         if (res.code == 0) {
           this.$message.success("审核成功");
           this.dialogVisible = false;
-          this.getStoreList(1);
+          this.getCodeList(1);
         }
       });
     },
