@@ -37,9 +37,7 @@
           :width="'160' || item.width"
           align="center"
         >
-          <template
-            slot-scope="scope"
-          >
+          <template slot-scope="scope">
             <p v-if="item.prop == 'step'">
               {{scope.row.step == 2 ? '审核完成' : '待审核'}}
             </p>
@@ -189,14 +187,17 @@ export default {
         companyCode: this.nowRow.companyCode,
         storeUserId: this.$store.state.userInfo.id
       };
-      let signData = this.$signData(data,4);
-      if (!signData) return;
-      let res = await this.$fetch("/storeRepertory/audit", signData, "POST");
-      if (res.code == 0) {
-        this.$message.success('审核成功');
-        this.dialogVisible = false;
-        this.getStoreList(1);
-      }
+      this.$checkSign(data, async signData => {
+        if (!signData) {
+          signData = this.$signData(data, 4);
+        }
+        let res = await this.$fetch("/storeRepertory/audit", signData, "POST");
+        if (res.code == 0) {
+          this.$message.success("审核成功");
+          this.dialogVisible = false;
+          this.getStoreList(1);
+        }
+      });
     },
     pageChange(page) {
       console.log(page);

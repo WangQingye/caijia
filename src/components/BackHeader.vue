@@ -42,11 +42,11 @@ export default {
       let res = await this.$fetch('/user/logout', {}, 'POST', 'user');
       if (res.code == 0) {
         this.$message.success('退出登陆成功');
+        this.$store.commit("savePrivateKey", null);
         this.$router.push({path:'/login'});
       };
     },
     handleCommand(c) {
-      console.log(c);
       if (c == 1) {
         this.logOut();
       }

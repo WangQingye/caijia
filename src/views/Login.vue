@@ -41,6 +41,9 @@
             @click="submitForm('loginForm')"
             :style="'width:200px;margin-left:-50px'"
           >登陆</el-button>
+          <router-link to="/main">
+            <p :style="'margin-left:-50px;font-size:12px;text-decoration:underline'">返回首页</p>
+          </router-link>
         </el-form-item>
       </el-form>
     </el-card>
@@ -100,15 +103,17 @@ export default {
         password: this.loginForm.password
       };
       let res = await fetch("/user/login", data, "POST", "user");
-      if (res.code == 0){
+      if (res.code == 0) {
         this.$message.success({
           message: "登陆成功",
           type: "success"
         });
         this.$store.commit("saveUserInfo", res.data);
-        console.log(this.privateKey);
         if (this.privateKey) {
-          this.$store.commit("savePrivateKey", api.apiDecESk(this.privateKey,res.data.esk));
+          this.$store.commit(
+            "savePrivateKey",
+            api.apiDecESk(this.privateKey, res.data.esk)
+          );
         }
         this.$router.push({ path: "/backend" });
       } else if (res.code == 301) {
@@ -158,7 +163,7 @@ export default {
   width: 100%;
   height: 100vh;
   background: white;
-  background: url('../../src/assets/imgs/bj1.jpg');
+  background: url("../../src/assets/imgs/bj1.jpg");
   background-repeat: no-repeat;
   background-size: 100% auto;
   padding-top: 15%;

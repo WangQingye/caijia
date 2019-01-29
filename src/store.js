@@ -20,7 +20,8 @@ export default new Vuex.Store({
       // "usable": true
     },
     showPkDialog: false,
-    privateKey: ''
+    privateKey: '',
+    pkCallBack: null
   },
   mutations: {
     saveUserInfo(state, info) {
@@ -31,6 +32,9 @@ export default new Vuex.Store({
     },
     savePrivateKey(state, key) {
       state.privateKey = key
+    },
+    setPkCallBack(state, cb) {
+      state.pkCallBack = cb
     }
   },
   actions: {

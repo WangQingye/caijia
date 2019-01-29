@@ -107,7 +107,7 @@ export default {
         batchCode: this.rowData.batchCode
       });
       if (res.code == 0) {
-        this.stockOutForm.boxNumStart = res.data.curBoxNum || 0;
+        this.stockOutForm.boxNumStart = (res.data.curBoxNum || 0) + 1;
         this.stockOutForm.boxNumEnd = res.data.boxNum;
       }
     },
@@ -121,23 +121,25 @@ export default {
       }
     },
     async addTransInfo() {
-      let data = this.$signData({
+      let data = {
         batchCode: this.rowData.batchCode,
         startBoxNum: this.stockOutForm.boxNumStart,
         endBoxNum: this.stockOutForm.boxNumEnd,
         action: "产品出库",
         transferCompanyCode: this.stockOutForm.logisticsCompany,
         outTime: this.stockOutForm.date,
-        actionId: this.rowData.id,
-      },6);
-      if (!data) return;
-      console.log(data);
-      let res = await this.$fetch("/out/outRepertory", data, 'POST');
-      console.log(res);
-      if (res.code == 0) {
-        this.$message.success('添加成功');
-        this.$emit("back");
-      }
+        actionId: this.rowData.id
+      };
+      this.$checkSign(data, async signData => {
+        if (!signData) {
+          signData = this.$signData(data, 6);
+        }
+        let res = await this.$fetch("/out/outRepertory", data, "POST");
+        if (res.code == 0) {
+          this.$message.success("添加成功");
+          this.$emit("back");
+        }
+      });
     }
   },
   watch: {
