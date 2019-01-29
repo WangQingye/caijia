@@ -54,8 +54,18 @@ export default{
     },
     methods:{
          renderTime(date) {
-            var dateee = new Date(date).toJSON();
-            return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+            let aa = date.replace(/\-/g,'/');
+            let bb = aa.replace(/T/g,' ');
+            let cc = bb.split('.')[0];
+            let dataObj = new Date(cc);
+            let txt = '';
+            txt += dataObj.getFullYear() + '-';
+            txt += dataObj.getMonth() + 1 + '-';
+            txt += dataObj.getDate() + ' ';
+            txt += dataObj.getHours() + ':';
+            txt += dataObj.getMinutes() + ':';
+            txt += dataObj.getSeconds();
+            return txt;
         }
 
     }
