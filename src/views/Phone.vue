@@ -40,11 +40,11 @@
       </div>
       <head-line :text="'产品溯源'" :text02="'PRODUCT  TRACEABILITY'"></head-line>
       <div class="product">
-        <el-row :gutter="20">
-          <el-col :span="12"  class="tableDot">
-            <img src="@/assets/imgs/yuan1.png">
-          </el-col>
-        </el-row>
+        <div  class="dot-row">
+          <div  class="tableDot">
+              <img src="@/assets/imgs/yuan1.png">
+          </div>
+        </div>
         <product-table
         :listData="productDetails"
         v-for="(item,index) in productDetails "
@@ -238,26 +238,33 @@ export default {
     padding-top:30px;
      position: relative;
   }
-  .tableDot{
+  .dot-row{
+    width: 311px;
+    height: 29px;
+    margin: 0 auto;
     position: relative;
-    img{
-      position: absolute;
-      top:-65px;
-      left:15px;
+    .tableDot{
+
+      img{
+        position: absolute;
+        top:-65px;
+        left:-20px;
+      }
+    }
+
+    .tableDot:after{
+        content:"";
+        display:inline-block;
+        width:3px;
+        height:49px;
+        float: left;
+        background:rgba(242,242,242,1);
+        position:absolute;
+        top:-49px;
+        left:-14px;
     }
   }
 
-  .tableDot:after{
-      content:"";
-      display:inline-block;
-      width:3px;
-      height:49px;
-      float: left;
-      background:rgba(242,242,242,1);
-      position:absolute;
-      top:-49px;
-      left:21px;
-  }
 }
 
 </style>

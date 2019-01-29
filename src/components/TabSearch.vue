@@ -33,9 +33,9 @@
     <el-dialog
     show-close
       :visible.sync="isModalshow"
-      :width="'1200px'"
+      :width="'63%'"
     >
-      <img src="@/assets/imgs/bj-web.png" />
+      <img src="@/assets/imgs/bj-web.png" class="bj-web"/>
       <head-line
         :text="'原产品'"
         :text02="'COUNTRY   OF  ORIGIN'"
@@ -83,18 +83,11 @@
         :text02="'PRODUCT  TRACEABILITY'"
       ></head-line>
       <div class="product-list">
-        <el-row :gutter="20">
-          <el-col
-            :span="12"
-            :offset="6"
-            class="Dot"
-          >
-            <img
-              src="@/assets/imgs/yuan1.png"
-              alt=""
-            >
-          </el-col>
-        </el-row>
+        <div class="Dot-row">
+          <div class="Dot">
+              <img src="@/assets/imgs/yuan1.png" alt="">
+          </div>
+        </div>
         <product-table
           :class="['goods-item',`item-${index+1}`, index%2==0 ?'goods-left':'goods-right']"
           :listData="productDetails"
@@ -159,7 +152,7 @@ export default {
       isDrag: false,
       isDisabled: true,
       isModalshow:false,
-      isClick:false
+      codeMsg:400
     };
   },
   methods: {
@@ -167,12 +160,12 @@ export default {
       //console.log(tab, event);
     },
     open() {
+      this.getData();
+      console.log(this.codeMsg)
       this.isDrag = this.$refs.confirmSuccess.confirmSuccess;
-      if (this.input != "" && this.isDrag) {
+      if (this.codeMsg ==0) {
         this.isModalshow=true;
-         this.inputText =this.input;
-         this.isClick=true;
-        this.getData();
+        this.inputText =this.input;
        //console.log(this.isModalshow)
       }else if(this.input.length !==19){
         this.$message({
@@ -196,25 +189,34 @@ export default {
         },
         "get"
       );
+      console.log(data)
       if(data.code==0){
+        this.codeMsg=data.code
+        console.log(this.codeMsg)
         for (var i = 0; i < data.data.length; i++) {
-        var item = data.data[i];
-        //console.log(item)
-        if (item.stepOrde == 1) {
-          //console.log("入库");
-          this.products = item;
-        } else if (item.stepOrde == 2) {
-          //console.log("检测")
-        } else if (item.stepOrde == 3) {
-          //console.log("标签申请")
-        } else if (item.stepOrde == 4) {
-          //console.log("出库")
-        } else {
-          //console.log("物流")
+          var item = data.data[i];
+          //console.log(item)
+          if (item.stepOrde == 1) {
+            //console.log("入库");
+            this.products = item;
+          } else if (item.stepOrde == 2) {
+            //console.log("检测")
+          } else if (item.stepOrde == 3) {
+            //console.log("标签申请")
+          } else if (item.stepOrde == 4) {
+            //console.log("出库")
+          } else {
+            //console.log("物流")
+          }
         }
-      }
-      this.productDetails = data.data;
-      //console.log(data);
+        this.productDetails = data.data;
+        //console.log(data);
+      }else {
+        return this.$message({
+          showClose: true,
+          message: '溯源码输入有误，请确认后重新输入！！',
+          type: 'error'
+        });
       }
 
     },
@@ -300,6 +302,7 @@ export default {
     .el-dialog__header{
         padding:0;
     }
+
   }
   .title-text {
     font-size: 30px;
@@ -350,7 +353,7 @@ export default {
     }
     .location {
       position: absolute;
-      bottom: 340px;
+      bottom: 236px;
       left: 320px;
       img {
         position: relative;
@@ -399,13 +402,21 @@ export default {
     }
   }
   .product-list {
+    width:100%;
+    min-width:1000px;
     padding-top: 95px;
-    .Dot {
+    .Dot-row{
+      width:100%;
+      max-width:311px;
+      margin:0 auto;
+      height:29px;
       position: relative;
+    }
+    .Dot {
       img {
         position: absolute;
         top: -65px;
-        left: 297px;
+        left: 145px;
       }
     }
     .Dot:after {
@@ -417,7 +428,7 @@ export default {
       background: rgba(242, 242, 242, 1);
       position: absolute;
       top: -49px;
-      left: 304px;
+      left: 152px;
     }
   }
   .goods-right div.table-row {
@@ -439,6 +450,42 @@ export default {
       bottom:18px;
       left:440px;
     }
+  }
+  .el-dialog__wrapper{
+      width:100%;
+      min-width:1000px;
+      .el-dialog{
+        width:100%;
+        min-width:1000px;
+        .el-dialog__body{
+          width:100%;
+          min-width:1000px;
+          img.bj-web{
+            width:100%;
+            min-width:1000px;
+          }
+          .head-line{
+            width:100%;
+            min-width:1000px;
+          }
+          .mapImg{
+            width:100%;
+            min-width:1000px;
+          }
+          .productMsg{
+            width:100%;
+            min-width:1000px;
+            ul{
+              width:50%;
+            }
+          }
+          .table-box{
+            width:100%;
+            max-width:311px;
+          }
+        }
+      }
+
   }
 }
 
