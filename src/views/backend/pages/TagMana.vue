@@ -65,8 +65,9 @@
               @click="downCode(scope.row)"
               type="text"
               size="small"
-              v-if="scope.row.step == 5"
-            >下载溯源码</el-button>
+              v-if="scope.row.step >= 5"
+              :disabled="!Boolean(scope.row.labelStatus)"
+            >{{scope.row.labelStatus ? '下载溯源码' : '标签生成中'}}</el-button>
             <el-button
               type="text"
               size="small"
