@@ -190,7 +190,7 @@ export default {
       );
       console.log(data);
 
-      if (data.code == 0) {
+      if (data.code == 0 && this.isDrag) {
         for (var i = 0; i < data.data.length; i++) {
           var item = data.data[i];
           //console.log(item)
