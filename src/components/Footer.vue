@@ -79,15 +79,15 @@ export default {
         },
         {
           name: "农产品投保",
-          path: "/"
+          path: ""
         },
         {
           name: "理赔公示",
-          path: "/"
+          path: ""
         },
         {
           name: "联系我们",
-          path: "/"
+          path: ""
         }
       ],
       friendsLinks: [

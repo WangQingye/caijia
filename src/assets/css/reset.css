@@ -36,4 +36,57 @@ button {
       .main .el-dialog__wrapper .el-dialog .el-dialog__body img.bj-web{
           width:50%;
       }
-  }
+      .main .el-dialog__wrapper .el-dialog .el-dialog__body .head-line{
+        width:50%;
+      }
+      .main .el-dialog__wrapper .el-dialog .el-dialog__body .mapImg{
+        width:50%;
+      }
+      .main .el-dialog__wrapper .el-dialog .el-dialog__body .productMsg{
+        width:50%;
+      }
+      .main .el-dialog__wrapper .el-dialog .el-dialog__body .productMsg ul{
+        width:50%;
+      }
+      .main .el-dialog__wrapper .el-dialog .el-dialog__body .table-box{
+        width:100%;
+        max-width:311px;
+      }
+}
+@media only screen and (min-width: 1200px) {
+    .tab-search .el-dialog__wrapper{
+        width:100%;
+        min-width:1000px;
+      }
+      .tab-search .el-dialog__wrapper  .el-dialog{
+        width:50%;
+        min-width:1000px;
+        }
+        .main .el-dialog__wrapper .el-dialog .el-dialog__body{
+            width:100%;
+          min-width:1000px;
+        }
+        .main .el-dialog__wrapper .el-dialog .el-dialog__body img.bj-web{
+            width:100%;
+            min-width:1000px;
+        }
+        .main .el-dialog__wrapper .el-dialog .el-dialog__body .head-line{
+            width:100%;
+            min-width:1000px;
+        }
+        .main .el-dialog__wrapper .el-dialog .el-dialog__body .mapImg{
+            width:100%;
+            min-width:1000px;
+        }
+        .main .el-dialog__wrapper .el-dialog .el-dialog__body .productMsg{
+            width:100%;
+            min-width:1000px;
+        }
+        .main .el-dialog__wrapper .el-dialog .el-dialog__body .productMsg ul{
+            width:50%;
+        }
+        .main .el-dialog__wrapper .el-dialog .el-dialog__body .table-box{
+            width:100%;
+            max-width:311px;
+        }
+}
