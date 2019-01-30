@@ -2,7 +2,7 @@
   <div class="main">
     <!-- 头部 -->
     <div class="nav">
-      <img class="bj" src="@/assets/imgs/bj1.png">
+      <img class="bj" src="@/assets/imgs/bj1.jpg">
       <tab-search></tab-search>
     </div>
     <!-- 新闻中心 -->
