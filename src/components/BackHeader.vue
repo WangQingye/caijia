@@ -78,7 +78,7 @@ export default {
     width: 30px;
     height: 30px;
     vertical-align: middle;
-    margin-right: 5px;
+    margin-right: 10px;
   }
 }
 .header-right {

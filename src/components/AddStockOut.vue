@@ -22,12 +22,11 @@
         <p>{{rowData.batchCode}}</p>
       </el-form-item>
       <el-form-item label="箱码">
-        <el-input
-          type="number"
-          v-model="stockOutForm.boxNumStart"
+        <p
           class="box-num"
-        ></el-input>
-        <span> ~ </span>
+          :style="'width:20px'"
+        >{{stockOutForm.boxNumStart}}</p>
+        <span>~  </span>
         <el-input
           type="number"
           v-model="stockOutForm.boxNumEnd"
@@ -97,7 +96,7 @@ export default {
       type: Object
     }
   },
-  mounted(){
+  mounted() {
     this.getTransCom();
   },
   methods: {
@@ -173,5 +172,6 @@ export default {
 }
 .box-num {
   width: 100px;
+  display: inline-block;
 }
 </style>

@@ -15,7 +15,7 @@
       <el-row class="mana-buttons">
         <el-button
           type="primary"
-          @click="showAddCode=true"
+          @click="showAdd"
         >申请</el-button>
       </el-row>
       <el-table
@@ -263,7 +263,6 @@ export default {
   },
   mounted() {
     this.getApplyList();
-    this.getCode();
   },
   methods: {
     async getCode() {
@@ -357,6 +356,10 @@ export default {
     },
     onAddSubmit() {
       this.applyTag();
+    },
+    showAdd() {
+      this.showAddCode = true;
+      this.getCode();
     },
     findKindName(value, tag, find, arrName) {
       let a;
