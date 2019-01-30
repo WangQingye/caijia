@@ -102,10 +102,11 @@ export default {
     back() {
       this.$emit("back");
     },
-    async getBoxNum() {
+    async getBoxNum(code) {
       let res = await this.$fetch("/transfer/boxCountByCode", {
-        actionId: this.rowData.id
+        actionId: code || this.rowData.id
       });
+      if (res.code !== 0) return;
       this.logisticsForm.boxNumStart = res.data.curBoxNum || 0;
       this.logisticsForm.boxNumEnd = res.data.endBoxNum;
     },
@@ -127,8 +128,7 @@ export default {
         let res = await this.$fetch("/transfer/addTransfer", data, "POST");
         if (res.code == 0) {
           this.$message.success("添加成功");
-          this.$refs.logisticsForm.resetFields();
-          this.getBoxNum();
+          // this.$refs.logisticsForm.resetFields();
           this.$emit("back");
         }
       });
@@ -138,7 +138,7 @@ export default {
     "rowData.batchCode": {
       // immediate: true,
       handler: function(val) {
-        this.getBoxNum();
+        // this.getBoxNum();
       }
     }
   }

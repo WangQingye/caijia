@@ -25,16 +25,16 @@
         icon="el-icon-search"
         disabled
       >搜索</el-button>
-      <el-row class="mana-buttons">
+      <!-- <el-row class="mana-buttons">
         <el-button
           type="primary"
           @click="showSourceFill"
         >填报信息</el-button>
-      </el-row>
+      </el-row> -->
       <el-table
         ref="codeTable"
         :data="codeData"
-        style="width: 100%"
+        style="width: 100%; margin-top:40px"
         @selection-change="handleSelectionChange"
       >
         <el-table-column
@@ -74,7 +74,8 @@
     </div>
     <div v-show="showAddCode">
       <add-logistics
-        @back="showAddCode=false"
+      ref="logisticOut"
+        @back="logisticBack"
         :rowData="nowRow"
       ></add-logistics>
     </div>
@@ -136,10 +137,10 @@ export default {
   },
   mounted() {
     // this.getTem();
-    this.getList();
+    this.getCodeList();
   },
   methods: {
-    async getList() {
+    async getCodeList() {
       let res = await this.$fetch("/list/queryTransfers", {
         page: 1,
         limit: 5
@@ -151,9 +152,14 @@ export default {
     showSourceFill(row) {
       this.showAddCode = true;
       this.nowRow = row;
+      this.$refs.logisticOut.getBoxNum(row.id);
     },
     handleSelectionChange() {
       console.log(1);
+    },
+    logisticBack(){
+      this.showAddCode = false;
+      this.getCodeList();
     },
     manuCode() {
       console.log(1);

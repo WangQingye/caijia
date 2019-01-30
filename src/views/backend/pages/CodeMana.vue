@@ -400,10 +400,10 @@ export default {
           text = "标签审核完成";
           break;
         case 6:
-          text = "出库中";
+          text = "出库完成";
           break;
         case 7:
-          text = "出库完成";
+          text = "物流完成";
           break;
       }
       return text;
