@@ -17,9 +17,15 @@
             ></el-input>
           </el-col>
           <el-col :span="7">
-            <slider ref="confirmSuccess" :modalEvent="isModalshow"></slider>
+            <slider
+              ref="confirmSuccess"
+              :modalEvent="isModalshow"
+            ></slider>
           </el-col>
-          <el-col :span="3" style="padding:0;margin:0">
+          <el-col
+            :span="3"
+            style="padding:0;margin:0"
+          >
             <el-button
               type="primary"
               @click="open"
@@ -34,7 +40,10 @@
       show-close
       :visible.sync="isModalshow"
     >
-      <img src="@/assets/imgs/bj-web.png" class="bj-web"/>
+      <img
+        src="@/assets/imgs/bj-web.png"
+        class="bj-web"
+      />
       <head-line
         :text="'原产品'"
         :text02="'COUNTRY   OF  ORIGIN'"
@@ -90,7 +99,10 @@
       <div class="product-list">
         <div class="Dot-row">
           <div class="Dot">
-              <img src="@/assets/imgs/yuan1.png" alt="">
+            <img
+              src="@/assets/imgs/yuan1.png"
+              alt=""
+            >
           </div>
         </div>
         <product-table
@@ -122,41 +134,41 @@ export default {
     return {
       activeName: "first",
       input: "",
-      inputText:"",
+      inputText: "",
       tabValue: 0,
       stopValue: "",
       index: "",
       products: [],
       productDetails: [
-          // {
-          //     ocreateTime:'2018-12-02',
-          //     oremark:'入库',
-          //     stepOrde:1
-          // },
-          //  {
-          //     ocreateTime:'2018-12-02',
-          //     oremark:'检测',
-          //     stepOrde:2
-          // },
-          //  {
-          //     ocreateTime:'2018-12-02',
-          //     oremark:'申请',
-          //     stepOrde:3
-          // },
-          //  {
-          //     ocreateTime:'2018-12-02',
-          //     oremark:'出库',
-          //     stepOrde:4
-          // },
-          //  {
-          //     ocreateTime:'2018-12-02',
-          //     oremark:'物流',
-          //     stepOrde:5
-          // }
+        // {
+        //     ocreateTime:'2018-12-02',
+        //     oremark:'入库',
+        //     stepOrde:1
+        // },
+        //  {
+        //     ocreateTime:'2018-12-02',
+        //     oremark:'检测',
+        //     stepOrde:2
+        // },
+        //  {
+        //     ocreateTime:'2018-12-02',
+        //     oremark:'申请',
+        //     stepOrde:3
+        // },
+        //  {
+        //     ocreateTime:'2018-12-02',
+        //     oremark:'出库',
+        //     stepOrde:4
+        // },
+        //  {
+        //     ocreateTime:'2018-12-02',
+        //     oremark:'物流',
+        //     stepOrde:5
+        // }
       ],
       isDrag: false,
       isDisabled: true,
-      isModalshow:false
+      isModalshow: false
     };
   },
   methods: {
@@ -165,7 +177,7 @@ export default {
     },
     open() {
       this.isDrag = this.$refs.confirmSuccess.confirmSuccess;
-      this.inputText =this.input;
+      this.inputText = this.input;
       this.getData();
     },
     async getData() {
@@ -176,9 +188,9 @@ export default {
         },
         "get"
       );
-      console.log(data)
+      console.log(data);
 
-      if(data.code==0){
+      if (data.code == 0) {
         for (var i = 0; i < data.data.length; i++) {
           var item = data.data[i];
           //console.log(item)
@@ -197,22 +209,21 @@ export default {
           }
         }
         this.productDetails = data.data;
-        this.isModalshow=true;
+        this.isModalshow = true;
         //console.log(data);
-      }else if(data.code!==0){
-         this.$message({
+      } else if (data.code !== 0) {
+        this.$message({
           showClose: true,
-          message: '溯源码输入有误，请确认后重新输入！！',
-          type: 'error'
+          message: "溯源码输入有误，请确认后重新输入！！",
+          type: "error"
         });
-      }else if(!this.isDrag){
-         this.$message({
-            showClose: true,
-            message: '请拖动滑片来验证！！',
-            type: 'error'
-          });
+      } else if (!this.isDrag) {
+        this.$message({
+          showClose: true,
+          message: "请拖动滑片来验证！！",
+          type: "error"
+        });
       }
-
     },
     renderTime(date) {
       var dateee = new Date(date).toJSON();
@@ -222,24 +233,20 @@ export default {
         .replace(/\.[\d]{3}Z/, "");
     }
   },
-  computed:{
-
-  },
-  mounted(){
-
-  },
+  computed: {},
+  mounted() {},
   watch: {
-    input:{
-      handler(){
+    input: {
+      handler() {
         //console.log("input改变了")
-        this.isDisabled=false;
+        this.isDisabled = false;
       }
     },
-    isModalshow:{
-      handler(){
+    isModalshow: {
+      handler() {
         //console.log("模态框改变了");
-        this.isDisabled=true;
-        this.input="";
+        this.isDisabled = true;
+        this.input = "";
       }
     }
   },
@@ -259,13 +266,13 @@ export default {
     bottom: 160px;
     left: 10%;
     width: 80%;
-    min-width:1000px;
+    min-width: 1000px;
     margin: 0 auto;
     background-color: #fff;
     padding: 40px;
-    box-sizing:border-box;
+    box-sizing: border-box;
     .productMsg {
-        margin-top:20px;
+      margin-top: 20px;
       display: flex;
       flex-direction: row;
       width: 1100px;
@@ -301,13 +308,17 @@ export default {
           margin-left: 47px;
       }
     }
-    .el-dialog__body{
-        padding:0;
+    .el-dialog__body {
+      padding: 0;
     }
-    .el-dialog__header{
-        padding:0;
+    .el-dialog__header {
+      padding: 0;
     }
-
+  }
+  @media only screen and (max-width: 1300px) {
+    .tab-search {
+      bottom: 90px;
+    }
   }
   .title-text {
     font-size: 30px;
@@ -332,9 +343,8 @@ export default {
     &:last-child {
       margin-bottom: 0;
     }
-    .el-col-4{
-      padding:0;
-
+    .el-col-4 {
+      padding: 0;
     }
   }
   .el-slider__runway {
@@ -400,21 +410,21 @@ export default {
       top: -26px;
       left: -317px;
       img {
-        left:0px;
+        left: 0px;
         width: 140px;
         height: 140px;
       }
     }
   }
   .product-list {
-    width:100%;
-    min-width:1000px;
+    width: 100%;
+    min-width: 1000px;
     padding-top: 95px;
-    .Dot-row{
-      width:100%;
-      max-width:311px;
-      margin:0 auto;
-      height:29px;
+    .Dot-row {
+      width: 100%;
+      max-width: 311px;
+      margin: 0 auto;
+      height: 29px;
       position: relative;
     }
     .Dot {
@@ -444,20 +454,17 @@ export default {
       left: 510px;
     }
   }
-  #UpToNow{
-    width:1200px;
-    height:20px;
-    .goTo[data-v-15e02a80]{
-      width:311px;
-      margin:0 auto;
-      display:block;
+  #UpToNow {
+    width: 1200px;
+    height: 20px;
+    .goTo[data-v-15e02a80] {
+      width: 311px;
+      margin: 0 auto;
+      display: block;
       position: absolute;
-      bottom:18px;
-      left:440px;
+      bottom: 18px;
+      left: 440px;
     }
   }
-
-
 }
-
 </style>

@@ -6,7 +6,7 @@
         class="logo-img"
         src="@/assets/imgs/single-logo.png"
         alt=""
-      >电科信链溯源后台管理系统</p>
+      >信链臻品管理系统</p>
     <div class="header-right">
       <router-link
         to="/"
