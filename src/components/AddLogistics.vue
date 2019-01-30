@@ -8,25 +8,9 @@
       class="form"
     >
       <el-form-item label="批次号">
-        <!-- <el-select
-          v-model="logisticsForm.code"
-          placeholder="请选择批次号"
-        >
-          <el-option
-            v-for="(code,index) in codes"
-            :key="index"
-            :label="code"
-            :value="code"
-          ></el-option>
-        </el-select> -->
         <p>{{rowData.batchCode}}</p>
       </el-form-item>
       <el-form-item label="箱码">
-        <!-- <el-input
-          type="number"
-          v-model="logisticsForm.boxNumStart"
-          class="box-num"
-        ></el-input> -->
         <p class="box-num" :style="'width:20px'">{{logisticsForm.boxNumStart}}</p>
         <span> ~ </span>
         <el-input
@@ -86,6 +70,8 @@ export default {
         endPlace: "",
         date: ""
       },
+      /* 储存原始数据，用来判断箱数是否合理 */
+      originData: {},
       codes: ["001", "002"]
     };
   },
@@ -107,10 +93,15 @@ export default {
         actionId: code || this.rowData.id
       });
       if (res.code !== 0) return;
+      this.originData = res.data;
       this.logisticsForm.boxNumStart = res.data.curBoxNum || 0;
       this.logisticsForm.boxNumEnd = res.data.endBoxNum;
     },
     async addTransInfo() {
+      if (this.logisticsForm.boxNumStart < this.originData.curBoxNum || this.logisticsForm.boxNumEnd > this.originData.endBoxNum) {
+        this.$message.error('请输入连续且正确的箱数');
+        return;
+      }
       let data = {
         batchCode: this.rowData.batchCode,
         startBoxNum: this.logisticsForm.boxNumStart,
