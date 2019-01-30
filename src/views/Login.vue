@@ -56,6 +56,7 @@
       <el-input
         v-model="privateKey"
         placeholder="请输入二级密码"
+        type="password"
       ></el-input>
       <span
         slot="footer"
