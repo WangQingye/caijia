@@ -6,7 +6,8 @@
             </el-col>
             <el-col :span="16" >
                 <p class="time">{{renderTime(listData[productIndex].ocreateTime)}}</p>
-                <p class="details">{{listData[productIndex].oremark}}</p>
+                <!-- <p class="details">{{listData[productIndex].oremark}}</p> -->
+                <p class="details">{{ listData[productIndex].stepOrde==3 ? '标签申请': listData[productIndex].oremark}}</p>
             </el-col>
             <el-col :span="4" class="goodsImg" style="padding:0">
                 <!-- <img class="goods" src='@/assets/imgs/goods.jpg'> -->
@@ -51,6 +52,7 @@ export default{
         }
     },
     mounted(){
+
     },
     methods:{
          renderTime(date) {

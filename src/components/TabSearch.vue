@@ -56,24 +56,30 @@
       <div class="productMsg">
         <ul class="ul1">
           <li>
-            产品编号<span>{{inputText}}</span>
+            <span>产品编号</span>
+            <span>{{inputText}}</span>
           </li>
           <li>
-            产地<span>{{products.sorigin}}</span>
+            <span>产地</span>
+            <span>{{products.sorigin}}</span>
           </li>
           <li>
-            农产种类<span>{{products.skindName}}</span>
+            <span>农产种类</span>
+            <span>{{products.skindName}}</span>
           </li>
         </ul>
         <ul class="ul2">
           <li>
-            农产品种<span>{{products.svarietyName}}</span>
+            <span>农产品种</span>
+            <span>{{products.svarietyName}}</span>
           </li>
           <li>
-            采摘时间<span>{{renderTime(products.sstoreTime)}}</span>
+            <span>采摘时间</span>
+            <span>{{renderTime(products.sstoreTime)}}</span>
           </li>
           <li>
-            企业<span>{{products.sstoreCompanyName}}</span>
+            <span>企业</span>
+            <span>{{products.sstoreCompanyName}}</span>
           </li>
         </ul>
       </div>
@@ -183,6 +189,7 @@ export default {
             //console.log("检测")
           } else if (item.stepOrde == 3) {
             //console.log("标签申请")
+
           } else if (item.stepOrde == 4) {
             //console.log("出库")
           } else {
@@ -275,12 +282,23 @@ export default {
         color: rgba(85, 85, 85, 1);
         line-height: 42px;
         border: 1px solid rgba(242, 242, 242, 1);
-        span {
+        span:last-child {
           font-family: ArialMT;
           margin-left: 20px;
           font-weight: 400;
           color: rgba(117, 117, 117, 1);
         }
+      }
+
+    }
+    .productMsg .ul1 li:nth-child(2){
+      span:last-child{
+          margin-left: 47px;
+      }
+    }
+    .productMsg .ul2 li:nth-child(3){
+      span:last-child{
+          margin-left: 47px;
       }
     }
     .el-dialog__body{

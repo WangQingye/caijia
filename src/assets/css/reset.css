@@ -25,68 +25,145 @@ button {
 
 @media only screen and (max-width: 800px) {
     .tab-search .el-dialog__wrapper{
-      width:500px;
+      width:100%;
     }
     .tab-search .el-dialog__wrapper  .el-dialog{
-        width:500px;
+        width:100%;
       }
       .main .el-dialog__wrapper .el-dialog .el-dialog__body{
           width:500px;
       }
       .main .el-dialog__wrapper .el-dialog .el-dialog__body img.bj-web{
-          width:50%;
+          width:101%;
       }
       .main .el-dialog__wrapper .el-dialog .el-dialog__body .head-line{
-        width:50%;
+        width:25%;
       }
       .main .el-dialog__wrapper .el-dialog .el-dialog__body .mapImg{
-        width:50%;
+        width:100%;
+      }
+      .main .el-dialog__wrapper .el-dialog .el-dialog__body .mapImg .location{
+          bottom:41%;
+          left:33%;
       }
       .main .el-dialog__wrapper .el-dialog .el-dialog__body .productMsg{
-        width:50%;
+        width:100%;
       }
       .main .el-dialog__wrapper .el-dialog .el-dialog__body .productMsg ul{
-        width:50%;
+        width:49%;
+      }
+      .main .el-dialog__wrapper .el-dialog .el-dialog__body .productMsg ul li {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap !important;
+      }
+      .main .el-dialog__wrapper .el-dialog .el-dialog__body .productMsg ul li  span{
+        text-align: right;
+      }
+      .main .el-dialog__wrapper .el-dialog .el-dialog__body .product-list{
+          width:80%;
+      }
+      .main .el-dialog__wrapper .el-dialog .el-dialog__body .Dot-row{
+          width:100%;
+          width:311px;
+          position: relative;
+      }
+      .main .el-dialog__wrapper .el-dialog .el-dialog__body .Dot-row .Dot {
+        position: absolute;
+        left:-459px;
       }
       .main .el-dialog__wrapper .el-dialog .el-dialog__body .table-box{
         width:100%;
-        max-width:311px;
+        width:311px;
+      }
+      .main .el-dialog__wrapper .el-dialog .el-dialog__body .table-row .table-dot{
+          left:-291px;
+      }
+      .main .goods-right div.table-row .el-col-16{
+        left:-250px;
+      }
+      .main .goods-right div.table-row .goodsImg{
+          left:-50px
+      }
+      .main .goods-left div.table-row .el-col-16{
+        left:-245px;
+      }
+      .main .goods-left div.table-row .goodsImg{
+          left:-50px;
       }
 }
 @media only screen and (min-width: 1200px) {
     .tab-search .el-dialog__wrapper{
         width:100%;
         min-width:1000px;
-      }
-      .tab-search .el-dialog__wrapper  .el-dialog{
+    }
+    .tab-search .el-dialog__wrapper  .el-dialog{
         width:50%;
         min-width:1000px;
-        }
-        .main .el-dialog__wrapper .el-dialog .el-dialog__body{
-            width:100%;
-          min-width:1000px;
-        }
-        .main .el-dialog__wrapper .el-dialog .el-dialog__body img.bj-web{
-            width:100%;
-            min-width:1000px;
-        }
-        .main .el-dialog__wrapper .el-dialog .el-dialog__body .head-line{
-            width:100%;
-            min-width:1000px;
-        }
-        .main .el-dialog__wrapper .el-dialog .el-dialog__body .mapImg{
-            width:100%;
-            min-width:1000px;
-        }
-        .main .el-dialog__wrapper .el-dialog .el-dialog__body .productMsg{
-            width:100%;
-            min-width:1000px;
-        }
-        .main .el-dialog__wrapper .el-dialog .el-dialog__body .productMsg ul{
-            width:50%;
-        }
-        .main .el-dialog__wrapper .el-dialog .el-dialog__body .table-box{
-            width:100%;
-            max-width:311px;
-        }
+    }
+    .main .el-dialog__wrapper .el-dialog .el-dialog__body{
+        width:100%;
+        min-width:1000px;
+    }
+    .main .el-dialog__wrapper .el-dialog .el-dialog__body img.bj-web{
+        width:100%;
+        min-width:1000px;
+    }
+    .main .el-dialog__wrapper .el-dialog .el-dialog__body .head-line{
+        width:100%;
+        min-width:1000px;
+    }
+    .main .el-dialog__wrapper .el-dialog .el-dialog__body .mapImg{
+        width:100%;
+        min-width:1000px;
+    }
+    .main .el-dialog__wrapper .el-dialog .el-dialog__body .productMsg{
+        width:100%;
+        min-width:1000px;
+    }
+    .main .el-dialog__wrapper .el-dialog .el-dialog__body .productMsg ul{
+        width:50%;
+    }
+    .main .el-dialog__wrapper .el-dialog .el-dialog__body .table-box{
+        width:100%;
+        max-width:311px;
+    }
+}
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .tab-search .el-dialog__wrapper{
+        width:100%;
+        min-width:1000px;
+    }
+    .tab-search .el-dialog__wrapper  .el-dialog{
+        width:50%;
+        min-width:1000px;
+    }
+    .main .el-dialog__wrapper .el-dialog .el-dialog__body{
+        width:100%;
+        min-width:1000px;
+    }
+    .main .el-dialog__wrapper .el-dialog .el-dialog__body img.bj-web{
+        width:100%;
+        min-width:1000px;
+    }
+    .main .el-dialog__wrapper .el-dialog .el-dialog__body .head-line{
+        width:100%;
+        min-width:1000px;
+    }
+    .main .el-dialog__wrapper .el-dialog .el-dialog__body .mapImg{
+        width:100%;
+        min-width:1000px;
+    }
+    .main .el-dialog__wrapper .el-dialog .el-dialog__body .productMsg{
+        width:100%;
+        min-width:1000px;
+    }
+    .main .el-dialog__wrapper .el-dialog .el-dialog__body .productMsg ul{
+        width:50%;
+    }
+    .main .el-dialog__wrapper .el-dialog .el-dialog__body .table-box{
+        width:100%;
+        max-width:311px;
+    }
 }

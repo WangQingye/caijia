@@ -7,7 +7,7 @@
     >
     <img
       class="footer-logo"
-      src="@/assets/imgs/logo.png"
+      src="@/assets/imgs/foot-logo.png"
       alt=""
     >
     <section class="middle">
