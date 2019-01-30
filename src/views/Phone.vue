@@ -1,7 +1,7 @@
 <template>
     <div class="phone">
       <img class="banner-wap" src="@/assets/imgs/banner-wap.png"  alt="">
-      <head-line :text="'原产品'" :text02="'COUNTRY   OF  ORIGIN'"></head-line>
+      <head-line :text="'原产地'" :text02="'COUNTRY   OF  ORIGIN'"></head-line>
       <div class="map">
         <img class="map-wap" src="@/assets/imgs/map-wap.png" >
         <div class="location" >

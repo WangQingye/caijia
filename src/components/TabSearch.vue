@@ -45,7 +45,7 @@
         class="bj-web"
       />
       <head-line
-        :text="'原产品'"
+        :text="'原产地'"
         :text02="'COUNTRY   OF  ORIGIN'"
       ></head-line>
       <div class="mapImg">
