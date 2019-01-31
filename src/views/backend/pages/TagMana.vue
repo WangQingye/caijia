@@ -263,7 +263,9 @@ export default {
     };
   },
   mounted() {
-    this.getApplyList();
+    setInterval(() => {
+      this.getApplyList();
+    }, 10000);
   },
   methods: {
     async getCode() {
