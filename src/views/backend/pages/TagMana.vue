@@ -263,6 +263,7 @@ export default {
     };
   },
   mounted() {
+    this.getApplyList();
     setInterval(() => {
       this.getApplyList();
     }, 10000);
@@ -324,7 +325,9 @@ export default {
           limit: 5,
           page: 1
         },
-        "POST"
+        "POST",
+        '',
+        false
       );
       if (res.code == 0) {
         this.codeData = res.data.data;

@@ -2,7 +2,7 @@ import a from '../../main';
 import {
     Loading
 } from 'element-ui';
-export default async (url = '', data = {}, type = 'GET', backend = '', method = 'fetch') => {
+export default async (url = '', data = {}, type = 'GET', backend = '', needLoading = true, method = 'fetch') => {
     type = type.toUpperCase();
     url = backend == 'user' ? userUrl + url : productUrl + url;
     if (type == 'GET') {
@@ -34,20 +34,24 @@ export default async (url = '', data = {}, type = 'GET', backend = '', method = 
                 // value: data
             })
         }
-        try {
+        let timer;
+        let loading;
+        if (needLoading) {
             let loading = Loading.service({
                 fullscreen: false
             });
-            let timer = setTimeout(() => {
+            timer = setTimeout(() => {
                 loading.close();
                 a.$message({
                     message: '连接超时',
                     type: "error"
                 });
             }, 10000)
+        }
+        try {
             const response = await fetch(url, requestConfig);
             clearTimeout(timer);
-            loading.close();
+            if (needLoading) loading.close();
             let responseData;
             if (url.indexOf('download') !== -1) {
                 responseData = await response.blob();
@@ -64,6 +68,8 @@ export default async (url = '', data = {}, type = 'GET', backend = '', method = 
             }
             return responseData;
         } catch (err) {
+            clearTimeout(timer);
+            if (needLoading) loading.close();
             throw new Error(err)
         }
     } else {
