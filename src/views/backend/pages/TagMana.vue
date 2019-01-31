@@ -259,12 +259,13 @@ export default {
         phone: [{ required: true, message: "请选择产摘时间", trigger: "blur" }]
       },
       codes: [],
-      getTypes: [{ name: "快递", code: 1 }, { name: "自行打印", code: 0 }]
+      getTypes: [{ name: "快递", code: 1 }, { name: "自行打印", code: 0 }],
+      timer: null
     };
   },
   mounted() {
     this.getApplyList();
-    setInterval(() => {
+    this.timer = setInterval(() => {
       this.getApplyList();
     }, 10000);
   },
@@ -379,7 +380,10 @@ export default {
   },
   components: {
     Pagination
-  }
+  },
+  destroyed() {
+    clearInterval(this.timer);
+  },
 };
 </script>
 <style lang="scss" scoped>
