@@ -37,7 +37,7 @@ export default async (url = '', data = {}, type = 'GET', backend = '', needLoadi
         let timer;
         let loading;
         if (needLoading) {
-            let loading = Loading.service({
+            loading = Loading.service({
                 fullscreen: false
             });
             timer = setTimeout(() => {
