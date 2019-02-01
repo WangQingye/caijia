@@ -68,6 +68,7 @@ export default {
   mounted() {},
   methods: {
     renderTime(date) {
+      if (!date) return;
       let aa = date.replace(/\-/g, "/");
       let bb = aa.replace(/T/g, " ");
       let cc = bb.split(".")[0];
