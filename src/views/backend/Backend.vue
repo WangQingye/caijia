@@ -25,6 +25,15 @@
               <i class="el-icon-location"></i>
               <span slot="title">溯源数据管理</span>
             </template>
+            <!--
+              typeCode: {
+                1:超管,
+                2:农企,
+                3:检测,
+                4:仓储,
+                5:物流
+              }
+             -->
             <el-menu-item
               v-if="this.$store.state.userInfo.typeCode == 2 || this.$store.state.userInfo.typeCode == 1"
               index="codemana"
@@ -54,13 +63,20 @@
               index="transfill"
             >物流信息填报</el-menu-item>
           </el-submenu>
-          <el-menu-item
-            index="2"
-            disabled
-          >
-            <i class="el-icon-document"></i>
-            <span slot="title">账号管理</span>
-          </el-menu-item>
+          <el-submenu index="account">
+            <template slot="title">
+              <i class="el-icon-document"></i>
+              <span slot="title">账号管理</span>
+            </template>
+            <el-menu-item
+              v-if="this.$store.state.userInfo.typeCode == 1"
+              index="companymana"
+            >企业管理</el-menu-item>
+            <el-menu-item
+              v-if="this.$store.state.userInfo.typeCode == 1"
+              index="accountmana"
+            >子账号管理</el-menu-item>
+          </el-submenu>
           <el-menu-item
             index="3"
             disabled
@@ -135,7 +151,10 @@ export default {
         stockoutfill: "出库信息填报",
         storemana: "入库信息管理",
         tagmana: "溯源标签管理",
-        tagverify: "溯源标签审核"
+        tagverify: "溯源标签审核",
+        account: "账号管理",
+        companymana: "企业管理",
+        accountmana: "子账号管理",
       },
       paths: [],
       privateKey: ""

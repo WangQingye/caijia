@@ -37,34 +37,42 @@ export default new Router({
       component: () => import( /* webpackChunkName: "backend" */ './views/backend/Backend.vue'),
       children: [{
           path: "/",
-          component: () => import( /* webpackChunkName: "backmain" */ './views/backend/pages/BackMain.vue')
+          component: () => import( /* webpackChunkName: "backmain" */ './views/backend/BackMain.vue')
         }, {
           path: "/codemana",
-          component: () => import( /* webpackChunkName: "codemana" */ './views/backend/pages/CodeMana.vue')
+          component: () => import( /* webpackChunkName: "codemana" */ './views/backend/trace/CodeMana.vue')
         },
         {
           path: "/stockoutfill",
-          component: () => import( /* webpackChunkName: "sourcefill" */ './views/backend/pages/StockOutFill.vue')
+          component: () => import( /* webpackChunkName: "stockoutfill" */ './views/backend/trace/StockOutFill.vue')
         },
         {
           path: "/transfill",
-          component: () => import( /* webpackChunkName: "sourcefill" */ './views/backend/pages/TransFill.vue')
+          component: () => import( /* webpackChunkName: "transfill" */ './views/backend/trace/TransFill.vue')
         },
         {
           path: "/verifyfill",
-          component: () => import( /* webpackChunkName: "sourcefill" */ './views/backend/pages/VerifyFill.vue')
+          component: () => import( /* webpackChunkName: "verifyfill" */ './views/backend/trace/VerifyFill.vue')
         },
         {
           path: "/storemana",
-          component: () => import( /* webpackChunkName: "storemana" */ './views/backend/pages/StoreMana.vue')
+          component: () => import( /* webpackChunkName: "storemana" */ './views/backend/trace/StoreMana.vue')
         },
         {
           path: "/tagmana",
-          component: () => import( /* webpackChunkName: "tagmana" */ './views/backend/pages/TagMana.vue')
+          component: () => import( /* webpackChunkName: "tagmana" */ './views/backend/trace/TagMana.vue')
         },
         {
           path: "/tagverify",
-          component: () => import( /* webpackChunkName: "tagverify" */ './views/backend/pages/TagVerify.vue')
+          component: () => import( /* webpackChunkName: "tagverify" */ './views/backend/trace/TagVerify.vue')
+        },
+        {
+          path: "/companymana",
+          component: () => import( /* webpackChunkName: "companymana" */ './views/backend/account/CompanyMana.vue')
+        },
+        {
+          path: "/accountmana",
+          component: () => import( /* webpackChunkName: "accountmana" */ './views/backend/account/AccountMana.vue')
         }
       ]
     },
