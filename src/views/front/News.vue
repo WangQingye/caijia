@@ -1,11 +1,11 @@
 <template>
   <div class="news">
-    <div class="nav">
+    <!-- <div class="nav">
       <img
         class="nav-bg"
         src="@/assets/imgs/bj1.png"
       >
-    </div>
+    </div> -->
     <div class="box">
       <div class="green-div">
         <p>NEWS</p>
@@ -98,7 +98,7 @@ export default {
 </script>
 <style lang="scss" >
 .news {
-  height: 1400px;
+  height: 900px;
   .nav {
     width: 100%;
     min-width: 1200px;
@@ -111,7 +111,7 @@ export default {
     width: 1200px;
     margin: 0 auto;
     position: relative;
-    top: -323px;
+    top: 100px;
     background-color: #fff;
     .green-div {
       width: 240px;
@@ -147,10 +147,15 @@ export default {
         }
       }
       .el-tabs {
-        height: 827px;
+        height: 700px;
         position: relative;
         top: 50px;
         background-color: #fff;
+        .el-tabs__nav-scroll {
+          border-left: 2px solid rgba(228, 231, 237, 1);
+          border-bottom: 2px solid rgba(228, 231, 237, 1);
+          box-sizing: border-box;
+        }
       }
     }
     .el-tabs__item {
