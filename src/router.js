@@ -2,10 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import MainPage from './views/front/MainPage.vue'
-
+import Bus from '@/assets/js/bus'
 Vue.use(Router)
-
-export default new Router({
+let router = new Router({
   routes: [
     {
       path: '/',
@@ -23,7 +22,7 @@ export default new Router({
           name: 'apply',
           component: () => import( /* webpackChunkName: "apply" */ './views/front/Apply.vue')
         },{
-          path: '/news',
+          path: '/news/:id?',
           name: 'news',
           component: () => import( /* webpackChunkName: "apply" */ './views/front/News.vue')
         }
@@ -70,6 +69,7 @@ export default new Router({
     },
     {
       path: '/login',
+      name: 'login',
       component: () => import( /* webpackChunkName: "login" */ './views/Login.vue')
     },
     {
@@ -78,3 +78,18 @@ export default new Router({
     }
   ]
 })
+router.beforeEach((to, from, next) => {
+  setTimeout(() => {
+    Bus.$emit('router-change', {
+      mainPage:0,
+      news:1,
+      apply:2,
+      login:3
+    }[to.name]);
+    if (to.name == 'news') {
+      window.scrollTo(0,0);
+    }
+  }, 100);
+  next();
+});
+export default router;
