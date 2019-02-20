@@ -2,7 +2,7 @@
   <div class="main">
     <!-- 头部 -->
     <div class="nav">
-      <img class="bj" src="@/assets/imgs/bj1.jpg">
+      <img class="bj" src="@/assets/imgs/bj1.png">
       <tab-search></tab-search>
     </div>
     <!-- 新闻中心 -->
@@ -25,10 +25,11 @@
                 <li
                   v-for="(item,index) in newsList"
                   :key="index"
+                  @click="clickNew(index)"
                 >
                   <p class="new-name">{{item.title}}</p>
-                  <div class="new-text">
-                    <p>{{item.text}}</p>
+                  <div class="new-text" :style="'min-height:50px'">
+                    <p :style="'min-height:50px'">{{item.text}}</p>
                     <span>{{item.time}}</span>
                   </div>
                 </li>
@@ -90,31 +91,31 @@ export default {
       activeName: "first",
       newsList: [
         {
-          title: "“标签连接中国 服务千县万企”走进黔西南州 ——中国物品...",
+          title: "农产品溯源系统解析，没有更全的了！",
           text:
-            "为深入贯彻习近平新时代中国特色社会主义思想，特别是习近平总书记关于质量发展和脱贫攻坚工作的重要指示精神，2018年8月14日...",
-          time: "2018-01-27",
+            "我国是农业大国，但农业发展举步维艰，农产品安全问题更是屡见报端，虽然管理部门积极采取措施，加强各方面的管理和监督，但效果一直不理想...",
+          time: "2018-04-27",
           route: "/new1"
         },
         {
-          title: "福建省地方标准《食品质量安全追溯码编码技术规范》",
+          title: "区块链技术为传统种业赋能，有助于解决农业诸多问题",
           text:
-            "为了深入实施福建省地方标准《食品质量安全追溯码编码技术规范》，扎实推进全省食品安全“一品一码”全过程追溯体系建设，...",
-          time: "2018-01-27",
+            "区块链技术应用在种业领域，有利于遏制侵权假冒行为、维护市场公平竞争、保护农民合法权益...",
+          time: "2018-07-23",
           route: "/new2"
         },
         {
-          title: "“标签连接中国 服务千县万企”走进黔西南州 ——中国物品...",
+          title: "2018“区块链+农业”引爆颠覆性变革，将为农业带来什么？",
           text:
-            "为深入贯彻习近平新时代中国特色社会主义思想，特别是习近平总书记关于质量发展和脱贫攻坚工作的重要指示精神，2018年8月14日...",
-          time: "2018-01-27",
+            "无论你在什么行业，想必这两天都能在朋友圈里看到关于区块链（Block Chain）的各种新闻。2018新年伊始，轰轰烈烈的区块链猝不及防进入农业人的视野...",
+          time: "2018-02-27",
           route: "/new3"
         },
         {
-          title: "福建省地方标准《食品质量安全追溯码编码技术规范》",
+          title: "基于区块链农产品溯源解决方案",
           text:
-            "为了深入实施福建省地方标准《食品质量安全追溯码编码技术规范》，扎实推进全省食品安全“一品一码”全过程追溯体系建设，...",
-          time: "2018-01-27",
+            "质量安全问题，是当前政府重视、社会关注的热点，不仅关系到公众的身体健康，商品质量追溯是对商品生产全过程的信息跟踪与追溯...",
+          time: "2018-07-12",
           route: "/new4"
         }
       ],
@@ -195,6 +196,9 @@ export default {
   methods: {
     handleClick(tab, event) {
       //console.log(tab, event);
+    },
+    clickNew(index) {
+      this.$router.push({path:`/news/${index + 1}`})
     }
   },
   watch: {},
@@ -211,6 +215,7 @@ export default {
 .main {
   .nav {
     position: relative;
+    margin-bottom: 160px;
     img.bj {
       width: 100%;
       min-width: 1000px;

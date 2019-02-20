@@ -263,7 +263,7 @@ export default {
 .main {
   .tab-search {
     position: absolute;
-    bottom: 160px;
+    bottom: -90px;
     left: 10%;
     width: 80%;
     min-width: 1000px;
@@ -271,6 +271,7 @@ export default {
     background-color: #fff;
     padding: 40px;
     box-sizing: border-box;
+    box-shadow:0 2px 12px 0 rgba(0, 0, 0, 0.1);
     .productMsg {
       margin-top: 20px;
       display: flex;

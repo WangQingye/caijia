@@ -146,6 +146,7 @@ export default {
       }
     },
     renderTime(date) {
+      if (!date) return;
       let aa = date.replace(/\-/g, "/");
       let bb = aa.replace(/T/g, " ");
       let cc = bb.split(".")[0];
@@ -174,8 +175,8 @@ export default {
     }
   },
   mounted() {
-    this.getUrlParam();
-    this.getProductData();
+    // this.getUrlParam();
+    // this.getProductData();
   },
   watch: {},
   components: {

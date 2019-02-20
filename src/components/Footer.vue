@@ -36,10 +36,10 @@
         </ul>
       </div>
       <div class="middle-right">
-        <p class="middle-right-phone">
+        <!-- <p class="middle-right-phone">
           <i class="el-icon-phone"></i>
           400-999-1188
-        </p>
+        </p> -->
         <div class="middle-right-qrcode">
           <img
             src="@/assets/imgs/qrcode.png"
@@ -47,13 +47,13 @@
           >
           <p>微信</p>
         </div>
-        <div class="middle-right-qrcode">
+        <!-- <div class="middle-right-qrcode">
           <img
             src="@/assets/imgs/qrcode.png"
             alt=""
           >
           <p>微博</p>
-        </div>
+        </div> -->
       </div>
     </section>
     <section class="bottom">
@@ -77,14 +77,14 @@ export default {
           name: "新闻中心",
           path: "/news"
         },
-        {
-          name: "农产品投保",
-          path: ""
-        },
-        {
-          name: "理赔公示",
-          path: ""
-        },
+        // {
+        //   name: "农产品投保",
+        //   path: ""
+        // },
+        // {
+        //   name: "理赔公示",
+        //   path: ""
+        // },
         {
           name: "联系我们",
           path: ""

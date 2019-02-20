@@ -1,5 +1,13 @@
 <template>
   <div class="contanier">
+    <el-row class="header">
+      <img
+        src="../../src/assets/imgs/logo.png"
+        alt=""
+        class="header-img"
+      >
+      <p class="header-text">后台登陆</p>
+    </el-row>
     <el-card
       class="login"
       v-if=isLogin
@@ -39,7 +47,7 @@
           <el-button
             type="primary"
             @click="submitForm('loginForm')"
-            :style="'width:200px;margin-left:-50px'"
+            :style="'width:200px;margin-left:-50px;margin-top:30px'"
           >登陆</el-button>
           <router-link to="/main">
             <p :style="'margin-left:-50px;font-size:12px;text-decoration:underline'">返回首页</p>
@@ -47,6 +55,14 @@
         </el-form-item>
       </el-form>
     </el-card>
+    <section class="bottom">
+      <img
+        class="bottom-slogan"
+        src="@/assets/imgs/slogan_gray.png"
+        alt=""
+      >
+      <p class="bottom-text">Copyright © 2019 XINLIAN TECHNOLOGY OF CETC, All Rights Reserved. 蜀ICP备18030395号</p>
+    </section>
     <el-dialog
       title="绑定二级密码"
       :visible.sync="dialogVisible"
@@ -159,21 +175,25 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .contanier {
   width: 100%;
-  height: 100vh;
+  min-width: 1400px;
+  height: 660px;
   background: white;
-  background: url("../../src/assets/imgs/bj1.jpg");
+  background: url("../../src/assets/imgs/bj1.png");
   background-repeat: no-repeat;
-  background-size: 100% auto;
-  padding-top: 15%;
+  background-size: 1920px 660px;
+  margin-top: 60px;
+  padding-top: 6%;
   box-sizing: border-box;
 }
+
 .login {
   width: 500px;
-  height: 300px;
+  height: 360px;
   margin: 0 auto;
+  margin-left: 60%;
 }
 .title {
   font-size: 20px;
@@ -183,5 +203,44 @@ export default {
   width: 400px;
   margin: 0 auto;
   margin-top: 15px;
+}
+.header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  text-align: left;
+  padding-left: 20%;
+  .header-img {
+    display: inline-block;
+    height: 40px;
+    margin-top: 10px;
+  }
+  .header-text {
+    display: inline-block;
+    border-left: 1px solid #757575;
+    font-size: 18px;
+    line-height: 20px;
+    color: #757575;
+    vertical-align: top;
+    margin-top: 20px;
+    padding-left: 30px;
+    margin-left: 30px;
+  }
+}
+.bottom {
+  position: absolute;
+  top: 800px;
+  width: 100%;
+  text-align: center;
+  min-width: 500px;
+  .bottom-slogan {
+    width: 270px;
+    margin-bottom: 10px;
+  }
+  .bottom-text {
+    color: #757575;
+    font-size: 14px;
+  }
 }
 </style>

@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import Bus from '@/assets/js/bus'
+import { nextTick } from 'q';
 export default {
   name: "Header",
   data() {
@@ -42,18 +44,26 @@ export default {
         { name: "后台登陆", url: "/login" }
       ],
       hoverIndex: null,
-      hoverOnList: false
+      hoverOnList: false,
+      nowIndex: 0
     };
   },
   props: {
-    nowIndex: {
-      default: 0,
-      type: Number
-    },
+    // nowIndex: {
+    //   default: 0,
+    //   type: Number
+    // },
     bgColorType: {
       default: 0,
       type: Number
     }
+  },
+  created() {
+    Bus.$on('router-change', index => {
+      this.nowIndex = index;
+    })
+  },
+  mounted() {
   },
   methods: {
     backToMain() {
