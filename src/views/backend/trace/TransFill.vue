@@ -68,7 +68,7 @@
         </el-table-column>
       </el-table>
       <pagination
-        :total="codeData.length"
+        :total="dataTotalLength"
         :page-change="pageChange"
       ></pagination>
     </div>
@@ -137,16 +137,17 @@ export default {
   },
   mounted() {
     // this.getTem();
-    this.getCodeList();
+    this.getCodeList(1);
   },
   methods: {
-    async getCodeList() {
+    async getCodeList(page) {
       let res = await this.$fetch("/list/queryTransfers", {
-        page: 1,
-        limit: 5
+        page: page,
+        limit: this.pageLimit
       });
       if (res.code == 0) {
         this.codeData = res.data.data;
+        this.dataTotalLength = res.data.countSize;
       }
     },
     showSourceFill(row) {

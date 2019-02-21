@@ -34,7 +34,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item
-          label="确认密码"
+          label="密码"
           prop="password"
         >
           <el-input
@@ -184,8 +184,7 @@ export default {
   background: url("../../src/assets/imgs/bj1.png");
   background-repeat: no-repeat;
   background-size: 1920px 660px;
-  margin-top: 60px;
-  padding-top: 6%;
+  background-position: 0 60px;
   box-sizing: border-box;
 }
 
@@ -205,8 +204,7 @@ export default {
   margin-top: 15px;
 }
 .header {
-  position: absolute;
-  top: 0;
+  margin-bottom: 6%;
   width: 100%;
   height: 60px;
   text-align: left;
