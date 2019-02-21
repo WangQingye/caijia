@@ -63,7 +63,7 @@
               index="transfill"
             >物流信息填报</el-menu-item>
           </el-submenu>
-          <el-submenu index="account">
+          <el-submenu index="account" v-if="this.$store.state.userInfo.companyAccount">
             <template slot="title">
               <i class="el-icon-document"></i>
               <span slot="title">账号管理</span>
@@ -73,17 +73,22 @@
               index="companymana"
             >企业管理</el-menu-item>
             <el-menu-item
-              v-if="this.$store.state.userInfo.typeCode == 1"
+              v-if="this.$store.state.userInfo.typeCode == 1 || this.$store.state.userInfo.companyAccount"
               index="accountmana"
             >子账号管理</el-menu-item>
           </el-submenu>
-          <el-menu-item
-            index="3"
-            disabled
+          <el-submenu
+            index="info"
+            v-if="this.$store.state.userInfo.typeCode == 1"
           >
-            <i class="el-icon-setting"></i>
-            <span slot="title">资讯管理</span>
-          </el-menu-item>
+            <template slot="title">
+              <i class="el-icon-tickets"></i>
+              <span slot="title">资讯管理</span>
+            </template>
+              <el-menu-item
+              index="infomana"
+            >资讯列表</el-menu-item>
+          </el-submenu>
           <i
             :class=" menuCollapse ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"
             @click="menuCollapse = !menuCollapse"
@@ -155,6 +160,8 @@ export default {
         account: "账号管理",
         companymana: "企业管理",
         accountmana: "子账号管理",
+        info: "资讯管理",
+        infomana: "资讯列表"
       },
       paths: [],
       privateKey: ""
@@ -208,8 +215,9 @@ export default {
       if (!vm.$store.state.userInfo.id) {
         let res = await vm.$fetch("/user/login", {}, "POST", "user");
         if (res.code == 0) {
-          this.$store.commit("saveUserInfo", res.data);
+          vm.$store.commit("saveUserInfo", res.data);
         } else {
+          vm.$store.commit("clearUserInfo");
           vm.$router.push({ path: "/login" });
         }
       }

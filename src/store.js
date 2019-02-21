@@ -35,6 +35,10 @@ export default new Vuex.Store({
     },
     setPkCallBack(state, cb) {
       state.pkCallBack = cb
+    },
+    clearUserInfo(state) {
+      state.userInfo = {}
+      state.privateKey = ''
     }
   },
   actions: {
