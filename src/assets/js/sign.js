@@ -26,7 +26,7 @@ function checkSign(data, cb) {
         v.$store.commit('setPkCallBack', cb);
         return;
     } else {
-        cb(signData(data));
+        cb();
     }
 }
 

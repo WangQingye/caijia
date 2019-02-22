@@ -72,6 +72,10 @@ let router = new Router({
         {
           path: "/accountmana",
           component: () => import( /* webpackChunkName: "accountmana" */ './views/backend/account/AccountMana.vue')
+        },
+        {
+          path: "/infomana",
+          component: () => import( /* webpackChunkName: "infomana" */ './views/backend/info/InfoMana.vue')
         }
       ]
     },

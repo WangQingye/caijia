@@ -63,9 +63,9 @@
               index="transfill"
             >物流信息填报</el-menu-item>
           </el-submenu>
-          <el-submenu index="account" v-if="this.$store.state.userInfo.companyAccount">
+          <el-submenu index="account" v-if="this.$store.state.userInfo.companyAccount || this.$store.state.userInfo.typeCode == 1">
             <template slot="title">
-              <i class="el-icon-document"></i>
+              <i class="el-icon-setting"></i>
               <span slot="title">账号管理</span>
             </template>
             <el-menu-item
@@ -73,7 +73,7 @@
               index="companymana"
             >企业管理</el-menu-item>
             <el-menu-item
-              v-if="this.$store.state.userInfo.typeCode == 1 || this.$store.state.userInfo.companyAccount"
+              v-if="this.$store.state.userInfo.companyAccount"
               index="accountmana"
             >子账号管理</el-menu-item>
           </el-submenu>

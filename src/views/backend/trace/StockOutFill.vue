@@ -70,7 +70,7 @@
       </el-table>
       <pagination
         :total="dataTotalLength"
-        :page-change="pageChange"
+        @page-change="pageChange"
       ></pagination>
     </div>
     <div v-show="showAddCode">
@@ -86,6 +86,7 @@
 <script>
 // import fetch from "@/assets/js/Fetch.js";
 import Pagination from "@/components/Pagination.vue";
+import PageMixin from "@/assets/js/pageMixin";
 import AddLogistics from "@/components/AddLogistics.vue";
 import AddStockOut from "@/components/AddStockOut.vue";
 import AddVerify from "@/components/AddVerify.vue";
@@ -160,9 +161,6 @@ export default {
     },
     manuCode() {
       console.log(1);
-    },
-    pageChange(page) {
-      console.log(page);
     },
     onAddSubmit() {},
     calStatus(step) {

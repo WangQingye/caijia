@@ -10,7 +10,7 @@
       <el-button
         type="primary"
         icon="el-icon-search"
-        disabled
+        @click="getCodeList(1,true)"
       >搜索</el-button>
       <el-row class="mana-buttons">
         <el-button
@@ -77,8 +77,8 @@
         </el-table-column>
       </el-table>
       <pagination
-        :total="codeData.length"
-        :page-change="pageChange"
+        :total="dataTotalLength"
+        @page-change="pageChange"
       ></pagination>
     </div>
     <div v-if="showAddCode">
@@ -195,7 +195,9 @@
 <script>
 // import fetch from "@/assets/js/Fetch.js";
 import Pagination from "@/components/Pagination.vue";
+import PageMixin from "@/assets/js/pageMixin";
 export default {
+  mixins: [PageMixin],
   data() {
     return {
       searchCode: "",
@@ -264,9 +266,9 @@ export default {
     };
   },
   mounted() {
-    this.getApplyList();
+    this.getCodeList(1);
     this.timer = setInterval(() => {
-      this.getApplyList();
+      this.getCodeList(1);
     }, 10000);
   },
   methods: {
@@ -308,7 +310,7 @@ export default {
               this.$message.success("申请成功，请等待审核");
               this.$refs.addTagForm.resetFields();
               this.showAddCode = false;
-              this.getApplyList();
+              this.getCodeList(1);
             }
           });
         } else {
@@ -316,15 +318,16 @@ export default {
         }
       });
     },
-    async getApplyList() {
+    async getCodeList(page, isFromSearch) {
+      if (isFromSearch) page = 1;
       let res = await this.$fetch(
         "/label/getAuditOfcompany",
         {
-          batchCode: "",
+          batchCode: this.searchCode,
           companyCode: this.$store.state.userInfo.companyCode,
           typeCode: this.$store.state.userInfo.typeCode,
-          limit: 5,
-          page: 1
+          limit: this.pageLimit,
+          page: page
         },
         "POST",
         '',
@@ -332,6 +335,7 @@ export default {
       );
       if (res.code == 0) {
         this.codeData = res.data.data;
+        this.dataTotalLength = res.data.countSize;
       }
     },
     onSelectCode(value) {
@@ -357,9 +361,6 @@ export default {
       a.download = `溯源码${row.batchCode}.zip`;
       a.click();
       window.URL.revokeObjectURL(url);
-    },
-    pageChange(page) {
-      console.log(page);
     },
     onAddSubmit() {
       this.applyTag();

@@ -41,6 +41,7 @@
             type="password"
             v-model="loginForm.password"
             autocomplete="off"
+            @keyup.enter.native="submitForm('loginForm')"
           ></el-input>
         </el-form-item>
         <el-form-item>

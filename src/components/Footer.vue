@@ -64,7 +64,8 @@
       >
       <p class="bottom-text">Copyright © 2019  XINLIAN TECHNOLOGY  OF CETC, All Rights Reserved.
         <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51019002001977" style="display:inline-block;text-decoration:underline;height:20px;line-height:30px;color:#fff">川公网安备 51019002001977号
-        <img src="@/assets/imgs/record-number.png" style="margin-left:5px;display:inline-block;height:16px;vertical-align: middle;margin-top:-5px;"/></a>
+        <!-- <img src="@/assets/imgs/record-number.png" style="margin-left:5px;display:inline-block;height:16px;vertical-align: middle;margin-top:-5px;"/> -->
+        </a>
       </p>
     </section>
   </div>

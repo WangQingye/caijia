@@ -1,16 +1,16 @@
 <template>
   <div class="codeMana">
     <div>
-      <p class="text">批次号</p>
+      <p class="text">企业名称</p>
       <el-input
         class="search-input"
-        v-model="searchCode"
-        placeholder="请输入要搜索的批次号"
+        v-model="searchCompany"
+        placeholder="请输入要搜索的企业名称"
       ></el-input>
       <el-button
         type="primary"
         icon="el-icon-search"
-        disabled
+        @click="getCodeList(1,true)"
       >搜索</el-button>
       <el-table
         ref="codeTable"
@@ -96,7 +96,7 @@ export default {
   mixins: [PageMixin],
   data() {
     return {
-      searchCode: "",
+      searchCompany: "",
       codeData: [],
       labels: [
         {
@@ -104,8 +104,8 @@ export default {
           prop: "batchCode"
         },
         {
-          name: "仓储机构",
-          prop: "storeCompanyName"
+          name: "所属企业",
+          prop: "companyName"
         },
         {
           name: "仓库编号",
@@ -124,8 +124,8 @@ export default {
           prop: "num"
         },
         {
-          name: "所属企业",
-          prop: "companyName"
+          name: "仓储机构",
+          prop: "storeCompanyName"
         },
         {
           name: "状态",
@@ -152,10 +152,12 @@ export default {
     this.getCodeList(1);
   },
   methods: {
-    async getCodeList(page) {
+    async getCodeList(page, isFromSearch) {
+      if (isFromSearch) page = 1;
       let res = await this.$fetch(
         "/storeRepertory/getAudit",
         {
+          companyName: this.searchCompany,
           page: page,
           limit: this.pageLimit,
           typeCode: this.$store.state.userInfo.typeCode,

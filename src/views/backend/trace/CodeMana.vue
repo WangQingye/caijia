@@ -10,7 +10,7 @@
       <el-button
         type="primary"
         icon="el-icon-search"
-        disabled
+        @click="getCodeList(1,true)"
       >搜索</el-button>
       <el-row class="mana-buttons">
         <el-button
@@ -269,10 +269,12 @@ export default {
   },
   methods: {
     /* 获取批次号列表 */
-    async getCodeList(page) {
+    async getCodeList(page,isFromSearch) {
+      if (isFromSearch) page = 1;
       let res = await this.$fetch(
         "/storeRepertory/getAuditOfcompany",
         {
+          batchCode: this.searchCode,
           companyCode: this.$store.state.userInfo.companyCode,
           typeCode: this.$store.state.userInfo.typeCode,
           limit: this.pageLimit,
