@@ -262,13 +262,15 @@ export default {
       },
       codes: [],
       getTypes: [{ name: "快递", code: 1 }, { name: "自行打印", code: 0 }],
-      timer: null
+      timer: null,
+      nowPage: 1
     };
   },
   mounted() {
     this.getCodeList(1);
     this.timer = setInterval(() => {
-      this.getCodeList(1);
+      if (this.searchCode) return;
+      this.getCodeList(this.nowPage);
     }, 10000);
   },
   methods: {
@@ -320,6 +322,7 @@ export default {
     },
     async getCodeList(page, isFromSearch) {
       if (isFromSearch) page = 1;
+      this.nowPage = page;
       let res = await this.$fetch(
         "/label/getAuditOfcompany",
         {

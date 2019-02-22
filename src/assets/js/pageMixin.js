@@ -2,7 +2,8 @@ const PageMixin = {
     data: () => {
         return {
             dataTotalLength: 1,
-            pageLimit: 5
+            pageLimit: 5,
+            currentPage: 2
         }
     },
     methods: {

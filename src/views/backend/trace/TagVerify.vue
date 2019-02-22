@@ -1,6 +1,12 @@
 <template>
   <div class="codeMana">
     <div v-if="!showAddCode">
+            <p class="text">企业名称</p>
+      <el-input
+        class="search-input"
+        v-model="searchName"
+        placeholder="请输入要搜索的企业名称"
+      ></el-input>
       <p class="text">批次号</p>
       <el-input
         class="search-input"
@@ -10,7 +16,7 @@
       <el-button
         type="primary"
         icon="el-icon-search"
-        disabled
+        @click="getCodeList(1,true)"
       >搜索</el-button>
       <el-table
         ref="codeTable"
@@ -72,8 +78,9 @@
         </el-table-column>
       </el-table>
       <pagination
-        :total="codeData.length"
-        :page-change="pageChange"
+        :total="dataTotalLength"
+        @page-change="pageChange"
+        :current-page="currentPage"
       ></pagination>
     </div>
     <el-dialog
@@ -98,10 +105,13 @@
 
 <script>
 import Pagination from "@/components/Pagination.vue";
+import PageMixin from "@/assets/js/pageMixin";
 export default {
+  mixins: [PageMixin],
   data() {
     return {
       searchCode: "",
+      searchName: "",
       showAddCode: false,
       dialogVisible: false,
       codeData: [],
@@ -151,24 +161,28 @@ export default {
     };
   },
   mounted() {
-    this.getApplyList();
+    this.getCodeList(1);
   },
   methods: {
-    async getApplyList() {
+    async getCodeList(page, isFromSearch) {
+      if (isFromSearch) page = 1;
       let res = await this.$fetch(
         "/label/getAudit",
         {
-          batchCode: "",
+          batchCode: this.searchCode,
+          companyName: this.searchName,
           companyCode: this.$store.state.userInfo.companyCode,
           typeCode: this.$store.state.userInfo.typeCode,
-          limit: 5,
-          page: 1
+          limit: this.pageLimit,
+          page: page
         },
         "POST"
       );
       console.log(res);
       if (res.code == 0) {
         this.codeData = res.data.data;
+        this.dataTotalLength = res.data.countSize;
+        this.currentPage = page;
       }
     },
     showAuditConfirm(row) {
@@ -196,7 +210,7 @@ export default {
         if (res.code == 0) {
           this.dialogVisible = false;
           this.$message.success("操作成功！");
-          this.getApplyList();
+          this.getCodeList();
         }
       });
     },
@@ -205,9 +219,6 @@ export default {
     },
     manuCode() {
       console.log(1);
-    },
-    pageChange(page) {
-      console.log(page);
     },
     onAddSubmit() {}
   },
