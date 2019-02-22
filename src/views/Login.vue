@@ -179,7 +179,7 @@ export default {
 <style scoped lang="scss">
 .contanier {
   width: 100%;
-  min-width: 1400px;
+  min-width: 1200px;
   height: 660px;
   background: white;
   background: url("../../src/assets/imgs/bj1.png");
@@ -188,7 +188,6 @@ export default {
   background-position: 0 60px;
   box-sizing: border-box;
 }
-
 .login {
   width: 500px;
   height: 360px;
@@ -240,6 +239,20 @@ export default {
   .bottom-text {
     color: #757575;
     font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .contanier {
+    background-size: 1366px 470px;
+    height: 660px;
+  }
+  .header {
+    margin-bottom: 4%;
+  }
+  .bottom {
+    position: absolute;
+    top: 600px;
   }
 }
 </style>
