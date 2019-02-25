@@ -2,7 +2,7 @@
   <div class="phone">
     <img
       class="banner-wap"
-      src="@/assets/imgs/banner-wap.png"
+      src="@/assets/imgs/bj-wap.png"
       alt=""
     >
     <head-line
@@ -86,31 +86,31 @@ export default {
       urlParam: "",
       products: [],
       productDetails: [
-        // {
-        //       ocreateTime:'2018-12-02',
-        //       oremark:'入库',
-        //       stepOrde:1
-        //   },
-        //    {
-        //       ocreateTime:'2018-12-02',
-        //       oremark:'检测',
-        //       stepOrde:2
-        //   },
-        //    {
-        //       ocreateTime:'2018-12-02',
-        //       oremark:'申请',
-        //       stepOrde:3
-        //   },
-        //    {
-        //       ocreateTime:'2018-12-02',
-        //       oremark:'出库',
-        //       stepOrde:4
-        //   },
-        //    {
-        //       ocreateTime:'2018-12-02',
-        //       oremark:'物流',
-        //       stepOrde:5
-        //   }
+        {
+              ocreateTime:'2018-12-02',
+              oremark:'入库',
+              stepOrde:1
+          },
+           {
+              ocreateTime:'2018-12-02',
+              oremark:'检测',
+              stepOrde:2
+          },
+           {
+              ocreateTime:'2018-12-02',
+              oremark:'申请',
+              stepOrde:3
+          },
+           {
+              ocreateTime:'2018-12-02',
+              oremark:'出库',
+              stepOrde:4
+          },
+           {
+              ocreateTime:'2018-12-02',
+              oremark:'物流',
+              stepOrde:5
+          }
       ]
     };
   },

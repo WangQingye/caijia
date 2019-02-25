@@ -17,6 +17,10 @@
         <p class="time">{{renderTime(listData[productIndex].stepOrde==2 ? listData[productIndex].ccheckTime : listData[productIndex].ocreateTime)}}</p>
         <!-- <p class="details">{{listData[productIndex].oremark}}</p> -->
         <p class="details">{{ listData[productIndex].stepOrde==3 ? '标签申请': listData[productIndex].oremark}}</p>
+        <p class="test-report" v-if="listData[productIndex].stepOrde==2">
+          <button  @click="dialogTableVisible = true" class="test-report-btn">查看检测报告</button>
+        </p>
+
       </el-col>
       <el-col
         :span="4"
@@ -29,6 +33,29 @@
           :src="imgs[listData[productIndex].stepOrde-1]"
         >
       </el-col>
+         <el-dialog title="检测报告" :visible.sync="dialogTableVisible" >
+        <!--移动端-->
+        <!-- <ml-i-view  v-model="imgShow" :url="url" :scale="4"></ml-i-view> -->
+        <div v-if="phoneShow" class="phone-text-Report-modal">
+          <img src="@/assets/imgs/test1-1.jpg" preview preview-text="描述">
+          <img src="@/assets/imgs/test1-2.jpg" preview="1" preview-text="描述">
+          <img src="@/assets/imgs/test1-3.jpg" preview="1" preview-text="描述">
+
+        </div>
+
+
+        <!--pc段端-->
+        <el-carousel class="pc-textReport-modal" v-if="pcShow"  :interval="4000" type="card" height="850px" :autoplay="isAutoPlay">
+          <el-carousel-item v-for="(item,index) in testImgs" :key="index">
+            <div class="grid-content">
+              <img class="testImg" :src="item.src">
+							<h3 class="italictext">{{ item.txt}}</h3>
+            </div>
+
+          </el-carousel-item>
+        </el-carousel>
+      </el-dialog>
+
     </el-row>
   </div>
 
@@ -39,12 +66,38 @@ import step2 from "@/assets/imgs/2.png";
 import step3 from "@/assets/imgs/3.png";
 import step4 from "@/assets/imgs/4.png";
 import step5 from "@/assets/imgs/5.png";
+
+import test1 from "@/assets/imgs/test1-1.jpg";
+import test2 from "@/assets/imgs/test1-2.jpg";
+import test3 from "@/assets/imgs/test1-3.jpg";
+
 export default {
   data() {
     return {
-      imgs: [step1, step2, step3, step4, step5]
+      imgs: [step1, step2, step3, step4, step5],
+      testImgs:[
+        {
+          src:test1,
+          txt:"检测报告1"
+        },
+        {
+          src:test2,
+          txt:"检测报告2"
+        },
+        {
+          src:test3,
+          txt:"检测报告3"
+        }
+      ],
+      imgShow:false,
+      url:'D:\syy-Project\test-report',
+      isAutoPlay:false,
+      phoneShow:false,
+      pcShow:false,
+      dialogTableVisible: false
     };
   },
+
   props: {
     listData: {
       type: Array,
@@ -65,7 +118,9 @@ export default {
       }
     }
   },
-  mounted() {},
+  mounted() {
+    this.goPAGE();
+  },
   methods: {
     renderTime(date) {
       if (!date) return;
@@ -84,7 +139,20 @@ export default {
     },
     PrefixInteger(num, n) {
       return (Array(n).join(0) + num).slice(-n);
+    },
+    goPAGE() {
+        if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+            /*window.location.href="你的手机版地址";*/
+            console.log("mobile")
+            this.phoneShow=true
+        }
+        else {
+            /*window.location.href="你的电脑版地址";    */
+            console.log("pc")
+            this.pcShow=true;
+        }
     }
+
   }
 };
 </script>
@@ -160,7 +228,7 @@ export default {
     line-height: 22px;
     text-align: left;
   }
-  .goodsImg {
+   .goodsImg {
     position: relative;
     .goods {
       border-radius: 50%;
@@ -171,5 +239,30 @@ export default {
       left: 24px;
     }
   }
+  .test-report{
+    margin-top:10px;
+    margin-left:-142px;
+    .test-report-btn{
+      outline: none;
+      border:none;
+      background:#fff;
+      text-decoration:underline
+    }
+  }
+  .phone-text-Report-modal{
+    img{
+      width:100%;
+    }
+  }
+  .pc-textReport-modal{
+    .grid-content{
+      .testImg{
+        width:100%;
+        cursor: pointer;
+
+      }
+    }
+  }
 }
+
 </style>

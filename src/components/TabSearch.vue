@@ -41,7 +41,7 @@
       :visible.sync="isModalshow"
     >
       <img
-        src="@/assets/imgs/bj-web.png"
+        src="@/assets/imgs/bj-tankuangweb.png"
         class="bj-web"
       />
       <head-line
