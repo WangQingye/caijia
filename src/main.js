@@ -11,8 +11,8 @@ Vue.prototype.$fetch = fetch;
 Vue.prototype.$signData = signData;
 Vue.prototype.$checkSign = checkSign;
 let a = new Vue({
-  router,
   store,
+  router,
   render: h => h(App)
 }).$mount('#app')
 

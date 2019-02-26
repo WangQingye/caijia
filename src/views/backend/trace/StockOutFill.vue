@@ -2,18 +2,11 @@
   <div class="codeMana">
     <div v-if="!showAddCode">
       <p class="text">批次号</p>
-      <el-select
+      <el-input
+        class="search-input"
         v-model="searchCode"
-        placeholder="请选择要搜索的批次号"
-        style="margin:0 20px;"
-      >
-        <el-option
-          v-for="(code,index) in codes"
-          :key="index"
-          :label="code"
-          :value="code"
-        ></el-option>
-      </el-select>
+        placeholder="请输入要搜索的批次号"
+      ></el-input>
       <p class="text">箱码</p>
       <el-input
         class="search-input"
@@ -23,7 +16,7 @@
       <el-button
         type="primary"
         icon="el-icon-search"
-        disabled
+        @click="getCodeList(1,true)"
       >搜索</el-button>
       <!-- <el-row class="mana-buttons">
         <el-button
@@ -129,7 +122,6 @@ export default {
           prop: "username"
         }
       ],
-      codes: ["001", "002"],
       nowRow: {}
     };
   },
@@ -141,6 +133,8 @@ export default {
     async getCodeList(page,fromSearch) {
       if (fromSearch) page = 1;
       let res = await this.$fetch("/list/queryOriginAction", {
+        batchCode: this.searchCode,
+        boxNum: this.searchBoxNum,
         page: page,
         limit: this.pageLimit
       });
@@ -157,7 +151,7 @@ export default {
     },
     stockOutBack(){
       this.showAddCode = false;
-      this.getCodeList();
+      this.getCodeList(1);
     },
     manuCode() {
       console.log(1);

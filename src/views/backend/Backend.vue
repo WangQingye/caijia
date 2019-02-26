@@ -63,7 +63,10 @@
               index="transfill"
             >物流信息填报</el-menu-item>
           </el-submenu>
-          <el-submenu index="account" v-if="this.$store.state.userInfo.companyAccount || this.$store.state.userInfo.typeCode == 1">
+          <el-submenu
+            index="account"
+            v-if="this.$store.state.userInfo.companyAccount || this.$store.state.userInfo.typeCode == 1"
+          >
             <template slot="title">
               <i class="el-icon-setting"></i>
               <span slot="title">账号管理</span>
@@ -85,9 +88,7 @@
               <i class="el-icon-tickets"></i>
               <span slot="title">资讯管理</span>
             </template>
-              <el-menu-item
-              index="infomana"
-            >资讯列表</el-menu-item>
+            <el-menu-item index="infomana">资讯列表</el-menu-item>
           </el-submenu>
           <i
             :class=" menuCollapse ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"
@@ -107,7 +108,7 @@
               >{{path}}</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
-          <router-view></router-view>
+          <router-view v-if="afterTestLogin"></router-view>
         </el-card>
       </el-main>
     </el-container>
@@ -116,10 +117,8 @@
       width="30%"
       :show-close="false"
     >
-      <p
-        slot="title"
-      >
-      此操作需要二级密码
+      <p slot="title">
+        此操作需要二级密码
       </p>
       <el-input
         v-model="privateKey"
@@ -164,11 +163,14 @@ export default {
         infomana: "资讯列表"
       },
       paths: [],
-      privateKey: ""
+      privateKey: "",
+      afterTestLogin: false
     };
   },
-  mounted() {
+  created() {
+    this.testLogin();
   },
+  mounted() {},
   methods: {
     onMenuSelect(index, indexPath) {
       this.paths = [];
@@ -204,24 +206,26 @@ export default {
       );
       this.$store.commit("setPkDialogShow", false);
       this.$store.state.pkCallBack();
+    },
+    async testLogin() {
+      if (!this.$store.state.userInfo.id) {
+        let res = await this.$fetch("/user/automaticLogin", {}, "GET", "user");
+        if (res.code == 0) {
+          this.$store.commit("saveUserInfo", res.data);
+        } else {
+          this.$store.commit("clearUserInfo");
+          this.$router.push({
+            path: "/login"
+          });
+        }
+        this.afterTestLogin = true;
+      } else {
+        this.afterTestLogin = true;
+      }
     }
   },
   components: {
     BackHeader
-  },
-  beforeRouteEnter(to, from, next) {
-    next(async vm => {
-      // 通过 `vm` 访问组件实例
-      if (!vm.$store.state.userInfo.id) {
-        let res = await vm.$fetch("/user/login", {}, "POST", "user");
-        if (res.code == 0) {
-          vm.$store.commit("saveUserInfo", res.data);
-        } else {
-          vm.$store.commit("clearUserInfo");
-          vm.$router.push({ path: "/login" });
-        }
-      }
-    });
   }
 };
 </script>

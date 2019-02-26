@@ -155,10 +155,15 @@ export default {
   props: {},
   methods: {
     async getOrgTypes() {
-      let res = await this.$fetch("/companyType/getAllCompanyTypes", {}, 'GET', 'user');
+      let res = await this.$fetch(
+        "/companyType/getAllCompanyTypes",
+        {},
+        "GET",
+        "user"
+      );
       console.log(res.code);
       if (res.code == 0) {
-        this.companyTypes = res.data;
+        this.companyTypes = res.data.companyTypes;
       }
     },
     submitForm(formName) {
@@ -167,7 +172,7 @@ export default {
           if (this.applyForm.password !== this.applyForm.repassword) {
             this.$message.error("两次密码不一致");
             return;
-          } else if ( this.fileList.length < 2) {
+          } else if (this.fileList.length < 2) {
             this.$message.error("请上传营业执照正、副两页");
             return;
           }
@@ -203,13 +208,13 @@ export default {
         confirmPassword: this.applyForm.repassword
       };
       console.log(data);
-      let res = await this.$fetch("/company/addCompany", data, 'POST', 'user');
+      let res = await this.$fetch("/company/addCompany", data, "POST", "user");
       console.log(res);
       if (res.code === 0) {
-        this.$alert('提交成功，审核通过后将通过电话联系您。', '提交成功', {
-          confirmButtonText: '确定',
+        this.$alert("提交成功，审核通过后将通过电话联系您。", "提交成功", {
+          confirmButtonText: "确定",
           callback: action => {
-            this.$router.push({path:'/main'})
+            this.$router.push({ path: "/main" });
           }
         });
       }

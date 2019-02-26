@@ -2,7 +2,10 @@
   <div class="main">
     <!-- 头部 -->
     <div class="nav">
-      <img class="bj" src="@/assets/imgs/bj1.png">
+      <img
+        class="bj"
+        src="@/assets/imgs/bj1.png"
+      >
       <tab-search></tab-search>
     </div>
     <!-- 新闻中心 -->
@@ -17,49 +20,58 @@
       >
         <el-tab-pane
           label="新闻动态"
-          name="first"
+          name="1"
         >
-          <div class="newsActive">
-            <div class="active-content">
-              <ul>
-                <li
-                  v-for="(item,index) in newsList"
-                  :key="index"
-                  @click="clickNew(index)"
-                >
-                  <p class="new-name">{{item.title}}</p>
-                  <div class="new-text" :style="'min-height:50px'">
-                    <p :style="'min-height:50px'">{{item.text}}</p>
-                    <span>{{item.time}}</span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="active-right">
-              <router-link to="/news">更多新闻></router-link>
-              <ul class="imgsList">
-                <li>
-                  <div class="right-img">
-                    <img src="@/assets/imgs/news-1.png">
-                    <div>
-                      <p></p>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="right-img">
-                    <img src="@/assets/imgs/news-2.png">
-                    <div>
-                      <p>舌尖上的安全</p>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
         </el-tab-pane>
-        <!-- <el-tab-pane label="信链资讯" name="second">信链资讯</el-tab-pane>
-            <el-tab-pane label="媒体视角" name="third">媒体视角</el-tab-pane> -->
+        <el-tab-pane
+          label="信链资讯"
+          name="2"
+        ></el-tab-pane>
+        <el-tab-pane
+          label="媒体视角"
+          name="3"
+        ></el-tab-pane>
+        <div class="newsActive">
+          <div class="active-content">
+            <ul>
+              <li
+                v-for="(item,index) in newsList"
+                :key="index"
+                @click="clickNew(index)"
+              >
+                <p class="new-name">{{item.title}}</p>
+                <div
+                  class="new-text"
+                  :style="'min-height:50px'"
+                >
+                  <p :style="'min-height:50px'">{{item.text}}</p>
+                  <span>{{item.time}}</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="active-right">
+            <router-link to="/news">更多新闻></router-link>
+            <ul class="imgsList">
+              <li>
+                <div class="right-img">
+                  <img src="@/assets/imgs/news-1.png">
+                  <div>
+                    <p></p>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="right-img">
+                  <img src="@/assets/imgs/news-2.png">
+                  <div>
+                    <p>舌尖上的安全</p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </el-tabs>
     </div>
     <!-- 理赔公示 -->
@@ -193,15 +205,39 @@ export default {
     };
   },
   props: {},
+  mounted() {
+    this.getInfo(1);
+  },
   methods: {
+    async getInfo(type) {
+      let res = await this.$fetch(
+        "/newsController/queryNewsPage",
+        {
+          newsStatus: 1,
+          newsType: type,
+          limit: 4,
+          page: 1
+        },
+        "POST"
+      );
+      if (res.code == 0) {
+        console.log(res);
+        this.codeData = res.data.data;
+        this.dataTotalLength = res.data.countSize;
+      }
+    },
     handleClick(tab, event) {
       //console.log(tab, event);
     },
     clickNew(index) {
-      this.$router.push({path:`/news/${index + 1}`})
+      this.$router.push({ path: `/news/${index + 1}` });
     }
   },
-  watch: {},
+  watch: {
+    activeName(val) {
+      console.log(val);
+    }
+  },
   components: {
     TabSearch,
     HeadLine,
@@ -243,7 +279,7 @@ export default {
       width: 790px;
     }
     .active-content ul {
-      border-top: 1px solid rgba(242, 242, 242, 1);
+      // border-top: 1px solid rgba(242, 242, 242, 1);
       padding-bottom: 15px;
       margin-bottom: 20px;
     }

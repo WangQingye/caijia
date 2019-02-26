@@ -45,7 +45,7 @@
             <el-button
               type="text"
               size="small"
-              disabled
+              @click="manuAccount(scope.row.id)"
             >删除</el-button>
           </template>
         </el-table-column>
@@ -68,31 +68,48 @@
           label="账户名"
           prop="account"
         >
-          <el-input v-model="addAccountForm.account" placeholder="请输入登陆账号"></el-input>
+          <el-input
+            v-model="addAccountForm.account"
+            placeholder="请输入登陆账号"
+          ></el-input>
         </el-form-item>
         <el-form-item
           label="密码"
           prop="password"
         >
-          <el-input v-model="addAccountForm.password" type="password" placeholder="请输入账号密码"></el-input>
+          <el-input
+            v-model="addAccountForm.password"
+            type="password"
+            placeholder="请输入账号密码"
+          ></el-input>
         </el-form-item>
         <el-form-item
           label="确认密码"
           prop="repassword"
         >
-          <el-input v-model="addAccountForm.repassword" type="password" placeholder="请确认账号密码"></el-input>
+          <el-input
+            v-model="addAccountForm.repassword"
+            type="password"
+            placeholder="请确认账号密码"
+          ></el-input>
         </el-form-item>
         <el-form-item
           label="联系人"
           prop="contact"
         >
-          <el-input v-model="addAccountForm.contact" placeholder="请输入联系人"></el-input>
+          <el-input
+            v-model="addAccountForm.contact"
+            placeholder="请输入联系人"
+          ></el-input>
         </el-form-item>
         <el-form-item
           label="联系电话"
           prop="phone"
         >
-          <el-input v-model="addAccountForm.phone" placeholder="请输入联系电话"></el-input>
+          <el-input
+            v-model="addAccountForm.phone"
+            placeholder="请输入联系电话"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -139,11 +156,11 @@ export default {
         }
       ],
       addAccountForm: {
-        account: '',
-        password: '',
-        repassword: '',
-        contact: '',
-        phone: ''
+        account: "",
+        password: "",
+        repassword: "",
+        contact: "",
+        phone: ""
       },
       rules: {
         account: [
@@ -155,9 +172,7 @@ export default {
         repassword: [
           { required: true, message: "请确认账号密码", trigger: "blur" }
         ],
-        contact: [
-          { required: true, message: "请输入联系人", trigger: "blur" }
-        ],
+        contact: [{ required: true, message: "请输入联系人", trigger: "blur" }],
         phone: [{ required: true, message: "请输入联系电话", trigger: "blur" }]
       },
       storeOrgs: [],
@@ -186,16 +201,12 @@ export default {
         this.dataTotalLength = res.data.totalCount;
       }
     },
-    /* 批次号表单验证 */
-    onAddSubmit() {
-      this.addCode();
-    },
     /* 添加批次号 */
     async addAccount() {
       this.$refs.addAccountForm.validate(async valid => {
         if (valid) {
           if (this.addAccountForm.password !== this.addAccountForm.repassword) {
-            this.$message.error('两次输入的密码不一致');
+            this.$message.error("两次输入的密码不一致");
             return;
           }
           let data = {
@@ -204,28 +215,39 @@ export default {
             name: this.addAccountForm.contact,
             password: this.addAccountForm.password,
             phone: this.addAccountForm.phone
-          }
-          let res = await this.$fetch(
-              "/user/addUser",
-              data,
-              "POST",
-              "user"
-            );
+          };
+          let res = await this.$fetch("/user/addUser", data, "POST", "user");
           if (res.code == 0) {
-            this.$message.success('添加成功');
+            this.$message.success("添加成功");
             this.showAddCode = false;
             this.getCodeList(1);
           }
         }
       });
     },
+    async manuAccount(account) {
+      let url, data;
+      if (typeof account == "object") {
+        url = "/user/disableOrEnableUser";
+        data = {
+          id: account.id,
+          usable: !account.usable
+        };
+      } else {
+        url = "/user/deleteUser";
+        data = { id: account };
+      }
+      let res = await this.$fetch(url, data, "POST", "user");
+      if (res.code == 0) {
+        this.$message.success("操作成功");
+        this.getCodeList(1);
+      }
+    },
     /* 展示批次号申请界面 */
     showCodeAdd() {
       this.showAddCode = true;
     },
-    manaAccount(){
-
-    }
+    manaAccount() {}
   },
   components: {
     Pagination

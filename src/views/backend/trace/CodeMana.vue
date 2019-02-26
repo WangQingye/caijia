@@ -49,15 +49,16 @@
         >
           <template slot-scope="scope">
             <el-button
-              @click="manuCode(scope.row)"
+              @click="editCode(scope.row)"
               type="text"
               size="small"
-              disabled
+              v-if="scope.row.step == 1"
             >编辑</el-button>
             <el-button
               type="text"
               size="small"
-              disabled
+              v-if="scope.row.step == 1"
+              @click="delCode(scope.row.flowId)"
             >删除</el-button>
           </template>
         </el-table-column>
@@ -176,7 +177,7 @@
             type="primary"
             @click="onAddSubmit"
           >提交申请</el-button>
-          <el-button @click="showAddCode=false">返回列表</el-button>
+          <el-button @click="backList">返回列表</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -235,7 +236,8 @@ export default {
         num: "",
         sourcePlace: "",
         pickTime: "",
-        desc: ""
+        desc: "",
+        flowId: ""
       },
       rules: {
         storeOrg: [
@@ -261,7 +263,8 @@ export default {
       storeOrgs: [],
       goodBigTypes: [],
       goodTypesBefore: [],
-      goodTypes: []
+      goodTypes: [],
+      isEdit: false
     };
   },
   mounted() {
@@ -269,7 +272,7 @@ export default {
   },
   methods: {
     /* 获取批次号列表 */
-    async getCodeList(page,isFromSearch) {
+    async getCodeList(page, isFromSearch) {
       if (isFromSearch) page = 1;
       let res = await this.$fetch(
         "/storeRepertory/getAuditOfcompany",
@@ -290,7 +293,6 @@ export default {
     /* 获取物流企业，产品类别 */
     async getStoreComps() {
       let res = await this.$fetch("/storeRepertory/getStoreCompany");
-      console.log(res);
       if (res.code == 0) {
         this.storeOrgs = res.company;
         this.goodBigTypes = res.kind;
@@ -303,12 +305,34 @@ export default {
         return item.kindCode == selection;
       });
     },
-    manuCode() {
-      console.log(1);
+    async editCode(data) {
+      this.showAddCode = true;
+      await this.getStoreComps();
+      this.addCodeForm.storeOrg = data.storeCompanyCode;
+      this.addCodeForm.storeNum = data.repositoryCode;
+      this.addCodeForm.goodBigType = data.kindCode;
+      this.handleOrgsChange(this.addCodeForm.goodBigType);
+      this.addCodeForm.goodType = data.varietyCode;
+      this.addCodeForm.num = data.num;
+      this.addCodeForm.sourcePlace = data.origin;
+      this.addCodeForm.pickTime = new Date(data.storeTime).getTime();
+      this.addCodeForm.desc = data.remark;
+      this.addCodeForm.flowId = data.flowId;
+    },
+    async delCode(id) {
+      let res = await this.$fetch("/storeRepertory/delete", { ids: [id] });
+      if (res.code == 0) {
+        this.$message.success("操作成功");
+        this.getCodeList(1);
+      }
     },
     /* 批次号表单验证 */
     onAddSubmit() {
-      this.addCode();
+      if (this.isEdit) {
+        this.postEditCode();
+      } else {
+        this.addCode();
+      }
     },
     /* 添加批次号 */
     async addCode() {
@@ -366,10 +390,73 @@ export default {
         }
       });
     },
+    /* 编辑批次号 */
+    async postEditCode() {
+      let data = {
+        action: "入库",
+        storeCompanyCode: this.addCodeForm.storeOrg,
+        storeCompanyName: this.findKindName(
+          this.addCodeForm.storeOrg,
+          "storeCompanyCode",
+          "storeCompanyName",
+          "storeOrgs"
+        ),
+        repositoryCode: this.addCodeForm.storeNum,
+        kindCode: this.addCodeForm.goodBigType,
+        kindName: this.findKindName(
+          this.addCodeForm.goodBigType,
+          "kindCode",
+          "kindName",
+          "goodBigTypes"
+        ),
+        varietyCode: this.addCodeForm.goodType,
+        varietyName: this.findKindName(
+          this.addCodeForm.goodType,
+          "varietyCode",
+          "varietyName",
+          "goodTypes"
+        ),
+        num: this.addCodeForm.num,
+        origin: this.addCodeForm.sourcePlace,
+        storeTime: this.addCodeForm.pickTime,
+        remark: this.addCodeForm.desc,
+        flowId: this.addCodeForm.flowId,
+        farmCode: this.$store.state.userInfo.companyCode,
+        farmName: this.$store.state.userInfo.companyName,
+        account: this.$store.state.userInfo.account,
+        handlerId: this.$store.state.userInfo.id
+      };
+      this.$refs.addCodeForm.validate(async valid => {
+        if (valid) {
+          let res = await this.$fetch("/storeRepertory/update", data, "POST");
+          if (res.code == 0) {
+            this.$message.success("修改成功");
+            this.showAddCode = false;
+            this.$refs.addCodeForm.resetFields();
+            this.getCodeList(1);
+            this.isEdit = false;
+          }
+        }
+      });
+    },
     /* 展示批次号申请界面 */
     showCodeAdd() {
       this.showAddCode = true;
       this.getStoreComps();
+    },
+    backList() {
+      this.showAddCode = false;
+      this.isEdit = false;
+      this.addCodeForm = {
+        storeOrg: "",
+        storeNum: "",
+        goodBigType: "",
+        goodType: "",
+        num: "",
+        sourcePlace: "",
+        pickTime: "",
+        desc: ""
+      };
     },
     /**
      *  值，对应的标签，要查找的标签

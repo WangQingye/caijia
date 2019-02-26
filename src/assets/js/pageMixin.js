@@ -3,11 +3,11 @@ const PageMixin = {
         return {
             dataTotalLength: 1,
             pageLimit: 5,
-            currentPage: 2
+            currentPage: 1
         }
     },
     methods: {
-        pageChange(page){
+        pageChange(page) {
             this.getCodeList(page);
         }
     },

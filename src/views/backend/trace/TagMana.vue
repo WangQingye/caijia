@@ -22,18 +22,7 @@
         ref="codeTable"
         :data="codeData"
         style="width: 100%"
-        @selection-change="handleSelectionChange"
       >
-        <!-- <el-table-column
-          type="selection"
-          width="55"
-        >
-        </el-table-column>
-        <el-table-column
-          type="index"
-          width="50"
-        >
-        </el-table-column> -->
         <el-table-column
           v-for="(item,index) in labels"
           :key="index"
@@ -71,7 +60,14 @@
             <el-button
               type="text"
               size="small"
-              :disabled="true"
+              v-if="scope.row.step== 4"
+              @click="editTag(scope.row)"
+            >编辑</el-button>
+            <el-button
+              type="text"
+              size="small"
+              v-if="scope.row.step== 4"
+              @click="delTag(scope.row.actionId)"
             >删除</el-button>
           </template>
         </el-table-column>
@@ -82,7 +78,7 @@
       ></pagination>
     </div>
     <div v-if="showAddCode">
-      <p class="title">溯源标签申请</p>
+      <p class="title">{{ this.isEdit ? '溯源标签修改' : '溯源标签申请'}}</p>
       <el-form
         ref="addTagForm"
         :model="addTagForm"
@@ -98,6 +94,7 @@
             v-model="addTagForm.code"
             placeholder="请选择批次号"
             @change="onSelectCode"
+            v-if="!isEdit"
           >
             <el-option
               v-for="(code,index) in codes"
@@ -106,6 +103,7 @@
               :value="code.batch"
             ></el-option>
           </el-select>
+          <p v-else>{{addTagForm.code}}</p>
         </el-form-item>
         <el-form-item
           label="农产种类"
@@ -185,7 +183,7 @@
             type="primary"
             @click="onAddSubmit"
           >提交申请</el-button>
-          <el-button @click="showAddCode=false">返回列表</el-button>
+          <el-button @click="backList">返回列表</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -263,7 +261,8 @@ export default {
       codes: [],
       getTypes: [{ name: "快递", code: 1 }, { name: "自行打印", code: 0 }],
       timer: null,
-      nowPage: 1
+      nowPage: 1,
+      isEdit:false
     };
   },
   mounted() {
@@ -333,7 +332,7 @@ export default {
           page: page
         },
         "POST",
-        '',
+        "",
         false
       );
       if (res.code == 0) {
@@ -350,9 +349,6 @@ export default {
         }
       });
     },
-    handleSelectionChange() {
-      console.log(1);
-    },
     async downCode(row) {
       let res = await this.$fetch("/label/download", {
         companyCode: row.companyCode,
@@ -365,12 +361,91 @@ export default {
       a.click();
       window.URL.revokeObjectURL(url);
     },
+    async delTag(id) {
+      let res = await this.$fetch("/label/delete", { ids: [id] });
+      if (res.code == 0) {
+        this.$message.success("操作成功");
+        this.getCodeList(1);
+      }
+    },
+    async editTag(data) {
+      this.showAddCode = true;
+      await this.getCode();
+      this.addTagForm.code = data.batchCode;
+      this.addTagForm.goodType = data.varietyName;
+      this.addTagForm.kindCode = data.varietyCode;
+      this.addTagForm.boxNum = data.boxNum;
+      this.addTagForm.singleNum = data.perNum;
+      this.addTagForm.getType = data.recType;
+      this.addTagForm.address = data.recAddr;
+      this.addTagForm.contact = data.contacts;
+      this.addTagForm.phone = data.phone;
+      this.addTagForm.flowId = data.flowId;
+      this.addTagForm.actionId = data.actionId;
+      this.isEdit = true;
+    },
+    async postEditTag() {
+      this.$refs.addTagForm.validate(async valid => {
+        if (
+          valid &&
+          this.addTagForm.boxNum * this.addTagForm.singleNum < 1000000
+        ) {
+          let data = {
+            action: "申请标签",
+            companyCode: this.$store.state.userInfo.companyCode,
+            companyName: this.$store.state.userInfo.companyName,
+            varietyCode: this.addTagForm.kindCode,
+            varietyName: this.addTagForm.goodType,
+            batchCode: this.addTagForm.code,
+            boxNum: this.addTagForm.boxNum,
+            perNum: this.addTagForm.singleNum,
+            recType: this.addTagForm.getType,
+            contacts: this.addTagForm.contact,
+            recAddr: this.addTagForm.address,
+            phone: this.addTagForm.phone,
+            account: this.$store.state.userInfo.account,
+            flowId: this.addTagForm.flowId,
+            handlerId: this.$store.state.userInfo.id
+          };
+          let res = await this.$fetch("/label/update", data, "POST");
+          if (res.code == 0) {
+            this.$message.success("修改成功，请等待审核");
+            this.$refs.addTagForm.resetFields();
+            this.showAddCode = false;
+            this.isEdit = false;
+            this.getCodeList(1);
+          }
+        } else {
+          this.$message.error("标签数量过大，请分批申请");
+        }
+      });
+    },
     onAddSubmit() {
-      this.applyTag();
+      if (this.isEdit) {
+        this.postEditTag();
+      } else {
+        this.applyTag();
+      }
     },
     showAdd() {
       this.showAddCode = true;
       this.getCode();
+    },
+    backList() {
+      this.showAddCode = false;
+      this.isEdit = false;
+      this.addTagForm = {
+        code: "",
+        goodType: "",
+        boxNum: "",
+        singleNum: "",
+        getType: 0,
+        address: "",
+        contact: "",
+        phone: "",
+        kindCode: "",
+        flowId: ""
+      }
     },
     findKindName(value, tag, find, arrName) {
       let a;
@@ -387,7 +462,7 @@ export default {
   },
   destroyed() {
     clearInterval(this.timer);
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>

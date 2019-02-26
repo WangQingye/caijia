@@ -182,7 +182,9 @@ export default {
       if (res.code == 0) {
         this.codeData = res.data.data;
         this.dataTotalLength = res.data.countSize;
+        console.log(this.currentPage);
         this.currentPage = page;
+        console.log(this.currentPage);
       }
     },
     showAuditConfirm(row) {
@@ -210,7 +212,7 @@ export default {
         if (res.code == 0) {
           this.dialogVisible = false;
           this.$message.success("操作成功！");
-          this.getCodeList();
+          this.getCodeList(1);
         }
       });
     },

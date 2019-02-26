@@ -1,29 +1,22 @@
 <template>
   <div class="codeMana">
     <div v-if="!showAddCode">
-      <p class="text">批次号</p>
-      <el-select
-        v-model="searchCode"
-        placeholder="请选择要搜索的批次号"
-        style="margin:0 20px;"
-      >
-        <el-option
-          v-for="(code,index) in codes"
-          :key="index"
-          :label="code"
-          :value="code"
-        ></el-option>
-      </el-select>
-      <p class="text">箱码</p>
+      <p class="text">企业名称</p>
       <el-input
         class="search-input"
-        v-model="searchBoxNum"
-        placeholder="请输入要搜索的箱码"
+        v-model="searchName"
+        placeholder="请输入要搜索的企业名称"
+      ></el-input>
+            <p class="text">批次号</p>
+      <el-input
+        class="search-input"
+        v-model="searchCode"
+        placeholder="请输入要搜索的批次号"
       ></el-input>
       <el-button
         type="primary"
         icon="el-icon-search"
-        disabled
+        @click="getCodeList(1,true)"
       >搜索</el-button>
       <!-- <el-row class="mana-buttons">
         <el-button
@@ -72,8 +65,9 @@
         </el-table-column>
       </el-table>
       <pagination
-        :total="codeData.length"
-        :page-change="pageChange"
+        :total="dataTotalLength"
+        @page-change="pageChange"
+        :current-page="currentPage"
       ></pagination>
     </div>
     <div v-if="showAddCode">
@@ -88,14 +82,16 @@
 
 <script>
 import Pagination from "@/components/Pagination.vue";
+import PageMixin from "@/assets/js/pageMixin";
 import AddLogistics from "@/components/AddLogistics.vue";
 import AddStockOut from "@/components/AddStockOut.vue";
 import AddVerify from "@/components/AddVerify.vue";
 export default {
+  mixins: [PageMixin],
   data() {
     return {
       searchCode: "",
-      searchBoxNum: "",
+      searchName: "",
       userType: 3,
       showAddCode: false,
       codeData: [],
@@ -140,22 +136,26 @@ export default {
   },
   mounted() {
     // this.getTem();
-    this.getList();
+    this.getCodeList(1);
   },
   methods: {
-    async getList() {
+    async getCodeList(page, isFromSearch) {
+      if (isFromSearch) page = 1;
       let res = await this.$fetch(
         "/check/noCheckList",
         {
-          page: 1,
-          limit: 5,
+          page: page,
+          limit: this.pageLimit,
           companyCode: this.$store.state.userInfo.companyCode,
-          typeCode: this.$store.state.userInfo.typeCode
+          typeCode: this.$store.state.userInfo.typeCode,
+          companyName: this.searchName,
+          batchCode: this.searchCode
         },
         "POST"
       );
       if (res.code == 0) {
         this.codeData = res.data.data;
+        this.dataTotalLength = res.data.countSize;
       }
     },
     showSourceFill(row) {
@@ -168,10 +168,6 @@ export default {
     manuCode() {
       console.log(1);
     },
-    pageChange(page) {
-      console.log(page);
-    },
-    onAddSubmit() {},
     onFillBack(flag) {
       this.showAddCode = false;
       if (flag) {
