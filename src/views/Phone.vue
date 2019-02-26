@@ -2,7 +2,7 @@
   <div class="phone">
     <img
       class="banner-wap"
-      src="@/assets/imgs/banner-wap.png"
+      src="@/assets/imgs/bj-wap.png"
       alt=""
     >
     <head-line
@@ -31,23 +31,23 @@
         </li>
         <li>
           <span class="pro-title">产地</span>
-          <span class="pro-details">{{products.sorigin}}</span>
+          <span class="pro-details">{{products.sOrigin}}</span>
         </li>
         <li>
           <span class="pro-title">农产种类</span>
-          <span class="pro-details">{{products.skindName}}</span>
+          <span class="pro-details">{{products.sKindName}}</span>
         </li>
         <li>
           <span class="pro-title">农产品种</span>
-          <span class="pro-details">{{products.svarietyName}}</span>
+          <span class="pro-details">{{products.sVarietyName}}</span>
         </li>
         <li>
           <span class="pro-title">采摘时间</span>
-          <span class="pro-details">{{renderTime(products.sstoreTime)}}</span>
+          <span class="pro-details">{{renderTime(products.sStoreTime)}}</span>
         </li>
         <li>
           <span class="pro-title">企业</span>
-          <span class="pro-details">{{products.ocompanyName}}</span>
+          <span class="pro-details">{{products.oCompanyName}}</span>
         </li>
       </ul>
     </div>
@@ -86,31 +86,31 @@ export default {
       urlParam: "",
       products: [],
       productDetails: [
-        // {
-        //       ocreateTime:'2018-12-02',
-        //       oremark:'入库',
-        //       stepOrde:1
-        //   },
-        //    {
-        //       ocreateTime:'2018-12-02',
-        //       oremark:'检测',
-        //       stepOrde:2
-        //   },
-        //    {
-        //       ocreateTime:'2018-12-02',
-        //       oremark:'申请',
-        //       stepOrde:3
-        //   },
-        //    {
-        //       ocreateTime:'2018-12-02',
-        //       oremark:'出库',
-        //       stepOrde:4
-        //   },
-        //    {
-        //       ocreateTime:'2018-12-02',
-        //       oremark:'物流',
-        //       stepOrde:5
-        //   }
+        {
+              ocreateTime:'2018-12-02',
+              oremark:'入库',
+              stepOrde:1
+          },
+           {
+              ocreateTime:'2018-12-02',
+              oremark:'检测',
+              stepOrde:2
+          },
+           {
+              ocreateTime:'2018-12-02',
+              oremark:'申请',
+              stepOrde:3
+          },
+           {
+              ocreateTime:'2018-12-02',
+              oremark:'出库',
+              stepOrde:4
+          },
+           {
+              ocreateTime:'2018-12-02',
+              oremark:'物流',
+              stepOrde:5
+          }
       ]
     };
   },
@@ -175,8 +175,8 @@ export default {
     }
   },
   mounted() {
-    // this.getUrlParam();
-    // this.getProductData();
+     this.getUrlParam();
+    this.getProductData();
   },
   watch: {},
   components: {

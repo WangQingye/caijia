@@ -41,7 +41,7 @@
       :visible.sync="isModalshow"
     >
       <img
-        src="@/assets/imgs/bj-web.png"
+        src="@/assets/imgs/bj-tankuangweb.png"
         class="bj-web"
       />
       <head-line
@@ -70,25 +70,25 @@
           </li>
           <li>
             <span>产地</span>
-            <span>{{products.sorigin}}</span>
+            <span>{{products.sOrigin}}</span>
           </li>
           <li>
             <span>农产种类</span>
-            <span>{{products.skindName}}</span>
+            <span>{{products.sKindName}}</span>
           </li>
         </ul>
         <ul class="ul2">
           <li>
             <span>农产品种</span>
-            <span>{{products.svarietyName}}</span>
+            <span>{{products.sVarietyName}}</span>
           </li>
           <li>
             <span>采摘时间</span>
-            <span>{{renderTime(products.sstoreTime)}}</span>
+            <span>{{renderTime(products.sStoreTime)}}</span>
           </li>
           <li>
             <span>企业</span>
-            <span>{{products.sstoreCompanyName}}</span>
+            <span>{{products.sStoreCompanyName}}</span>
           </li>
         </ul>
       </div>
