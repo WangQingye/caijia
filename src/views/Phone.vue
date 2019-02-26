@@ -31,23 +31,23 @@
         </li>
         <li>
           <span class="pro-title">产地</span>
-          <span class="pro-details">{{products.sorigin}}</span>
+          <span class="pro-details">{{products.sOrigin}}</span>
         </li>
         <li>
           <span class="pro-title">农产种类</span>
-          <span class="pro-details">{{products.skindName}}</span>
+          <span class="pro-details">{{products.sKindName}}</span>
         </li>
         <li>
           <span class="pro-title">农产品种</span>
-          <span class="pro-details">{{products.svarietyName}}</span>
+          <span class="pro-details">{{products.sVarietyName}}</span>
         </li>
         <li>
           <span class="pro-title">采摘时间</span>
-          <span class="pro-details">{{renderTime(products.sstoreTime)}}</span>
+          <span class="pro-details">{{renderTime(products.sStoreTime)}}</span>
         </li>
         <li>
           <span class="pro-title">企业</span>
-          <span class="pro-details">{{products.ocompanyName}}</span>
+          <span class="pro-details">{{products.oCompanyName}}</span>
         </li>
       </ul>
     </div>
@@ -175,8 +175,8 @@ export default {
     }
   },
   mounted() {
-    // this.getUrlParam();
-    // this.getProductData();
+     this.getUrlParam();
+    this.getProductData();
   },
   watch: {},
   components: {
