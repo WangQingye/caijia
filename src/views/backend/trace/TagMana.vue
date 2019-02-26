@@ -262,7 +262,7 @@ export default {
       getTypes: [{ name: "快递", code: 1 }, { name: "自行打印", code: 0 }],
       timer: null,
       nowPage: 1,
-      isEdit:false
+      isEdit: false
     };
   },
   mounted() {
@@ -405,16 +405,22 @@ export default {
             phone: this.addTagForm.phone,
             account: this.$store.state.userInfo.account,
             flowId: this.addTagForm.flowId,
+            actionId: this.addTagForm.actionId,
             handlerId: this.$store.state.userInfo.id
           };
-          let res = await this.$fetch("/label/update", data, "POST");
-          if (res.code == 0) {
-            this.$message.success("修改成功，请等待审核");
-            this.$refs.addTagForm.resetFields();
-            this.showAddCode = false;
-            this.isEdit = false;
-            this.getCodeList(1);
-          }
+          this.$checkSign(data, async signData => {
+            if (!signData) {
+              signData = this.$signData(data, 13);
+            }
+            let res = await this.$fetch("/label/update", signData, "POST");
+            if (res.code == 0) {
+              this.$message.success("申请成功，请等待审核");
+              this.$refs.addTagForm.resetFields();
+              this.showAddCode = false;
+              this.isEdit = false;
+              this.getCodeList(1);
+            }
+          });
         } else {
           this.$message.error("标签数量过大，请分批申请");
         }
@@ -445,7 +451,7 @@ export default {
         phone: "",
         kindCode: "",
         flowId: ""
-      }
+      };
     },
     findKindName(value, tag, find, arrName) {
       let a;

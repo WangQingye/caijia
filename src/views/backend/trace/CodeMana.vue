@@ -318,6 +318,8 @@ export default {
       this.addCodeForm.pickTime = new Date(data.storeTime).getTime();
       this.addCodeForm.desc = data.remark;
       this.addCodeForm.flowId = data.flowId;
+      this.addCodeForm.actionId = data.actionId;
+      this.isEdit = true;
     },
     async delCode(id) {
       let res = await this.$fetch("/storeRepertory/delete", { ids: [id] });
@@ -392,50 +394,61 @@ export default {
     },
     /* 编辑批次号 */
     async postEditCode() {
-      let data = {
-        action: "入库",
-        storeCompanyCode: this.addCodeForm.storeOrg,
-        storeCompanyName: this.findKindName(
-          this.addCodeForm.storeOrg,
-          "storeCompanyCode",
-          "storeCompanyName",
-          "storeOrgs"
-        ),
-        repositoryCode: this.addCodeForm.storeNum,
-        kindCode: this.addCodeForm.goodBigType,
-        kindName: this.findKindName(
-          this.addCodeForm.goodBigType,
-          "kindCode",
-          "kindName",
-          "goodBigTypes"
-        ),
-        varietyCode: this.addCodeForm.goodType,
-        varietyName: this.findKindName(
-          this.addCodeForm.goodType,
-          "varietyCode",
-          "varietyName",
-          "goodTypes"
-        ),
-        num: this.addCodeForm.num,
-        origin: this.addCodeForm.sourcePlace,
-        storeTime: this.addCodeForm.pickTime,
-        remark: this.addCodeForm.desc,
-        flowId: this.addCodeForm.flowId,
-        farmCode: this.$store.state.userInfo.companyCode,
-        farmName: this.$store.state.userInfo.companyName,
-        account: this.$store.state.userInfo.account,
-        handlerId: this.$store.state.userInfo.id
-      };
       this.$refs.addCodeForm.validate(async valid => {
         if (valid) {
-          let res = await this.$fetch("/storeRepertory/update", data, "POST");
-          if (res.code == 0) {
-            this.$message.success("修改成功");
-            this.showAddCode = false;
-            this.$refs.addCodeForm.resetFields();
-            this.getCodeList(1);
-            this.isEdit = false;
-          }
+          let data = {
+            action: "入库",
+            storeCompanyCode: this.addCodeForm.storeOrg,
+            storeCompanyName: this.findKindName(
+              this.addCodeForm.storeOrg,
+              "storeCompanyCode",
+              "storeCompanyName",
+              "storeOrgs"
+            ),
+            repositoryCode: this.addCodeForm.storeNum,
+            kindCode: this.addCodeForm.goodBigType,
+            kindName: this.findKindName(
+              this.addCodeForm.goodBigType,
+              "kindCode",
+              "kindName",
+              "goodBigTypes"
+            ),
+            varietyCode: this.addCodeForm.goodType,
+            varietyName: this.findKindName(
+              this.addCodeForm.goodType,
+              "varietyCode",
+              "varietyName",
+              "goodTypes"
+            ),
+            num: this.addCodeForm.num,
+            origin: this.addCodeForm.sourcePlace,
+            storeTime: this.addCodeForm.pickTime,
+            remark: this.addCodeForm.desc,
+            farmCode: this.$store.state.userInfo.companyCode,
+            farmName: this.$store.state.userInfo.companyName,
+            account: this.$store.state.userInfo.account,
+            handlerId: this.$store.state.userInfo.id,
+            flowId: this.addCodeForm.flowId,
+            actionId: this.addCodeForm.actionId
+          };
+          this.$checkSign(data, async signData => {
+            if (!signData) {
+              signData = this.$signData(data, 15);
+            }
+            let res = await this.$fetch(
+              "/storeRepertory/update",
+              signData,
+              "POST"
+            );
+            if (res.code == 0) {
+              this.$message.success("修改成功");
+              this.showAddCode = false;
+              this.isEdit = false;
+
+              this.$refs.addCodeForm.resetFields();
+              this.getCodeList(1);
+            }
+          });
         }
       });
     },
