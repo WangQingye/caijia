@@ -54,7 +54,16 @@ export default async (url = '', data = {}, type = 'GET', backend = '', needLoadi
             if (needLoading) loading.close();
             let responseData;
             if (url.indexOf('download') !== -1) {
+                let contentLength = response.headers.get('Content-Length');
                 responseData = await response.blob();
+                let realSize = responseData.size;
+                if (!contentLength || !realSize) {
+                    this.$message.error('文件不存在，下载失败，请联系管理员');
+                    return false;
+                } else if (realSize !== contentLength) {
+                    this.$message.error('文件大小错误，下载失败，请联系管理员');
+                    return false;
+                }
             } else {
                 responseData = await response.json();
                 if (responseData.code !== 0 && responseData.code !== 301) {

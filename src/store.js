@@ -21,7 +21,8 @@ export default new Vuex.Store({
     },
     showPkDialog: false,
     privateKey: '',
-    pkCallBack: null
+    pkCallBack: null,
+    headerIndex: 1
   },
   mutations: {
     saveUserInfo(state, info) {
@@ -39,6 +40,9 @@ export default new Vuex.Store({
     clearUserInfo(state) {
       state.userInfo = {}
       state.privateKey = ''
+    },
+    setHeaderIndex(state, index) {
+      state.headerIndex = index;
     }
   },
   actions: {

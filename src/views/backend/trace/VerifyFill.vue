@@ -171,7 +171,7 @@ export default {
     onFillBack(flag) {
       this.showAddCode = false;
       if (flag) {
-        this.getList();
+        this.getCodeList(1);
       }
     },
     calStatus(step) {

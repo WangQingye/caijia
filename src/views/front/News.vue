@@ -12,47 +12,65 @@
       </div>
       <div class="news-container">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/main' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item>新闻中心</el-breadcrumb-item>
           <el-breadcrumb-item>
-            <p @click="showNewIndex=null" :style="'cursor:pointer'">新闻动态</p>
+            <p
+              @click="showNewIndex=null"
+              :style="'cursor:pointer'"
+            >{{titleLabels[this.activeName]}}</p>
           </el-breadcrumb-item>
           <!--<el-breadcrumb-item>媒体查询</el-breadcrumb-item> -->
         </el-breadcrumb>
-        <el-tabs :tab-position="tabPosition">
-          <el-tab-pane label="新闻动态">
-            <div class="news-active" v-if="!showNewIndex">
-              <div class="active-content">
-                <ul>
-                  <li
-                    v-for="(item,index) in newsList"
-                    :key="index"
-                    @click="clickNew(index)"
-                  >
-                    <p class="new-name">{{item.title}}</p>
-                    <div class="new-text">
-                      <p>{{item.text}}</p>
-                      <span>{{item.time}}</span>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="news-content" v-else>
-              <img v-if="showNewIndex==1" src="@/assets/imgs/new1.png" alt="">
-              <img v-if="showNewIndex==2" src="@/assets/imgs/new2.png" alt="">
-              <img v-if="showNewIndex==3" src="@/assets/imgs/new3.png" alt="">
-              <img v-if="showNewIndex==4" src="@/assets/imgs/new4.png" alt="">
-            </div>
-            <el-pagination
-              background
-              layout="prev, pager, next"
-              :total="2"
-            >
-            </el-pagination>
+        <el-tabs
+          tab-position="left"
+          v-model="activeName"
+          @tab-click="handleTabClick"
+        >
+          <el-tab-pane
+            label="新闻动态"
+            name="1"
+          >
           </el-tab-pane>
-          <!-- <el-tab-pane label="信链资讯">配置管理</el-tab-pane>
-                    <el-tab-pane label="媒体查询">角色管理</el-tab-pane> -->
+          <el-tab-pane
+            label="信链资讯"
+            name="2"
+          ></el-tab-pane>
+          <el-tab-pane
+            label="媒体查询"
+            name="3"
+          ></el-tab-pane>
+          <div
+            class="news-active"
+            v-if="!showNewIndex"
+          >
+            <div class="active-content">
+              <ul>
+                <li
+                  v-for="(item,index) in newsList"
+                  :key="index"
+                  @click="getSingleNew(item.id)"
+                >
+                  <new-item :data="item"></new-item>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="news-content"
+            v-else
+          >
+          <h1 :style="'padding: 0 20px;'" v-if="signleNew.newsContent.indexOf('<h1>') == -1">{{signleNew.newsTitle}}</h1>
+            <div
+              v-html="signleNew.newsContent"
+              class="news-content"
+            ></div>
+          </div>
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :total="dataTotalLength"
+          >
+          </el-pagination>
         </el-tabs>
       </div>
 
@@ -60,10 +78,12 @@
   </div>
 </template>
 <script>
+import NewItem from "@/components/NewItem.vue";
+import PageMixin from "@/assets/js/pageMixin";
 export default {
+  mixins: [PageMixin],
   data() {
     return {
-      tabPosition: "left",
       newsList: [
         {
           title: "农产品溯源系统解析，没有更全的了！",
@@ -94,17 +114,65 @@ export default {
           route: "/new4"
         }
       ],
-      showNewIndex: null
+      titleLabels: {
+        1:'新闻动态',
+        2:'信链资讯',
+        3:'媒体查询'
+      },
+      showNewIndex: null,
+      signleNew: "",
+      activeName: "1"
     };
   },
+  mounted() {
+    this.getCodeList(1);
+  },
   methods: {
-    clickNew(index){
-      this.showNewIndex = index + 1;
+    async getSingleNew(id) {
+      let res = await this.$fetch("/newsController/queryNewsById", { id });
+      if (res.code == 0) {
+        this.showNewIndex = true;
+        this.signleNew = res.data;
+        console.log(this.signleNew);
+      }
+    },
+    async getCodeList(page) {
+      let res = await this.$fetch(
+        "/newsController/queryNewsPage",
+        {
+          newsStatus: 1,
+          newsType: this.activeName,
+          limit: 5,
+          page
+        },
+        "POST"
+      );
+      if (res.code == 0) {
+        this.newsList = res.data.data;
+        this.dataTotalLength = res.data.countSize;
+      }
+    },
+    handleTabClick(tab) {
+      this.showNewIndex=false;
+      this.activeName = tab.name;
+      this.getCodeList(1);
     }
   },
-  beforeRouteEnter (to, from, next) {
-      next(async vm => {
-        vm.showNewIndex = to.params.id;
+  components: {
+    NewItem
+  },
+  watch: {
+    activeName(val) {
+      this.showNewIndex=false;
+      this.getCodeList(1);
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(async vm => {
+      if (to.params.id) {
+        vm.getSingleNew(to.params.id);
+        vm.showNewIndex = true;
+      }
     });
   }
 };
@@ -165,7 +233,7 @@ export default {
         top: 50px;
         background-color: #fff;
         .el-tabs__nav-scroll {
-          height: 200px;
+          height: 800px;
           border-left: 2px solid rgba(228, 231, 237, 1);
           box-sizing: border-box;
         }
@@ -193,60 +261,47 @@ export default {
       height: 100%;
       padding-left: 30px;
     }
-    .active-content ul {
-      width: 863px;
-      border-top: 1px solid rgba(242, 242, 242, 1);
-      padding-bottom: 15px;
-      margin-bottom: 20px;
-    }
-    .active-content ul li {
-      position: relative;
-      cursor: pointer;
-      margin-top: 15px;
-      border-bottom: 1px solid rgba(242, 242, 242, 1);
-    }
-    .active-content ul li p.new-name {
-      width: 450px;
-      height: 16px;
-      font-size: 16px;
-      font-family: MicrosoftYaHei-Bold;
-      font-weight: bold;
-      color: rgba(85, 85, 85, 1);
-      margin-bottom: 17px;
-      text-align: left;
-    }
-    .active-content ul li div.new-text {
-      width: 100%;
-      height: 46px;
-      font-size: 16px;
-      font-family: MicrosoftYaHei;
-      font-weight: 400;
-      color: rgba(153, 153, 153, 1);
-      line-height: 30px;
-      margin-bottom: 20px;
-      p {
-        text-align: left;
-      }
-    }
-    .active-content ul li div.new-text span {
-      position: absolute;
-      bottom: 5px;
-      right: 20px;
-      float: right;
-      margin-top: -17px;
-      font-size: 16px;
-      font-family: MicrosoftYaHei;
-      font-weight: 400;
-      color: rgba(117, 117, 117, 1);
-    }
     .el-pagination {
       float: right;
+      margin-top: 20px;
       ul.el-pager li {
         background-color: #fff;
         border: 1px solid rgba(242, 242, 242, 1);
         border-radius: 4px;
       }
     }
+  }
+}
+.news-content {
+  line-height: 30px;
+  padding: 0 20px;
+  text-align: left;
+  h1 {
+    font-size: 30px;
+    margin-bottom: 30px;
+  }
+  h2 {
+    font-size: 20px;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  a {
+    text-decoration: underline;
+    color: blue;
+  }
+  p {
+    text-align: left;
+    font-size: 16px;
+    // text-indent: 36px;
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  img {
+    display: block;
+    margin: 20px auto;
   }
 }
 </style>

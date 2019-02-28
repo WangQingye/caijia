@@ -81,7 +81,7 @@ export default {
         title: "",
         type: "",
         remote: "至臻信链",
-        status: "",
+        status: "1",
         content: "",
         publishDate: ""
       },
@@ -153,20 +153,56 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
-.title {
-  width: 100%;
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-.form {
-  width: 800px;
-  margin: 0 auto;
-}
-.box-num {
-  width: 100px;
-  display: inline-block;
+<style lang="scss">
+.add-stock-out {
+  .title {
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  .form {
+    width: 800px;
+    margin: 0 auto;
+  }
+  .box-num {
+    width: 100px;
+    display: inline-block;
+  }
+  .quill-editor {
+    h2 {
+      margin: 10px 0;
+    }
+    p {
+      line-height: 25px;
+    }
+    img {
+      margin: 20px 0;
+    }
+    // .ql-picker-label {
+    //   width: 90px;
+    // }
+    .ql-formats:nth-child(2),
+    .ql-formats:nth-child(4),
+    .ql-formats:nth-child(5),
+    .ql-formats:nth-child(6),
+    .ql-formats:nth-child(7),
+    .ql-formats:nth-child(8),
+    .ql-formats:nth-child(9),
+    .ql-formats:nth-child(11),
+    .ql-formats:nth-child(12),
+    .ql-formats:nth-child(13)
+     {
+      display: none;
+    }
+    .ql-picker-label::before {
+      font-size: 15px;
+      vertical-align: top;
+    }
+    .ql-color-picker {
+      margin-top: -15px;
+    }
+  }
 }
 </style>

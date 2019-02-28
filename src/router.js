@@ -88,31 +88,26 @@ let router = new Router({
   ]
 })
 router.beforeEach(async (to, from, next) => {
-  setTimeout(async () => {
-    Bus.$emit('router-change', {
+  // setTimeout(async () => {
+  //   Bus.$emit('router-change', {
+  //     mainPage: 0,
+  //     news: 1,
+  //     apply: 2,
+  //     login: 3
+  //   } [to.name]);
+  //   if (to.name == 'news') {
+  //     window.scrollTo(0, 0);
+  //   }
+  // }, 200);
+  Vue.nextTick(() => {
+    vm.$store.commit('setHeaderIndex', {
       mainPage: 0,
       news: 1,
       apply: 2,
       login: 3
     } [to.name]);
-    if (to.name == 'news') {
-      window.scrollTo(0, 0);
-    }
-    // if (to.matched[0].path == '/backend') {
-    //   if (!vm.$store.state.userInfo.id) {
-    //     let res = await vm.$fetch("/user/automaticLogin", {}, "GET", "user");
-    //     if (res.code == 0) {
-    //       vm.$store.commit("saveUserInfo", res.data);
-    //     } else {
-    //       vm.$store.commit("clearUserInfo");
-    //       vm.$router.push({
-    //         path: "/login"
-    //       });
-    //     }
-    //     next();
-    //   }
-    // }
-  }, 100);
+    console.log(vm.$store.state.headerIndex);
+  })
   next();
 });
 export default router;

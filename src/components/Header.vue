@@ -11,7 +11,7 @@
       <div class="nav-wrapper">
         <ul class="nav-ul">
           <li
-            :class="['nav-li', index === hoverIndex ? 'nav-active' : '', index == nowIndex ? 'nav-big-font' : '']"
+            :class="['nav-li', index === hoverIndex ? 'nav-active' : '', index == $store.state.headerIndex ? 'nav-big-font' : '']"
             v-for="(nav, index) in navs"
             :key="index"
             @click="clickNav(index)"
@@ -44,8 +44,7 @@ export default {
         { name: "后台登陆", url: "/login" }
       ],
       hoverIndex: null,
-      hoverOnList: false,
-      nowIndex: 0
+      // nowIndex: this.$store.state.headerIndex
     };
   },
   props: {
@@ -59,9 +58,9 @@ export default {
     }
   },
   created() {
-    Bus.$on('router-change', index => {
-      this.nowIndex = index;
-    })
+    // Bus.$on('router-change', index => {
+    //   this.nowIndex = index;
+    // })
   },
   mounted() {
   },
@@ -78,13 +77,6 @@ export default {
     },
     onMouseOut() {
       this.hoverIndex = null;
-    }
-  },
-  watch: {
-    nowIndex(val) {
-      if (val !== 1) {
-        this.hoverOnList = false;
-      }
     }
   }
 };

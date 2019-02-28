@@ -157,7 +157,7 @@ export default {
     },
     logisticBack(){
       this.showAddCode = false;
-      this.getCodeList();
+      this.getCodeList(1);
     },
     onAddSubmit() {}
   },

@@ -354,6 +354,7 @@ export default {
         companyCode: row.companyCode,
         batch: row.batchCode
       });
+      if (!res) return;
       var a = document.createElement("a");
       var url = window.URL.createObjectURL(res);
       a.href = url;
