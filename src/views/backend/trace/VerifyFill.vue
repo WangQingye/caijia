@@ -7,7 +7,7 @@
         v-model="searchName"
         placeholder="请输入要搜索的企业名称"
       ></el-input>
-            <p class="text">批次号</p>
+      <p class="text">批次号</p>
       <el-input
         class="search-input"
         v-model="searchCode"
@@ -43,6 +43,12 @@
             <p v-if="item.prop == 'step'">
               {{calStatus(scope.row.step)}}
             </p>
+            <el-button
+              v-else-if="item.prop == 'report'"
+              @click="showReport(scope.row)"
+              type="text"
+              size="small"
+            >查看报告</el-button>
             <p v-else-if="!scope.row[item.prop]">无</p>
             <p v-else>{{scope.row[item.prop]}}</p>
           </template>
@@ -77,15 +83,15 @@
         :rowData="nowRow"
       ></add-verify>
     </div>
+    <img-viewer ref="imgViewer" :showFlag="showImgList"></img-viewer>
   </div>
 </template>
 
 <script>
 import Pagination from "@/components/Pagination.vue";
 import PageMixin from "@/assets/js/pageMixin";
-import AddLogistics from "@/components/AddLogistics.vue";
-import AddStockOut from "@/components/AddStockOut.vue";
 import AddVerify from "@/components/AddVerify.vue";
+import ImgViewer from "@/components/ImgViewer.vue";
 export default {
   mixins: [PageMixin],
   data() {
@@ -131,7 +137,9 @@ export default {
         }
       ],
       codes: ["001", "002"],
-      nowRow: null
+      nowRow: null,
+      showImgList: false,
+      reportList: []
     };
   },
   mounted() {
@@ -165,8 +173,9 @@ export default {
     handleSelectionChange() {
       console.log(1);
     },
-    manuCode() {
-      console.log(1);
+    showReport(data) {
+      this.$refs.imgViewer.show();
+      this.reportList = data;
     },
     onFillBack(flag) {
       this.showAddCode = false;
@@ -204,8 +213,7 @@ export default {
   },
   components: {
     Pagination,
-    AddLogistics,
-    AddStockOut,
+    ImgViewer,
     AddVerify
   }
 };

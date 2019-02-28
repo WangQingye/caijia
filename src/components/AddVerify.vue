@@ -29,7 +29,7 @@
       <el-form-item label="检测报告">
         <el-upload
           class="upload-demo"
-          :action="productUrl + '/list/upload'"
+          :action="userUrl + '/company/fileUpload'"
           :on-success="handleFileChange"
           :file-list="fileList"
           list-type="picture"
@@ -93,7 +93,7 @@ export default {
       codes: ["001", "002"],
       companys: ["农企1", "农企2"],
       fileList: [],
-      productUrl: window.productUrl
+      userUrl: window.userUrl
     };
   },
   props: {
@@ -137,12 +137,12 @@ export default {
       this.$emit("back", true);
     },
     handleFileChange(res, file, fileList) {
-      console.log(res.data);
+      console.log(res);
       if (res.code == 0) {
         if (this.addVerifyForm.filePath) {
           this.addVerifyForm.filePath += ",";
         }
-        this.addVerifyForm.filePath += res.data[0];
+        this.addVerifyForm.filePath += res.data;
       }
       this.fileList = fileList;
     }

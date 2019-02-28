@@ -93,16 +93,18 @@
           <p>{{detailData.companyTypeName}}</p>
         </el-form-item>
         <el-form-item label="营业执照">
-          <el-card :body-style="{ padding: '0px' }">
+          <el-card :body-style="{ padding: '0px'}">
             <img
-              src="@/assets/imgs/qrcode.png"
-              class="image"
+              :style="'width:100%;margin-top:15px'"
+              src="http://www.33lc.com/article/UploadPic/2012-7/201272713562117180.jpg"
+              @click="window.open('http://www.33lc.com/article/UploadPic/2012-7/201272713562117180.jpg')"
             >
           </el-card>
           <el-card :body-style="{ padding: '0px' }">
             <img
-              src="@/assets/imgs/qrcode.png"
-              class="image"
+              :style="'width:100%;margin-top:15px'"
+              src="http://www.33lc.com/article/UploadPic/2012-7/201272713562117180.jpg"
+              @click="window.open('http://www.33lc.com/article/UploadPic/2012-7/201272713562117180.jpg')"
             >
           </el-card>
         </el-form-item>
@@ -178,7 +180,8 @@ export default {
         }
       ],
       showDetails: false,
-      detailData: null
+      detailData: null,
+      window: window
     };
   },
   mounted() {
