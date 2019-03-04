@@ -29,7 +29,7 @@
       <el-form-item label="检测报告">
         <el-upload
           class="upload-demo"
-          :action="userUrl + '/company/fileUpload'"
+          :action="productUrl + '/list/upload'"
           :on-success="handleFileChange"
           :file-list="fileList"
           list-type="picture"
@@ -93,7 +93,7 @@ export default {
       codes: ["001", "002"],
       companys: ["农企1", "农企2"],
       fileList: [],
-      userUrl: window.userUrl
+      productUrl: window.productUrl
     };
   },
   props: {
