@@ -83,7 +83,7 @@
         :rowData="nowRow"
       ></add-verify>
     </div>
-    <img-viewer ref="imgViewer" :showFlag="showImgList"></img-viewer>
+    <img-viewer ref="imgViewer" :showFlag="showImgList" :imgList="reportList"></img-viewer>
   </div>
 </template>
 
@@ -175,7 +175,9 @@ export default {
     },
     showReport(data) {
       this.$refs.imgViewer.show();
-      this.reportList = data;
+      this.reportList = data.picList.split(',').map(item=>{
+        return window.productUrl.replace('/zp_product_manager', '') + item;
+      });
     },
     onFillBack(flag) {
       this.showAddCode = false;

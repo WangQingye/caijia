@@ -106,7 +106,6 @@ router.beforeEach(async (to, from, next) => {
       apply: 2,
       login: 3
     } [to.name]);
-    console.log(vm.$store.state.headerIndex);
   })
   next();
 });
