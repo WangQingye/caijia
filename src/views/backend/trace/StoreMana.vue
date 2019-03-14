@@ -179,6 +179,7 @@ export default {
       this.nowRow = row;
     },
     async manuCode(flag) {
+      this.dialogVisible = false;
       let data = {
         action: "审核入库",
         storeCompanyCode: this.nowRow.storeCompanyCode,
@@ -196,7 +197,6 @@ export default {
         let res = await this.$fetch("/storeRepertory/audit", signData, "POST");
         if (res.code == 0) {
           this.$message.success("审核成功");
-          this.dialogVisible = false;
           this.getCodeList(1);
         }
       });

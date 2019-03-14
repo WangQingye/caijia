@@ -1,7 +1,7 @@
 <template>
   <div class="codeMana">
     <div v-if="!showAddCode">
-            <p class="text">企业名称</p>
+      <p class="text">企业名称</p>
       <el-input
         class="search-input"
         v-model="searchName"
@@ -192,7 +192,7 @@ export default {
       this.nowRow = row;
     },
     async auditApply(flag) {
-      console.log(this.nowRow);
+      this.dialogVisible = false;
       let data = {
         action: "审核标签",
         labelCompanyCode: this.$store.state.userInfo.companyCode,
@@ -210,7 +210,6 @@ export default {
         }
         let res = await this.$fetch("/label/audit", signData, "POST");
         if (res.code == 0) {
-          this.dialogVisible = false;
           this.$message.success("操作成功！");
           this.getCodeList(1);
         }
