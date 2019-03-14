@@ -160,6 +160,7 @@
             type="date"
             placeholder="请选择采摘时间"
             value-format="timestamp"
+            :picker-options="pickerOptions"
           >
           </el-date-picker>
         </el-form-item>
@@ -264,7 +265,12 @@ export default {
       goodBigTypes: [],
       goodTypesBefore: [],
       goodTypes: [],
-      isEdit: false
+      isEdit: false,
+      pickerOptions: {
+        disabledDate(time){
+          return time.getTime() > Date.now();;
+        }
+      }
     };
   },
   mounted() {
