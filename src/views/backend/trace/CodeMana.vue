@@ -253,7 +253,21 @@ export default {
         goodType: [
           { required: true, message: "请选择农产品品种", trigger: "blur" }
         ],
-        num: [{ required: true, message: "请输入入库数量", trigger: "blur" }],
+        num: [
+          { required: true, message: "请输入入库数量", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              if (value.split('.')[1] && value.split('.')[1].length > 4) {
+                callback(new Error("仅支持4位小数"));
+              } else if (value < 0) {
+                callback(new Error("不能输入小于0的数字"));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
+        ],
         sourcePlace: [
           { required: true, message: "请输入产地", trigger: "blur" }
         ],
@@ -267,8 +281,8 @@ export default {
       goodTypes: [],
       isEdit: false,
       pickerOptions: {
-        disabledDate(time){
-          return time.getTime() > Date.now();;
+        disabledDate(time) {
+          return time.getTime() > Date.now();
         }
       }
     };
