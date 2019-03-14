@@ -60,7 +60,7 @@
         >
           <template slot-scope="scope">
             <p v-if="item.prop == 'newsStatus'">
-              {{scope.row.newsStatus == 1 ? '启用中' : '停用'}}
+              {{scope.row.newsStatus == 1 ? '启用中' : '未启用'}}
             </p>
             <p v-else>
               {{scope.row[item.prop]}}
