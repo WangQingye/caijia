@@ -6,14 +6,14 @@
         alt=""
         class="header-img"
       >
-      <p class="header-text">后台登陆</p>
+      <p class="header-text">后台登录</p>
     </el-row>
     <el-card
       class="login"
       v-if=isLogin
     >
       <div slot="header">
-        <span class="title">信链臻品 - 后台登陆</span>
+        <span class="title">信链臻品 - 后台登录</span>
       </div>
       <el-form
         :model="loginForm"
@@ -48,7 +48,7 @@
             type="primary"
             @click="submitForm('loginForm')"
             :style="'width:200px;margin-left:-50px;margin-top:30px'"
-          >登陆</el-button>
+          >登录</el-button>
           <router-link to="/main">
             <p :style="'margin-left:-50px;font-size:12px;text-decoration:underline'">返回首页</p>
           </router-link>
@@ -128,7 +128,7 @@ export default {
       let res = await fetch("/user/login", data, "POST", "user");
       if (res.code == 0) {
         this.$message.success({
-          message: "登陆成功",
+          message: "登录成功",
           type: "success"
         });
         this.$store.commit("saveUserInfo", res.data);

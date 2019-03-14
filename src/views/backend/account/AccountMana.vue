@@ -70,7 +70,7 @@
         >
           <el-input
             v-model="addAccountForm.account"
-            placeholder="请输入登陆账号"
+            placeholder="请输入登录账号"
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -164,7 +164,7 @@ export default {
       },
       rules: {
         account: [
-          { required: true, message: "请输入登陆账号", trigger: "blur" }
+          { required: true, message: "请输入登录账号", trigger: "blur" }
         ],
         password: [
           { required: true, message: "请输入账号密码", trigger: "blur" }

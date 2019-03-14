@@ -20,7 +20,7 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="0">修改密码</el-dropdown-item>
-            <el-dropdown-item command="1">退出登陆</el-dropdown-item>
+            <el-dropdown-item command="1">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <p class="user-company">{{this.$store.state.userInfo.companyName}}</p>
@@ -93,7 +93,7 @@ export default {
     async logOut() {
       let res = await this.$fetch("/user/logout", {}, "POST", "user");
       if (res.code == 0) {
-        this.$message.success("退出登陆成功");
+        this.$message.success("退出登录成功");
         this.$store.commit("clearUserInfo");
         this.$router.push({ path: "/login" });
       }
