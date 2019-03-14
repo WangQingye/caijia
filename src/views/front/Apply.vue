@@ -133,7 +133,10 @@ export default {
         code: [{ required: true, message: "请统一信用码", trigger: "blur" }],
         type: [{ required: true, message: "请选择企业类型", trigger: "blur" }],
         person: [{ required: true, message: "请输入联系人", trigger: "blur" }],
-        phone: [{ required: true, message: "请输入联系方式", trigger: "blur" }],
+        phone: [
+          { required: true, message: "请输入联系方式", trigger: "blur" },
+          { max: 13, message: "联系电话过长", trigger: "blur" }
+        ],
         account: [
           { required: true, message: "请输入企业账号", trigger: "blur" }
         ],
