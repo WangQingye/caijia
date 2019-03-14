@@ -152,13 +152,13 @@
           ></el-input>
         </el-form-item>
         <el-form-item
-          label="产摘时间"
+          label="采摘时间"
           prop="pickTime"
         >
           <el-date-picker
             v-model="addCodeForm.pickTime"
             type="date"
-            placeholder="请选择产摘时间"
+            placeholder="请选择采摘时间"
             value-format="timestamp"
           >
           </el-date-picker>
@@ -257,7 +257,7 @@ export default {
           { required: true, message: "请输入产地", trigger: "blur" }
         ],
         pickTime: [
-          { required: true, message: "请选择产摘时间", trigger: "blur" }
+          { required: true, message: "请选择采摘时间", trigger: "blur" }
         ]
       },
       storeOrgs: [],
