@@ -57,12 +57,6 @@
               type="text"
               size="small"
             >查看</el-button>
-            <el-button
-              type="text"
-              size="small"
-              v-if="scope.row.state == 1"
-              @click="enableAccount(scope.row)"
-            >{{scope.row.usable ? '停用' : '启用'}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -162,12 +156,9 @@ export default {
       codeData: [],
       labels: [
         {
-          name: "启用状态",
-          prop: "usable"
-        },
-        {
           name: "企业名称",
-          prop: "name"
+          prop: "name",
+          width: "auto"
         },
         {
           name: "企业类型",
@@ -175,8 +166,7 @@ export default {
         },
         {
           name: "审核状态",
-          prop: "state",
-          width: "auto"
+          prop: "state"
         }
       ],
       showDetails: false,
