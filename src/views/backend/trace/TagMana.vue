@@ -280,6 +280,8 @@ export default {
       this.codes = res.data;
     },
     async applyTag() {
+      this.addTagForm.singleNum = this.addTagForm.singleNum.replace(/\b(0+)/gi,"");
+      this.addTagForm.boxNum = this.addTagForm.singleNum.replace(/\b(0+)/gi,"");
       this.$refs.addTagForm.validate(async valid => {
         if (valid) {
           let data = {

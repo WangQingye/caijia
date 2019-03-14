@@ -261,6 +261,8 @@ export default {
                 callback(new Error("仅支持4位小数"));
               } else if (value < 0) {
                 callback(new Error("不能输入小于0的数字"));
+              } else if (value.length > 7){
+                callback(new Error("不能7位数"));
               } else {
                 callback();
               }
