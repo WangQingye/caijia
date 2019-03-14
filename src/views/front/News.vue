@@ -19,7 +19,7 @@
               :style="'cursor:pointer'"
             >{{titleLabels[this.activeName]}}</p>
           </el-breadcrumb-item>
-          <!--<el-breadcrumb-item>媒体查询</el-breadcrumb-item> -->
+          <!--<el-breadcrumb-item>媒体视角</el-breadcrumb-item> -->
         </el-breadcrumb>
         <el-tabs
           tab-position="left"
@@ -36,7 +36,7 @@
             name="2"
           ></el-tab-pane>
           <el-tab-pane
-            label="媒体查询"
+            label="媒体视角"
             name="3"
           ></el-tab-pane>
           <div
@@ -117,7 +117,7 @@ export default {
       titleLabels: {
         1:'新闻动态',
         2:'信链资讯',
-        3:'媒体查询'
+        3:'媒体视角'
       },
       showNewIndex: null,
       signleNew: "",
