@@ -53,6 +53,7 @@
             :on-success="handleFileChange"
             :file-list="fileList"
             list-type="picture"
+            ref="imgUpload"
           >
             <el-button
               size="small"
@@ -188,6 +189,7 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+      this.$refs.imgUpload.clearFiles();
     },
     handleFileChange(res, file, fileList) {
       if (res.code == 0) {
