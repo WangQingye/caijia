@@ -35,15 +35,15 @@
               }
              -->
             <el-menu-item
-              v-if="this.$store.state.userInfo.typeCode == 2 || this.$store.state.userInfo.typeCode == 1"
+              v-if="this.$store.state.userInfo.typeCode == 2"
               index="codemana"
             >批次号管理</el-menu-item>
             <el-menu-item
-              v-if="this.$store.state.userInfo.typeCode == 4 || this.$store.state.userInfo.typeCode == 1"
+              v-if="this.$store.state.userInfo.typeCode == 4"
               index="storemana"
             >入库信息管理</el-menu-item>
             <el-menu-item
-              v-if="this.$store.state.userInfo.typeCode == 2 || this.$store.state.userInfo.typeCode == 1"
+              v-if="this.$store.state.userInfo.typeCode == 2"
               index="tagmana"
             >溯源标签管理</el-menu-item>
             <el-menu-item
@@ -51,15 +51,15 @@
               index="tagverify"
             >溯源标签审核</el-menu-item>
             <el-menu-item
-              v-if="this.$store.state.userInfo.typeCode == 3 || this.$store.state.userInfo.typeCode == 1"
+              v-if="this.$store.state.userInfo.typeCode == 3"
               index="verifyfill"
             >检测信息填报</el-menu-item>
             <el-menu-item
-              v-if="this.$store.state.userInfo.typeCode == 2 || this.$store.state.userInfo.typeCode == 1"
+              v-if="this.$store.state.userInfo.typeCode == 2"
               index="stockoutfill"
             >出库信息填报</el-menu-item>
             <el-menu-item
-              v-if="this.$store.state.userInfo.typeCode == 5 || this.$store.state.userInfo.typeCode == 1"
+              v-if="this.$store.state.userInfo.typeCode == 5"
               index="transfill"
             >物流信息填报</el-menu-item>
           </el-submenu>

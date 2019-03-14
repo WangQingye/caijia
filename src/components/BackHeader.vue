@@ -122,8 +122,10 @@ export default {
           passwordNew: this.changePassForm.newPass,
           passwordOld: this.changePassForm.oldPass
         }, 'POST', 'user');
-        this.$message.success('修改成功');
-        this.closeChangeForm();
+        if (res.code == 0) {
+          this.$message.success('修改成功');
+          this.closeChangeForm();
+        }
       }
     }
   },
