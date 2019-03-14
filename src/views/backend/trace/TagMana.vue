@@ -245,18 +245,18 @@ export default {
           { required: true, message: "请输入箱码数量", trigger: "blur" }
         ],
         singleNum: [
-          { required: true, message: "请选择农产品种类", trigger: "blur" }
+          { required: true, message: "请输入果码数量", trigger: "blur" }
         ],
         address: [
-          { required: true, message: "请选择农产品品种", trigger: "blur" }
+          { required: true, message: "请输入收货地址", trigger: "blur" }
         ],
         contact: [
-          { required: true, message: "请输入入库数量", trigger: "blur" }
+          { required: true, message: "请输入联系人", trigger: "blur" }
         ],
         sourcePlace: [
           { required: true, message: "请输入产地", trigger: "blur" }
         ],
-        phone: [{ required: true, message: "请选择产摘时间", trigger: "blur" }]
+        phone: [{ required: true, message: "请输入联系电话", trigger: "blur" }]
       },
       codes: [],
       getTypes: [{ name: "快递", code: 1 }, { name: "自行打印", code: 0 }],
@@ -281,10 +281,7 @@ export default {
     },
     async applyTag() {
       this.$refs.addTagForm.validate(async valid => {
-        if (
-          valid &&
-          this.addTagForm.boxNum * this.addTagForm.singleNum < 1000000
-        ) {
+        if (valid) {
           let data = {
             action: "申请标签",
             companyCode: this.$store.state.userInfo.companyCode,
@@ -315,7 +312,9 @@ export default {
             }
           });
         } else {
-          this.$message.error("标签数量过大，请分批申请");
+          if (this.addTagForm.boxNum * this.addTagForm.singleNum > 1000000) {
+            this.$message.error("标签数量过大，请分批申请");
+          }
         }
       });
     },
