@@ -6,27 +6,23 @@
       :model="stockOutForm"
       label-width="80px"
       class="form"
+      :rules="rules"
     >
-      <el-form-item label="批次号">
-        <!-- <el-select
-          v-model="stockOutForm.codes"
-          placeholder="请选择批次号"
-        >
-          <el-option
-            v-for="(code,index) in codes"
-            :key="index"
-            :label="code"
-            :value="code"
-          ></el-option>
-        </el-select> -->
+      <el-form-item
+        label="批次号"
+        prop="batchCode"
+      >
         <p>{{rowData.batchCode}}</p>
       </el-form-item>
-      <el-form-item label="箱码">
+      <el-form-item
+        label="箱码"
+        prop="boxNum"
+      >
         <p
           class="box-num"
           :style="'width:20px'"
         >{{stockOutForm.boxNumStart}}</p>
-        <span>~  </span>
+        <span>~ </span>
         <el-input
           type="number"
           v-model="stockOutForm.boxNumEnd"
@@ -36,7 +32,10 @@
       <el-form-item label="溯源类别">
         <p>出库</p>
       </el-form-item>
-      <el-form-item label="物流企业">
+      <el-form-item
+        label="物流企业"
+        prop="company"
+      >
         <el-select
           v-model="stockOutForm.logisticsCompany"
           placeholder="请选择物流企业"
@@ -49,7 +48,10 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="时间">
+      <el-form-item
+        label="时间"
+        prop="date"
+      >
         <el-date-picker
           v-model="stockOutForm.date"
           type="date"
@@ -85,7 +87,16 @@ export default {
         date: ""
       },
       codes: ["001", "002"],
-      logisticsCompanys: []
+      logisticsCompanys: [],
+      rules: {
+        boxNum: [
+          { required: true, message: "请输入出库箱码", trigger: "blur" }
+        ],
+        company: [
+          { required: true, message: "请选择物流机构", trigger: "blur" }
+        ],
+        date: [{ required: true, message: "请选择出库时间", trigger: "blur" }]
+      }
     };
   },
   props: {
@@ -123,24 +134,28 @@ export default {
       }
     },
     async addTransInfo() {
-      let data = {
-        batchCode: this.rowData.batchCode,
-        startBoxNum: this.stockOutForm.boxNumStart,
-        endBoxNum: this.stockOutForm.boxNumEnd,
-        action: "产品出库",
-        transferCompanyCode: this.stockOutForm.logisticsCompany,
-        outTime: this.stockOutForm.date,
-        actionId: this.rowData.id
-      };
-      this.$checkSign(data, async signData => {
-        if (!signData) {
-          signData = this.$signData(data, 6);
-        }
-        let res = await this.$fetch("/out/outRepertory", data, "POST");
-        if (res.code == 0) {
-          this.$message.success("添加成功");
-          this.$refs.stockOutForm.resetFields();
-          this.$emit("back");
+      this.$refs.stockOutForm.validate(async valid => {
+        if (valid) {
+          let data = {
+            batchCode: this.rowData.batchCode,
+            startBoxNum: this.stockOutForm.boxNumStart,
+            endBoxNum: this.stockOutForm.boxNumEnd,
+            action: "产品出库",
+            transferCompanyCode: this.stockOutForm.logisticsCompany,
+            outTime: this.stockOutForm.date,
+            actionId: this.rowData.id
+          };
+          this.$checkSign(data, async signData => {
+            if (!signData) {
+              signData = this.$signData(data, 6);
+            }
+            let res = await this.$fetch("/out/outRepertory", data, "POST");
+            if (res.code == 0) {
+              this.$message.success("添加成功");
+              this.$refs.stockOutForm.resetFields();
+              this.$emit("back");
+            }
+          });
         }
       });
     }
