@@ -158,7 +158,7 @@ export default {
       txt += this.PrefixInteger(dataObj.getHours(), 2) + ":";
       txt += this.PrefixInteger(dataObj.getMinutes(), 2) + ":";
       txt += this.PrefixInteger(dataObj.getSeconds(), 2);
-      return txt;
+      return this.regfn(txt);
     },
     PrefixInteger(num, n) {
       return (Array(n).join(0) + num).slice(-n);
@@ -172,6 +172,16 @@ export default {
       var num = this.urlParam.indexOf("?");
       this.urlParam = this.urlParam.substr(num + 10);
       //alert(this.urlParam)
+    },
+    regfn(str){
+      let reg=/\s+00:|:00+$/g;
+      let strIndex=str.search(reg);
+      if(strIndex>0){
+        let strSlice = str.slice(0,strIndex)
+        return strSlice
+      }else{
+        return str
+      }
     }
   },
   mounted() {

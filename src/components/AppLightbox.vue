@@ -21,7 +21,7 @@
         mounted(){
             var overlay = document.getElementById('overlay');
             overlay.setAttribute('style', 'height:' + window.innerHeight + 'px; ' + 'width:' + window.innerWidth + 'px');
-            console.log(window.innerWidth);
+            //console.log(window.innerWidth);
         }
     }
 

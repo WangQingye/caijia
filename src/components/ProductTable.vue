@@ -103,7 +103,8 @@ export default {
           }
         ],
       currentPic: '',
-      lightBoxToggle: false
+      lightBoxToggle: false,
+
     };
   },
 
@@ -132,7 +133,7 @@ export default {
     this.goPAGE();
   },
   methods: {
-    renderTime(date) {
+    renderTime(date) {// IOS/iPhone的Safari不兼容Javascript中的Date( YYYY-MM-DD HH:mm:ss 或者YYYY/MM/DD HH:mm:ss这样的时间格式)问题
       if (!date) return;
       let aa = date.replace(/\-/g, "/");
       let bb = aa.replace(/T/g, " ");
@@ -145,7 +146,7 @@ export default {
       txt += this.PrefixInteger(dataObj.getHours(), 2) + ":";
       txt += this.PrefixInteger(dataObj.getMinutes(), 2) + ":";
       txt += this.PrefixInteger(dataObj.getSeconds(), 2);
-      return txt;
+      return this.regfn(txt);
     },
     PrefixInteger(num, n) {
       return (Array(n).join(0) + num).slice(-n);
@@ -168,6 +169,16 @@ export default {
     },
     closeBox() {
         this.lightBoxToggle = false;
+    },
+    regfn(str){
+      let reg=/\s+00:|:00+$/g;
+      let strIndex=str.search(reg);
+      if(strIndex>0){
+        let strSlice = str.slice(0,strIndex)
+        return strSlice
+      }else{
+        return str
+      }
     }
 
   },
