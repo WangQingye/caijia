@@ -73,7 +73,19 @@ let router = new Router({
         {
           path: "/infomana",
           component: () => import( /* webpackChunkName: "infomana" */ './views/backend/info/InfoMana.vue')
-        }
+        },
+        {
+          path: "/insurancemana",
+          component: () => import( /* webpackChunkName: "tagverify" */ './views/backend/trace/InsuranceMana.vue')
+        },
+        {
+          path: "/labelspecmana",
+          component: () => import( /* webpackChunkName: "tagverify" */ './views/backend/label/LabelSpecMana.vue')
+        },
+        {
+          path: "/labelgeneration",
+          component: () => import( /* webpackChunkName: "tagverify" */ './views/backend/label/LabelGeneration.vue')
+        },
       ]
     },
     {

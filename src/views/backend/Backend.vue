@@ -32,6 +32,8 @@
                 3:检测,
                 4:仓储,
                 5:物流
+
+                6:保险
               }
              -->
             <el-menu-item
@@ -47,9 +49,13 @@
               index="tagmana"
             >溯源标签管理</el-menu-item>
             <el-menu-item
-              v-if="this.$store.state.userInfo.typeCode == 3 || this.$store.state.userInfo.typeCode == 1"
+              v-if="this.$store.state.userInfo.typeCode == 1"
               index="tagverify"
             >溯源标签审核</el-menu-item>
+            <el-menu-item
+              v-if="this.$store.state.userInfo.typeCode == 1"
+              index="insurancemana"
+            >产品保险管理</el-menu-item>
             <el-menu-item
               v-if="this.$store.state.userInfo.typeCode == 3"
               index="verifyfill"
@@ -90,6 +96,22 @@
             </template>
             <el-menu-item index="infomana">资讯列表</el-menu-item>
           </el-submenu>
+
+          <el-submenu
+            index="labelmana"
+          >
+            <template slot="title">
+              <i class="el-icon-menu"></i>
+              <span slot="title">溯源标签管理</span>
+            </template>
+            <el-menu-item
+              index="labelspecmana"
+            >标签规格管理</el-menu-item>
+            <el-menu-item
+              index="labelgeneration"
+            >标签生成</el-menu-item>
+          </el-submenu>
+
           <i
             :class=" menuCollapse ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"
             @click="menuCollapse = !menuCollapse"
@@ -156,11 +178,15 @@ export default {
         storemana: "入库信息管理",
         tagmana: "溯源标签管理",
         tagverify: "溯源标签审核",
+        insurancemana:'产品保险管理',
         account: "账号管理",
         companymana: "企业管理",
         accountmana: "子账号管理",
         info: "资讯管理",
-        infomana: "资讯列表"
+        infomana: "资讯列表",
+        labelmana:'溯源标签管理',
+        labelspecmana:'标签规格管理',
+        labelgeneration:'标签生成'
       },
       paths: [],
       privateKey: "",
