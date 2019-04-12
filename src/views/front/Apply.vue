@@ -197,6 +197,7 @@ export default {
           this.applyForm.filePath += ",";
         }
         this.applyForm.filePath += res.data;
+
       }
       this.fileList = fileList;
     },
@@ -218,6 +219,7 @@ export default {
         password: this.applyForm.password,
         confirmPassword: this.applyForm.repassword
       };
+      console.log(this.applyForm)
       let res = await this.$fetch("/company/addCompany", data, "POST", "user");
       if (res.code === 0) {
         this.$alert("提交成功，审核通过后将通过电话联系您。", "提交成功", {

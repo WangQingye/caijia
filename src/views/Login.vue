@@ -140,7 +140,7 @@ export default {
         }
         this.$router.push({ path: "/backend" });
       } else if (res.code == 301) {
-        this.dialogVisible = true;
+        // this.dialogVisible = true;
       }
     },
     async checkLogin() {

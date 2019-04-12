@@ -13,7 +13,7 @@
           class="insurance-state-change"
           v-model="insuranceStateCode"
           filterable
-          placeholder="请选择"
+          placeholder="请选择保险状态"
         >
           <el-option
             v-for="item in options"
@@ -47,11 +47,11 @@
           align="center"
         >
           <template slot-scope="scope">
-            <!-- <p v-if="item.prop == 'step'">
-              {{scope.row.step == 5 ? ''}}
-            </p> -->
-            <p v-if="item.prop == 'policyStatus'">
-              {{scope.row.policyStatus == 0 ? '未承保' : (scope.row.policyStatus == 1 ? '已承保':(scope.row.policyStatus == 2 ? '已失效':(scope.row.policyStatus == 3 ? '已出险' :'已赔付')))}}
+             <p v-if="item.prop == 'step'">
+                {{scope.row.step ==1 ? '入库' :(scope.row.step == 2 ? '检测' : (scope.row.step == 3 ? '申请' : (scope.row.step == 4 ? '出库' :'物流')))}}
+            </p>
+            <p v-else-if="item.prop == 'policyStatus'">
+              {{scope.row.policyStatus == 0 ? '未承保' : (scope.row.policyStatus == 1 ? '已承保':(scope.row.policyStatus == 2 ? '已出险':(scope.row.policyStatus == 3 ? '已赔付' :'已失效')))}}
             </p>
             <p v-else>
               {{scope.row[item.prop]}}
@@ -67,9 +67,9 @@
           <!-- policyStatus:{
                         0：未承保
                         1：已承保
-                        2：已失效
-                        3：已出险
-                        4：已赔付
+                        2：已出险
+                        3：已赔付
+                        4：已失效
                 } -->
           <template slot-scope="scope">
             <el-button
@@ -82,10 +82,10 @@
               @click="operation(scope.row)"
               type="text"
               size="small"
-              v-if="scope.row.policyStatus == 1 || scope.row.policyStatus == 3"
+              v-if="scope.row.policyStatus == 1 || scope.row.policyStatus == 2"
             >操作</el-button>
             <el-button
-              @click="showDetail(scope.row)"
+              @click="consumerInfos(scope.row)"
               type="text"
               size="small"
               v-if="scope.row.policyStatus == 1 || scope.row.policyStatus == 2||scope.row.policyStatus == 3 || scope.row.policyStatus == 4"
@@ -100,75 +100,8 @@
     </div>
     <div
       v-show="showDetails"
-      v-if="detailData">
-      <el-form
-        ref="detailForm"
-        label-width="130px"
-        label-position="left"
-        class="underwrite-form"
-      >
-        <p class="title">添加承保信息</p>
-        <el-form-item label="农企">
-          <p>{{detailData.companyName}}</p>
-        </el-form-item>
-        <el-form-item label="批次号">
-          <p>{{detailData.batch}}</p>
-        </el-form-item>
-        <el-form-item label="产品种类">
-          <p>{{detailData.varietyName}}</p>
-        </el-form-item>
-        <el-form-item label="采摘时间">
-          <p>{{detailData.sStoreTime}}</p>
-        </el-form-item>
-        <el-form-item label="描述">
-          <el-input
-            type="textarea"
-            v-model="detailData.desc"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="保单号">
-          <el-input v-model="detailData.policyNum"></el-input>
-        </el-form-item>
-        <el-form-item label="文件">
-          <el-upload
-            class="upload-demo"
-            :action="productUrl + '/list/upload'"
-            :on-success="handleFileChange"
-            :file-list="fileList"
-            list-type="text"
-          >
-            <el-button
-              size="small"
-              type="primary"
-            >点击上传</el-button>
-            <div
-              slot="tip"
-              class="el-upload__tip"
-            >只能上传jpg/png文件，且不超过500kb</div>
-          </el-upload>
-        </el-form-item>
-        <el-form-item label="产品等级">
-          <el-input v-model="detailData.proLevel"></el-input>
-        </el-form-item>
-        <el-form-item label="时间">
-          <el-date-picker
-            v-model="detailData.underwriteTime"
-            type="date"
-            placeholder="选择日期"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="责任人">
-          <p>{{this.$store.state.userInfo.companyName}}</p>
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            type="primary"
-            @click="onSubmit"
-          >确定</el-button>
-          <el-button @click="back">取消</el-button>
-        </el-form-item>
-      </el-form>
+      v-if="rowFrom">
+      <add-policy @back="cancelBtn" :rowFrom="rowFrom"></add-policy>
     </div>
     <div
       v-show="showOperation"
@@ -179,45 +112,61 @@
         label-position="left"
         class="underwrite-form"
       >
-        <p class="title">承保信息</p>
+        <p class="title">更改承保状态</p>
         <el-form-item label="农企">
-          <p>{{detailData.companyTypeName}}</p>
+          <p>{{detailData.companyName}}</p>
         </el-form-item>
         <el-form-item label="批次号">
-          <p>{{detailData.batchCode}}</p>
+          <p>{{detailData.batch}}</p>
         </el-form-item>
         <el-form-item label="产品种类">
           <p>{{detailData.varietyName}}</p>
         </el-form-item>
         <el-form-item label="采摘时间">
-          <p>{{detailData.sStoreTime}}</p>
+          <p>{{detailData.storeTime}}</p>
         </el-form-item>
         <el-form-item label="描述">
-          <p>{{detailData.desc}}</p>
+          <p>{{detailData.policyRemark}}</p>
         </el-form-item>
         <el-form-item label="保单号">
-          <p>{{detailData.policyNumber}}</p>
+          <p>{{detailData.policyNum}}</p>
         </el-form-item>
         <el-form-item label="文件">
-          <p>保单01</p>
-          <p>保单02</p>
+          <!-- <p>{{detailData.fileList}}</p> -->
+          <ul>
+            <li v-for="(item,index) in fileArry" :key="index">保单{{index+1}}.txt</li>
+          </ul>
         </el-form-item>
         <el-form-item label="产品等级">
-          <p>{{detailData.proLevel}}</p>
+          <p>{{detailData.productLevel}}</p>
         </el-form-item>
         <el-form-item label="承保时间">
-          <p>{{detailData.underwriteTime}}</p>
+          <p>{{detailData.policyDate}}</p>
         </el-form-item>
         <el-form-item label="保险状态">
-          <p>{{detailData.state}}</p>
+          <p>{{detailData.policyStatus == 1 ? '已承保' :'已出险'}}</p>
         </el-form-item>
         <el-form-item label="保险状态变更">
           <el-select
-            v-model="detailData.state"
-            placeholder="请选择"
+            v-model="policyStatus"
+             v-if="detailData.policyStatus == 1"
+            placeholder="请选择保险状态"
           >
             <el-option
-              v-for="item in options"
+              v-for="item in policyStatusOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+          <el-select
+            v-model="policyStatus"
+             v-if="detailData.policyStatus == 2"
+            placeholder="请选择保险状态"
+          >
+            <el-option
+              v-for="item in policyStatusOptions2"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -228,15 +177,15 @@
         <el-form-item label="描述">
           <el-input
             type="textarea"
-            v-model="detailData.desc1"
+            v-model="detailData.policyRemark"
           ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
-            @click="onSubmit"
+            @click="changeStatus"
           >确定</el-button>
-          <el-button @click="back">取消</el-button>
+          <el-button @click="comeBack">取消</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -250,18 +199,18 @@
         label-position="left"
         class="underwrite-form"
       >
-        <p class="title">承保信息</p>
+        <p class="title">保险机构 - 消费者信息</p>
         <el-form-item
           class="inputMsg"
           label="农企"
         >
-          <p>{{detailData.companyTypeName}}</p>
+          <p>{{detailData.companyName}}</p>
         </el-form-item>
         <el-form-item
           class="inputMsg"
           label="批次号"
         >
-          <p>{{detailData.batchCode}}</p>
+          <p>{{detailData.batch}}</p>
         </el-form-item>
         <el-form-item
           class="inputMsg"
@@ -273,43 +222,45 @@
           class="inputMsg"
           label="采摘时间"
         >
-          <p>{{detailData.sStoreTime}}</p>
+          <p>{{detailData.storeTime}}</p>
         </el-form-item>
         <el-form-item
           class="inputMsg"
           label="描述"
         >
-          <p>{{detailData.desc}}</p>
+          <p>{{detailData.policyRemark}}</p>
         </el-form-item>
         <el-form-item
           class="inputMsg"
           label="保单号"
         >
-          <p>{{detailData.policyNumber}}</p>
+          <p>{{detailData.policyNum}}</p>
         </el-form-item>
         <el-form-item
           class="inputMsg"
           label="文件"
         >
-          <p>保单1</p>
+          <ul>
+            <li v-for="(item,index) in fileArry" :key="index">保单{{index+1}}.txt</li>
+          </ul>
         </el-form-item>
         <el-form-item
           class="inputMsg"
           label="产品等级"
         >
-          <p>{{detailData.proLevel}}</p>
+          <p>{{detailData.productLevel}}</p>
         </el-form-item>
         <el-form-item
           class="inputMsg"
           label="承保时间"
         >
-          <p>{{detailData.underwriteTime}}</p>
+          <p>{{detailData.policyDate}}</p>
         </el-form-item>
         <el-form-item
           class="inputMsg"
           label="保险状态"
         >
-          <p>{{detailData.state}}</p>
+          <p>{{detailData.policyStatus == 1 ? '已承保' :(detailData.policyStatus == 2 ? '已出险' : (detailData.policyStatus == 3 ? '已赔付' : '已失效'))}}</p>
         </el-form-item>
       </el-form>
       <el-table
@@ -334,6 +285,10 @@
         </el-table-column>
 
       </el-table>
+      <pagination
+        :total="dataTotalLength"
+        @page-change="pageChange"
+      ></pagination>
       <el-row
         class="el-row-btn"
         :gutter="20"
@@ -344,7 +299,7 @@
         >
           <el-button
             type="primary"
-            @click="back"
+            @click="comeBack"
           >确定</el-button>
           <el-button>导出</el-button>
         </el-col>
@@ -373,17 +328,20 @@
 <script>
 import Pagination from "@/components/Pagination.vue";
 import PageMixin from "@/assets/js/pageMixin";
+import AddPolicy from '@/components/AddPolicy'
 export default {
   mixins: [PageMixin],
   data() {
     return {
       searchCode: "",
+      policyStatus:'',
       insuranceStateCode: "",
       showDetails: false,
       insuranceForm: false,
       showOperation: false,
       showInformation: false,
       dialogVisible:false,
+      policyStatusChange:false,
       insuranceState: "",
       codeData: [],
       labels: [
@@ -417,32 +375,9 @@ export default {
           prop: "policyStatus"
         }
       ],
-      consumerData: [
-        {
-          boxNum: "0001",
-          consumerName: "小王",
-          cardType: "工行",
-          cardNum: "123456798",
-          openingBank: "工行成都分支",
-          location: "四川成都"
-        },
-        {
-          boxNum: "0002",
-          consumerName: "小李",
-          cardType: "农行",
-          cardNum: "1236984656",
-          openingBank: "农行成都分支",
-          location: "四川乐山"
-        },
-        {
-          boxNum: "0003",
-          consumerName: "小刘",
-          cardType: "农行",
-          cardNum: "23684326952",
-          openingBank: "农行成都分支",
-          location: "四川自贡"
-        }
-      ],
+      rowFrom:null,
+      consumerData: [],
+      detailData:{},
       label2: [
         {
           name: "箱码",
@@ -475,20 +410,6 @@ export default {
           width: "auto"
         }
       ],
-      detailData: {
-        companyTypeName: "",
-        batchCode: "",
-        varietyName: "",
-        sStoreTime: "2019.3.5",
-        desc: "",
-        policyNumber: "",
-        batchCode: "",
-        policyDate: "",
-        state: "1",
-        filePath:'',
-        name: this.$store.state.userInfo.companyTypeName,
-        productLevel: "特级"
-      },
       options: [
         {
           value: "",
@@ -515,12 +436,38 @@ export default {
           label: "已失效"
         }
       ],
+      policyStatusOptions:[
+        {
+          value: "1",
+          label: "已承保",
+        },
+        {
+          value: "2",
+          label: "已出险",
+        },
+        {
+          value: "4",
+          label: "已失效",
+        },
+      ],
+      policyStatusOptions2:[
+         {
+          value: "2",
+          label: "已出险",
+        },
+        {
+          value: "3",
+          label: "已赔付",
+        },
+      ],
       fileList: [],
-      productUrl: window.productUrl
+      productUrl: window.productUrl,
+      fileArry:[]
     };
   },
   mounted(){
     this.getCodeList(1)
+
   },
   methods: {
     async getCodeList(page, isFromSearch) {
@@ -540,70 +487,98 @@ export default {
         this.codeData = res.data.data;
         this.dataTotalLength = res.data.countSize;
         console.log(res.data)
-
       }
     },
-    underwrite(data) {
+    underwrite(data) {//承保
       this.showDetails = true;
       this.insuranceForm = true;
-      this.detailData = data;
+      this.rowFrom = data;
       console.log(data);
     },
-    operation(data) {
+    operation(data) {//操作
       this.showOperation = true;
       this.insuranceForm = true;
       this.detailData = data;
-      console.log(data);
+      console.log(this.detailData);
+      this.fileArry=this.getFileList(this.detailData.fileList)
+
     },
-    showDetail(data) {
+    consumerInfos(data) {
       this.showInformation = true;
       this.insuranceForm = true;
+      this.detailData = data;
+      this.allUserPolicy();
+      this.fileArry=this.getFileList(this.detailData.fileList)
+      console.log(data)
     },
-    async onSubmit() {
+    async allUserPolicy(page){
+      page=1
       let res = await this.$fetch(
-        "/policy/acceptInsuranceBatch",
+        "/policy/queryAllUserOfPolicy",
         {
-          fileList:this.detailData.filePath,
-          flowId:0,
-          loginUserCompany:this.$store.state.userInfo.companyCode,
-          loginUserId:this.$store.state.userInfo.companyCode,
-          policyDate:this.detailData.underwriteTime,
-          policyNum:this.detailData.policyNum,
-          policyRe:this.detailData.desc,
-          policyRemark:1,
-          policyStatus:0,
-          productLevel:this.detailData.proLevel,
-          sign:13465,
+          flowId:this.detailData.id,
+          limit:this.pageLimit,
+          page:page,
         },
         "POST"
       )
       if (res.code == 0) {
+        this.consumerData = res.data.data;
+        this.dataTotalLength = res.data.countSize;
         console.log(res.data)
       }
-      //console.log(res.data)
     },
-    back() {
+    async changeStatus() {
+      let res = await this.$fetch(
+        "/policy/updatePolicyStatus",
+        {
+          fileList: this.detailData.fileList,
+          flowId: this.detailData.flowId,
+          id: this.detailData.id,
+          loginUserCompany: this.$store.state.userInfo.companyCode,
+          loginUserId: this.$store.state.userInfo.id,
+          policyDate: this.detailData.policyDate,
+          policyNum:  this.detailData.policyNum,
+          policyRe:  this.detailData.policyRe,
+          policyRemark: this.detailData.policyRemark,
+          policyStatus:  this.policyStatus,
+          productLevel:  this.detailData.productLevel,
+          sign: 1234
+        },
+        "POST"
+      );
+      if (res.code == 0) {
+        this.$message({
+            message: '产品保险状态已改变！！',
+            type: 'success'
+        });
+        this.comeBack();
+      }
+    },
+    getFileList(data){
+       return data.split(",")
+    },
+    cancelBtn(flag){
+      this.showDetails = false;
+      this.insuranceForm=false;
+      this.showOperation = false;
+      this.showInformation = false;
+      if (flag) {
+        this.getCodeList(1);
+      }
+    },
+    comeBack() {
       this.showDetails = false;
       this.showOperation = false;
       this.showInformation = false;
       this.insuranceForm = false;
+      this.getCodeList(1)
 
     },
-    handleFileChange(res, file, fileList) {
-      if (res.code == 0) {
-        if (this.detailData.filePath) {
-          this.detailData.filePath += ",";
-        }
-        console.log(res.data)
-        this.detailData.filePath += res.data;
-        console.log(this.detailData.filePath)
-      }
-      this.fileList = fileList;
-    },
-
   },
   components: {
-    Pagination
+    Pagination,
+    AddPolicy
   }
 };
 </script>

@@ -89,9 +89,6 @@ export default {
     };
   },
   props: {},
-  mounted(){
-    console.log(this.$store.state.userInfo.companyCode)
-  },
   methods: {
     async logOut() {
       let res = await this.$fetch("/user/logout", {}, "POST", "user");

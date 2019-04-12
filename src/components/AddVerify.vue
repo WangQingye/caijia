@@ -12,7 +12,7 @@
         <p>{{rowData.companyName}}</p>
       </el-form-item>
       <el-form-item label="批次号">
-        <p>{{rowData.batchCode}}</p>
+        <p>{{rowData.batch}}</p>
       </el-form-item>
       <el-form-item label="溯源类别">
         <p>检测</p>
@@ -122,6 +122,7 @@ export default {
         handlerId: this.$store.state.userInfo.id
       };
       this.$checkSign(data, async signData => {
+        console.log(data)
         if (!signData) {
           signData = this.$signData(data, 8);
         }
@@ -141,10 +142,13 @@ export default {
       if (res.code == 0) {
         if (this.addVerifyForm.filePath) {
           this.addVerifyForm.filePath += ",";
+          console.log(this.addVerifyForm.filePath);
         }
         this.addVerifyForm.filePath += res.data;
+        console.log(this.addVerifyForm.filePath);
       }
       this.fileList = fileList;
+      console.log(this.fileList);
     }
   },
   watch: {}

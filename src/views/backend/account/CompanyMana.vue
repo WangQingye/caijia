@@ -2,8 +2,7 @@
   <div>
     <div
       v-show="!showDetails"
-      class="codeMana"
-    >
+      class="codeMana">
       <el-row class="mana-buttons">
         <p class="text">企业名称</p>
         <el-input
@@ -68,8 +67,7 @@
     <div
       v-if="detailData"
       v-show="showDetails"
-      class="details"
-    >
+      class="details">
       <p class="title">企业详情</p>
       <el-form
         ref="detailForm"
@@ -195,9 +193,11 @@ export default {
         this.codeData = res.data.companyVOList;
         this.dataTotalLength = res.data.totalCount;
       }
+      console.log(res.data)
     },
     /* 展示详情页面 */
     showDetail(data) {
+      console.log(data)
       this.showDetails = true;
       this.detailData = data;
     },

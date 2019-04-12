@@ -232,7 +232,7 @@ export default {
         goodType: "",
         boxNum: "",
         singleNum: "",
-        getType: 0,
+        getType: 1,
         address: "",
         contact: "",
         phone: "",
@@ -244,9 +244,9 @@ export default {
         boxNum: [
           { required: true, message: "请输入箱码数量", trigger: "blur" }
         ],
-        singleNum: [
-          { required: true, message: "请输入果码数量", trigger: "blur" }
-        ],
+        // singleNum: [
+        //   { required: true, message: "请输入果码数量", trigger: "blur" }
+        // ],
         address: [
           { required: true, message: "请输入收货地址", trigger: "blur" }
         ],
@@ -259,7 +259,7 @@ export default {
         phone: [{ required: true, message: "请输入联系电话", trigger: "blur" }]
       },
       codes: [],
-      getTypes: [{ name: "快递", code: 1 }, { name: "自行打印", code: 0 }],
+      getTypes: [{ name: "快递", code: 1 }],
       timer: null,
       nowPage: 1,
       isEdit: false
@@ -278,6 +278,7 @@ export default {
         farmCode: this.$store.state.userInfo.companyCode
       });
       this.codes = res.data;
+      console.log(this.codes)
     },
     async applyTag() {
       this.addTagForm.singleNum = this.addTagForm.singleNum.replace(/\b(0+)/gi,"");
@@ -340,6 +341,7 @@ export default {
         this.codeData = res.data.data;
         this.dataTotalLength = res.data.countSize;
       }
+      console.log(res)
     },
     onSelectCode(value) {
       this.codes.forEach(item => {
@@ -378,7 +380,7 @@ export default {
       this.addTagForm.kindCode = data.varietyCode;
       this.addTagForm.boxNum = data.boxNum;
       this.addTagForm.singleNum = data.perNum;
-      this.addTagForm.getType = data.recType;
+      this.addTagForm.getType = 1;//data.recType;
       this.addTagForm.address = data.recAddr;
       this.addTagForm.contact = data.contacts;
       this.addTagForm.phone = data.phone;
@@ -447,7 +449,7 @@ export default {
         goodType: "",
         boxNum: "",
         singleNum: "",
-        getType: 0,
+        getType: 1,
         address: "",
         contact: "",
         phone: "",
@@ -470,6 +472,7 @@ export default {
   },
   destroyed() {
     clearInterval(this.timer);
+    this.timer=null;
   }
 };
 </script>

@@ -53,7 +53,7 @@
               index="tagverify"
             >溯源标签审核</el-menu-item>
             <el-menu-item
-              v-if="this.$store.state.userInfo.typeCode == 1"
+              v-if="this.$store.state.userInfo.typeCode == 6"
               index="insurancemana"
             >产品保险管理</el-menu-item>
             <el-menu-item
@@ -99,6 +99,7 @@
 
           <el-submenu
             index="labelmana"
+            v-if="this.$store.state.userInfo.typeCode == 1"
           >
             <template slot="title">
               <i class="el-icon-menu"></i>

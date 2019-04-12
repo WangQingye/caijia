@@ -65,14 +65,14 @@
               type="text"
               size="small"
               v-if="scope.row.step == 4"
-              @click="showAuditConfirm(scope.row)"
+              @click="showAuditConfirm(scope.row,1)"
             >审核</el-button>
             <el-button
-              @click="manuCode(scope.row)"
+              @click="showAuditConfirm(scope.row,0)"
               type="text"
               size="small"
               v-else
-              :disabled="true"
+              :disabled="false"
             >查看</el-button>
           </template>
         </el-table-column>
@@ -83,11 +83,93 @@
         :current-page="currentPage"
       ></pagination>
     </div>
+    <div v-show="showAudit">
+      <el-form
+        ref="auditForm"
+        :model="auditForm"
+        label-width="130px"
+        label-position="left"
+        class="label-audit"
+      >
+        <p class="title">{{!confirmBtn? '溯源标签审核':'溯源标签查看'}}</p>
+        <el-form-item label="农企">
+          <p>{{auditForm.companyName}}</p>
+        </el-form-item>
+        <el-form-item label="批次号">
+          <p>{{auditForm.batchCode}}</p>
+        </el-form-item>
+        <el-form-item label="箱码数量">
+          <p>{{auditForm.boxNum}}</p>
+        </el-form-item>
+        <el-form-item label="果码数量">
+          <p>{{auditForm.perNum}}</p>
+        </el-form-item>
+        <el-form-item label="收货地址">
+          <p>{{auditForm.address}}</p>
+        </el-form-item>
+        <el-form-item label="联系人">
+          <p>{{auditForm.contact}}</p>
+        </el-form-item>
+        <el-form-item label="电话号码">
+          <p>{{auditForm.phone}}</p>
+        </el-form-item>
+        <div v-show="!confirmBtn">
+          <el-form-item label="标签规格">
+            <el-select
+              v-model="auditForm.labelspec"
+              placeholder="请选择标签规格"
+              @change="changeSelect"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.id"
+                :label="item.labSpecification"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+            <p>支持最大果码数:{{maxFruitNum}}</p>
+          </el-form-item>
+          <el-form-item label="箱码标签数量">
+            <el-input-number
+              v-model="auditForm.boxLabelNum"
+              @change="handleChange"
+              :min="1"
+              :max="100000000"
+              label="描述文字"
+            ></el-input-number>
+          </el-form-item>
+          <el-form-item label="箱码标签范围">
+            <el-row :gutter="20" class="boxRange">
+              <el-input disabled  style="margin-left:10px;margin-right:15px" v-model="auditForm.rangStart" placeholder="最小箱码标签数"> </el-input>----
+              <el-input disabled  style="margin-left:15px"  v-model="labelRangEnd" placeholder="最大箱码标签数"> </el-input>
+            </el-row>
+
+          </el-form-item>
+          <el-form-item >
+            <el-button type="primary" @click="verifyPass(1)">审核标签</el-button>
+          </el-form-item>
+        </div>
+        <div v-show="confirmBtn">
+          <el-form-item label="标签规格">
+            <p>{{auditForm.labelspec}}</p>
+          </el-form-item>
+          <el-form-item label="箱码标签数量">
+            <p>{{auditForm.labelNumber}}</p>
+          </el-form-item>
+          <el-form-item label="箱码标签范围">
+            <p>{{auditForm.rangStart}}---{{auditForm.rangEnd}}</p>
+          </el-form-item>
+          <el-form-item >
+            <el-button type="primary" @click="verifyPass(0)">确定</el-button>
+          </el-form-item>
+        </div>
+      </el-form>
+    </div>
     <el-dialog
       title="审核操作"
       :visible.sync="dialogVisible"
-      width="30%"
-    >
+      width="30%">
       <span>是否要通过此条溯源标签申请？</span>
       <span
         slot="footer"
@@ -114,6 +196,22 @@ export default {
       searchName: "",
       showAddCode: false,
       dialogVisible: false,
+      showAudit: false,
+      confirmBtn:false,
+      auditForm: {
+        companyName: "",
+        batchCode: "",
+        boxNum: "",
+        perNum: "",
+        address: "",
+        contact: "",
+        phone: "",
+        labelspec: "",
+        labelNumber: 100,
+        rangStart: 1,
+        rangEnd: 2
+      },
+      options: [],
       codeData: [],
       labels: [
         {
@@ -157,7 +255,9 @@ export default {
       },
       codes: ["001", "002"],
       getTypes: ["快递", "自行打印"],
-      nowRow: null
+      nowRow: null,
+      createTime:new Date(),
+      maxFruitNum:'100'
     };
   },
   mounted() {
@@ -180,48 +280,128 @@ export default {
       );
       console.log(res);
       if (res.code == 0) {
+        //console.log(res.data)
         this.codeData = res.data.data;
         this.dataTotalLength = res.data.countSize;
-        console.log(this.currentPage);
+        //console.log(this.currentPage);
         this.currentPage = page;
-        console.log(this.currentPage);
+        //console.log(this.currentPage);
       }
     },
-    showAuditConfirm(row) {
-      this.dialogVisible = true;
-      this.nowRow = row;
+    showAuditConfirm(row,num) {
+      if(num !==1){
+        this.confirmBtn=true
+      }else{
+        this.confirmBtn=false
+        this.getSpecList();
+      }
+        this.showAudit = true;
+        this.showAddCode = true;
+        this.auditForm = row;
+        //console.log(this.auditForm)
+    },
+    verifyPass(page){
+      if(page == 1){
+        this.dialogVisible = true;
+        if(this.maxFruitNum < this.auditForm.boxNum ){
+          this.$alert('申请的果码数已经超出该规格下支持的最大果码数', '提示', {
+          confirmButtonText: '确定',
+        });
+        }
+       console.log(this.auditForm)
+      }else{
+        this.showAudit=false;
+        this.showAddCode=false;
+        this.getCodeList(1)
+        this.auditForm={
+          companyName: "",
+          batchCode: "",
+          boxNum: "",
+          perNum: "",
+          address: "",
+          contact: "",
+          phone: "",
+          labelspec: "",
+          labelNumber: 1,
+          labelrang: 1,
+          rangEnd: 2
+        }
+
+      }
+
     },
     async auditApply(flag) {
       this.dialogVisible = false;
       let data = {
+        account: this.$store.state.userInfo.account,
         action: "审核标签",
+        actionId: this.auditForm.actionId,
+        batchCode:this.auditForm.batchCode,
+        companyCode: this.auditForm.companyCode,
+        companyName:this.$store.state.userInfo.companyName,
+        flowId: this.auditForm.flowId,
         labelCompanyCode: this.$store.state.userInfo.companyCode,
         labelCompanyName: this.$store.state.userInfo.companyName,
-        account: this.$store.state.userInfo.account,
-        actionId: this.nowRow.actionId,
-        flowId: this.nowRow.flowId,
-        companyCode: this.nowRow.companyCode,
-        labelUserId: this.$store.state.userInfo.id
+        labelReview:{
+          actionId: this.auditForm.actionId,
+          createTime:this.createTime,
+          id:0,
+          labelEnd:this.auditForm.rangEnd,
+          labelStart:this.auditForm.rangStart,
+          operUserId:this.$store.state.userInfo.id,
+          reviewStatus:1,
+          rm:13,
+          specificationId:this.auditForm.labelspec,
+        },
+        labelUserId: this.$store.state.userInfo.id,
+        labelTime:this.createTime,
+        sign:'123',
+        step:this.auditForm.step
       };
       this.$checkSign(data, async signData => {
         console.log(data);
         if (!signData) {
           signData = this.$signData(data, 4);
         }
-        let res = await this.$fetch("/label/audit", signData, "POST");
+        let res = await this.$fetch("/label/labelReview", signData, "POST");
         if (res.code == 0) {
           this.$message.success("操作成功！");
           this.getCodeList(1);
         }
       });
     },
+    async getSpecList(){
+      let res = await this.$fetch("/labelManager/findAllLabel","GET")
+      if(res.code == 0){
+        this.options =res.data
+        //console.log(this.options)
+      }
+    },
+    changeSelect(value){
+       let obj ={};
+       obj =this.options.find((item)=>{
+         return item.id === value
+       })
+       this.maxFruitNum=obj.fruitNum
+       this.auditForm.rangStart = (obj.rm)+1;
+    },
     handleSelectionChange() {
-      console.log(1);
+      //console.log(1);
     },
-    manuCode() {
-      console.log(1);
+    handleChange(value) {
+     // console.log(value);
     },
-    onAddSubmit() {}
+    getZero(value){
+      let pad ="00000000";
+      value = pad.substring(0,pad.length - value.toString().length)+value;
+      return value
+    },
+  },
+  computed:{
+    labelRangEnd(){
+       this.auditForm.rangEnd = (this.auditForm.rangStart)+(this.auditForm.boxLabelNum);
+       return  this.auditForm.rangEnd ? this.auditForm.rangEnd:'最小箱码标签数'
+    }
   },
   components: {
     Pagination
@@ -246,5 +426,22 @@ export default {
 .addTagForm {
   width: 400px;
   margin: 20px auto;
+}
+.label-audit {
+  width: 800px;
+  margin: 0 auto;
+  .title {
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+}
+.boxRange{
+  display: flex;
+  .el-input{
+    width:32%;
+  }
 }
 </style>

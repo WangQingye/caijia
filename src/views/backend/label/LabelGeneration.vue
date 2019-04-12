@@ -6,7 +6,7 @@
       <el-row class="new-table">
         <el-button
           type="primary"
-          @click="addLabel"
+          @click="addSpec"
         >生成标签</el-button>
       </el-row>
       <el-row class="history-list">
@@ -33,6 +33,14 @@
           width="200"
           align="center"
         >
+        <template slot-scope="scope">
+            <p v-if="item.prop == 'range'">
+              {{scope.row.labelStart }}~{{scope.row.labelEnd}}
+            </p>
+            <p v-else>
+              {{scope.row[item.prop]}}
+            </p>
+          </template>
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -75,9 +83,9 @@
           >
             <el-option
               v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.id"
+              :label="item.labSpecification"
+              :value="item.id"
             >
             </el-option>
           </el-select>
@@ -85,7 +93,7 @@
         <el-form-item
           label="数量"
           prop="num">
-          <el-input-number v-model="addLabelForm.num" @change="handleChange" :min="1" :max="10" label="大于1的正整数"></el-input-number>
+          <el-input-number v-model="addLabelForm.generateNum" @change="handleChange" :min="1" :max="1000000" label="大于1的正整数"></el-input-number>
         </el-form-item>
         <el-form-item>
           <el-button type="primary"  @click="submitForm('addLabelForm')">确定</el-button>
@@ -112,7 +120,7 @@ export default {
         },
         {
           name: "数量",
-          prop: "num"
+          prop: "generateNum"
         },
         {
           name: "范围",
@@ -120,7 +128,7 @@ export default {
         },
         {
           name: "标签生成时间",
-          prop: "generationTime"
+          prop: "createTime"
         }
       ],
       labelData: [
@@ -165,12 +173,40 @@ export default {
           value: "5",
           label: "0E"
         }
-      ]
+      ],
+      createTime:new Date()
     };
   },
+  mounted() {
+    this.getCodeList(1);
+  },
   methods: {
-    addLabel() {
-      this.showDetails = true;
+    addSpec(){
+      this.showDetails=true;
+      this.getSpecList();
+    },
+    async getCodeList(page, isFromSearch) {
+        if (isFromSearch) page = 1;
+        let res = await this.$fetch(
+            "/labelManager/queryLabelCreatePage",
+            {
+            limit: this.pageLimit,
+            page: page
+            },
+            "POST"
+        );
+        if (res.code == 0) {
+            console.log(res)
+            this.labelData = res.data.data;
+            this.dataTotalLength = res.data.countSize;
+        }
+    },
+    async getSpecList(){
+      let res = await this.$fetch("/labelManager/findAllLabel","GET")
+      if(res.code == 0){
+        this.options =res.data
+        console.log(this.options)
+      }
     },
     download(row) {
       console.log(row);
@@ -178,14 +214,41 @@ export default {
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {
             if (valid) {
-            this.$message({
-                message: '标签生成成功！！',
-                type: 'success'
-            });
+              this.labelCreate();
             } else {
             return false;
             }
         });
+    },
+    async labelCreate(){
+      let res = await this.$fetch(
+        "/labelManager/labelCreate",
+        {
+          createTime: this.createTime,
+          generateNum: this.addLabelForm.generateNum,
+          labelSpecificationId: this.addLabelForm.labSpecification,
+          rm: 1
+        },
+        "POST"
+      )
+      if(res.code == 0){
+        this.showDetails=false;
+        this.$message({
+            message: '标签生成成功！！',
+            type: 'success'
+        });
+        this.getCodeList(1);
+        this.addLabelForm={
+          generateNum:'',
+          labSpecification:''
+        }
+        console.log(this.addLabelForm)
+      }else{
+         this.$message({
+            message: '标签生成失败！！',
+            type: 'error'
+        });
+      }
     },
     resetForm(formName) {
         this.$refs[formName].resetFields();

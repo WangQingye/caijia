@@ -2,7 +2,7 @@
     <div class="label-mana">
         <div v-show="!showDetails" class="spec-mana">
             <el-row class="label-spec">
-                <el-button type="primary" @click="addSpec">新增</el-button>
+                <el-button type="primary" @click="showDetails=true">新增</el-button>
             </el-row>
             <el-table
                 ref="codeTable"
@@ -59,7 +59,7 @@
                     <p>{{addSpecForm.boxNum}}</p>
                 </el-form-item>
                 <el-form-item label="果码数量" prop="fruitNum">
-                    <el-input-number v-model="addSpecForm.fruitNum" @change="handleChange" :min="1" :max="10" label="果码数量可为0"></el-input-number>
+                    <el-input-number v-model="addSpecForm.fruitNum" @change="handleChange" :min="1" :max="1000000" label="果码数量可为0"></el-input-number>
                 </el-form-item>
                 <el-form-item>
                     <el-button
@@ -85,7 +85,7 @@ export default {
                 return callback(new Error('标签规格不能为空'))
             }
             setTimeout(()=>{
-                let reg=/^[0-9][A-F]$/;
+                let reg=/^[0-9A-F]|[0-9A-F]$/;
                 if(!reg.test(value)){
                     callback(new Error('请输入两位的16进制数'))
                 }else{
@@ -154,6 +154,7 @@ export default {
                 "POST"
             );
             if (res.code == 0) {
+                console.log(res)
                 this.specData = res.data.data;
                 this.dataTotalLength = res.data.countSize;
             }
@@ -164,14 +165,38 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.$message({
-                        message: '新增标签规格成功！！',
-                        type: 'success'
-                    });
+                    this.addLabelSpec()
                 } else {
                     return false;
                 }
             });
+        },
+        async addLabelSpec(){
+            let res = await this.$fetch(
+                "/labelManager/addLabelSpecification",
+                {
+                    boxNum: this.addSpecForm.boxNum,
+                    fruitNum: this.addSpecForm.fruitNum,
+                    id: this.specData.id,
+                    labSpecification: this.addSpecForm.labSpecification,
+                    rm: this.specData.rm
+                },
+                "POST"
+            )
+            if(res.code == 0){
+                 this.$message({
+                    message: '新增标签规格成功！！',
+                    type: 'success'
+                });
+                this.showDetails=false;
+                 this.getCodeList(1);
+                console.log(this.addSpecForm)
+            }else{
+                this.$message({
+                    message: '溯源标签规格重复，请重新输入！！',
+                    type: 'error'
+                });
+            }
         },
         handleChange(value) {
             //console.log(value);
