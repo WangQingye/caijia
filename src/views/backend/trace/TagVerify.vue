@@ -90,6 +90,7 @@
         label-width="130px"
         label-position="left"
         class="label-audit"
+        :rules="rules"
       >
         <p class="title">{{!confirmBtn? '溯源标签审核':'溯源标签查看'}}</p>
         <el-form-item label="农企">
@@ -105,16 +106,16 @@
           <p>{{auditForm.perNum}}</p>
         </el-form-item>
         <el-form-item label="收货地址">
-          <p>{{auditForm.address}}</p>
+          <p>{{auditForm.recAddr}}</p>
         </el-form-item>
         <el-form-item label="联系人">
-          <p>{{auditForm.contact}}</p>
+          <p>{{auditForm.contacts}}</p>
         </el-form-item>
         <el-form-item label="电话号码">
           <p>{{auditForm.phone}}</p>
         </el-form-item>
         <div v-show="!confirmBtn">
-          <el-form-item label="标签规格">
+          <el-form-item label="标签规格" prop="labelspec">
             <el-select
               v-model="auditForm.labelspec"
               placeholder="请选择标签规格"
@@ -130,14 +131,13 @@
             </el-select>
             <p>支持最大果码数:{{maxFruitNum}}</p>
           </el-form-item>
-          <el-form-item label="箱码标签数量">
-            <el-input-number
-              v-model="auditForm.boxLabelNum"
+          <el-form-item label="箱码标签数量" prop="boxLabelNum">
+            <el-input
+              v-model.number="auditForm.boxLabelNum"
               @change="handleChange"
-              :min="1"
-              :max="100000000"
-              label="描述文字"
-            ></el-input-number>
+              style="width:33%"
+              placeholder="请输入箱码标签数量"
+            ></el-input>
           </el-form-item>
           <el-form-item label="箱码标签范围">
             <el-row :gutter="20" class="boxRange">
@@ -147,7 +147,7 @@
 
           </el-form-item>
           <el-form-item >
-            <el-button type="primary" @click="verifyPass(1)">审核标签</el-button>
+            <el-button type="primary" @click="verifyPass('auditForm',1)">审核标签</el-button>
           </el-form-item>
         </div>
         <div v-show="confirmBtn">
@@ -161,7 +161,7 @@
             <p>{{auditForm.rangStart}}---{{auditForm.rangEnd}}</p>
           </el-form-item>
           <el-form-item >
-            <el-button type="primary" @click="verifyPass(0)">确定</el-button>
+            <el-button type="primary" @click="verifyPass('auditForm',0)">确定</el-button>
           </el-form-item>
         </div>
       </el-form>
@@ -191,6 +191,19 @@ import PageMixin from "@/assets/js/pageMixin";
 export default {
   mixins: [PageMixin],
   data() {
+    var checkNum = (rule,value,callback) => {
+        if(!value){
+          return callback(new Error('箱码标签数量不能为空！！'))
+        }
+        let timer = setInterval(()=>{
+          let reg = /^(0|[0-9]\d*)\b/gm;
+          if(!reg.test(value)){
+            callback(new Error('请输入数字值！'))
+          }else{
+            callback()
+          }
+        },1000)
+      }
     return {
       searchCode: "",
       searchName: "",
@@ -210,6 +223,15 @@ export default {
         labelNumber: 100,
         rangStart: 1,
         rangEnd: 2
+      },
+      rules:{
+        labelspec:[
+           { required: true, message: '请选择标签规格', trigger: 'change' }
+        ],
+        boxLabelNum:[
+           { required: true,validator: checkNum, trigger: 'blur' }
+        ]
+
       },
       options: [],
       codeData: [],
@@ -257,7 +279,8 @@ export default {
       getTypes: ["快递", "自行打印"],
       nowRow: null,
       createTime:new Date(),
-      maxFruitNum:'100'
+      maxFruitNum:'100',
+      timer:null
     };
   },
   mounted() {
@@ -298,16 +321,24 @@ export default {
         this.showAudit = true;
         this.showAddCode = true;
         this.auditForm = row;
-        //console.log(this.auditForm)
+        console.log(this.auditForm)
     },
-    verifyPass(page){
+    verifyPass(formName,page){
       if(page == 1){
-        this.dialogVisible = true;
-        if(this.maxFruitNum < this.auditForm.boxNum ){
-          this.$alert('申请的果码数已经超出该规格下支持的最大果码数', '提示', {
-          confirmButtonText: '确定',
-        });
-        }
+        this.$refs[formName].validate((valid) =>{
+          if(valid){
+            if(this.maxFruitNum < this.auditForm.boxNum ){
+
+              this.$alert('申请的果码数已经超出该规格下支持的最大果码数', '提示', {
+                confirmButtonText: '确定',
+              });
+            }
+            this.dialogVisible = true;
+          }else{
+            return false;
+          }
+        })
+
        console.log(this.auditForm)
       }else{
         this.showAudit=false;
@@ -333,15 +364,7 @@ export default {
     async auditApply(flag) {
       this.dialogVisible = false;
       let data = {
-        account: this.$store.state.userInfo.account,
         action: "审核标签",
-        actionId: this.auditForm.actionId,
-        batchCode:this.auditForm.batchCode,
-        companyCode: this.auditForm.companyCode,
-        companyName:this.$store.state.userInfo.companyName,
-        flowId: this.auditForm.flowId,
-        labelCompanyCode: this.$store.state.userInfo.companyCode,
-        labelCompanyName: this.$store.state.userInfo.companyName,
         labelReview:{
           actionId: this.auditForm.actionId,
           createTime:this.createTime,
@@ -353,9 +376,16 @@ export default {
           rm:13,
           specificationId:this.auditForm.labelspec,
         },
+        flowId: this.auditForm.flowId,
+        actionId: this.auditForm.actionId,
+        batchCode:this.auditForm.batchCode,
+        companyCode: this.auditForm.companyCode,
+        companyName:this.$store.state.userInfo.companyName,
+        labelCompanyCode: this.$store.state.userInfo.companyCode,
+        labelCompanyName: this.$store.state.userInfo.companyName,
+        account: this.$store.state.userInfo.account,
         labelUserId: this.$store.state.userInfo.id,
         labelTime:this.createTime,
-        sign:'123',
         step:this.auditForm.step
       };
       this.$checkSign(data, async signData => {
@@ -402,6 +432,10 @@ export default {
        this.auditForm.rangEnd = (this.auditForm.rangStart)+(this.auditForm.boxLabelNum);
        return  this.auditForm.rangEnd ? this.auditForm.rangEnd:'最小箱码标签数'
     }
+  },
+  destroyed(){
+    clearInterval(this.timer)
+    this.timer=null
   },
   components: {
     Pagination

@@ -191,7 +191,6 @@
 </template>
 
 <script>
-// import fetch from "@/assets/js/Fetch.js";
 import Pagination from "@/components/Pagination.vue";
 import PageMixin from "@/assets/js/pageMixin";
 export default {

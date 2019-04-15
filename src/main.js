@@ -6,12 +6,14 @@ import store from './store'
 import './assets/css/reset.css'
 import fetch from "@/assets/js/fetch";
 import {signData, checkSign} from "@/assets/js/sign";
+import {renderTime} from "@/assets/js/switchTime"
 
 
 Vue.config.productionTip = false
 Vue.prototype.$fetch = fetch;
 Vue.prototype.$signData = signData;
 Vue.prototype.$checkSign = checkSign;
+Vue.prototype.renderTime = renderTime;
 let a = new Vue({
   store,
   router,

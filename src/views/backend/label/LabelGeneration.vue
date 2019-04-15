@@ -37,6 +37,9 @@
             <p v-if="item.prop == 'range'">
               {{scope.row.labelStart }}~{{scope.row.labelEnd}}
             </p>
+            <p v-else-if="item.prop == 'createTime'">
+              {{renderTime(scope.row.createTime)}}
+            </p>
             <p v-else>
               {{scope.row[item.prop]}}
             </p>

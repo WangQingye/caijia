@@ -125,6 +125,9 @@
               v-if="item.prop == 'picList'"
             >{{scope.row.picList == '' ? '':'检测报告'}}</el-button>
             <p v-else-if="!scope.row[item.prop]">无</p>
+            <p v-else-if="item.prop == 'createTime'">
+              {{renderTime(scope.row.createTime)}}
+            </p>
             <p v-else>{{scope.row[item.prop]}}</p>
           </template>
         </el-table-column>
@@ -387,6 +390,10 @@ export default {
       if (res.code == 0) {
         console.log(res);
         this.importDialog = false;
+        this.$message({
+            message: '添加检测报告成功',
+            type: 'success'
+        });
         this.$refs.importForm.resetFields();
       }
     },

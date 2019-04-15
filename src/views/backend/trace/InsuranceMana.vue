@@ -53,6 +53,7 @@
             <p v-else-if="item.prop == 'policyStatus'">
               {{scope.row.policyStatus == 0 ? '未承保' : (scope.row.policyStatus == 1 ? '已承保':(scope.row.policyStatus == 2 ? '已出险':(scope.row.policyStatus == 3 ? '已赔付' :'已失效')))}}
             </p>
+            <p v-else-if="!scope.row[item.prop]">无</p>
             <p v-else>
               {{scope.row[item.prop]}}
             </p>
@@ -101,7 +102,7 @@
     <div
       v-show="showDetails"
       v-if="rowFrom">
-      <add-policy @back="cancelBtn" :rowFrom="rowFrom"></add-policy>
+      <add-policy @cancelBtn="cancelBtn" :rowFrom="rowFrom"></add-policy>
     </div>
     <div
       v-show="showOperation"
@@ -112,7 +113,7 @@
         label-position="left"
         class="underwrite-form"
       >
-        <p class="title">更改承保状态</p>
+        <p class="title">保险机构 - 更改承保状态</p>
         <el-form-item label="农企">
           <p>{{detailData.companyName}}</p>
         </el-form-item>
@@ -123,7 +124,7 @@
           <p>{{detailData.varietyName}}</p>
         </el-form-item>
         <el-form-item label="采摘时间">
-          <p>{{detailData.storeTime}}</p>
+          <p>{{renderTime(detailData.storeTime)}}</p>
         </el-form-item>
         <el-form-item label="描述">
           <p>{{detailData.policyRemark}}</p>
@@ -141,7 +142,7 @@
           <p>{{detailData.productLevel}}</p>
         </el-form-item>
         <el-form-item label="承保时间">
-          <p>{{detailData.policyDate}}</p>
+          <p>{{renderTime(detailData.policyDate)}}</p>
         </el-form-item>
         <el-form-item label="保险状态">
           <p>{{detailData.policyStatus == 1 ? '已承保' :'已出险'}}</p>
@@ -185,7 +186,7 @@
             type="primary"
             @click="changeStatus"
           >确定</el-button>
-          <el-button @click="comeBack">取消</el-button>
+          <el-button @click="goBack">取消</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -222,7 +223,7 @@
           class="inputMsg"
           label="采摘时间"
         >
-          <p>{{detailData.storeTime}}</p>
+          <p>{{renderTime(detailData.storeTime)}}</p>
         </el-form-item>
         <el-form-item
           class="inputMsg"
@@ -254,7 +255,7 @@
           class="inputMsg"
           label="承保时间"
         >
-          <p>{{detailData.policyDate}}</p>
+          <p>{{renderTime(detailData.policyDate)}}</p>
         </el-form-item>
         <el-form-item
           class="inputMsg"
@@ -267,6 +268,7 @@
         :data="consumerData"
         border
         style="width: 100%"
+        id="consumer"
       >
         <el-table-column
           type="index"
@@ -301,7 +303,7 @@
             type="primary"
             @click="comeBack"
           >确定</el-button>
-          <el-button>导出</el-button>
+          <el-button @click="exportList">导出</el-button>
         </el-col>
       </el-row>
 
@@ -329,6 +331,8 @@
 import Pagination from "@/components/Pagination.vue";
 import PageMixin from "@/assets/js/pageMixin";
 import AddPolicy from '@/components/AddPolicy'
+import FileSaver from "file-saver";
+import XLSX from "xlsx";
 export default {
   mixins: [PageMixin],
   data() {
@@ -503,7 +507,7 @@ export default {
       this.fileArry=this.getFileList(this.detailData.fileList)
 
     },
-    consumerInfos(data) {
+    consumerInfos(data) {//查看消费者信息
       this.showInformation = true;
       this.insuranceForm = true;
       this.detailData = data;
@@ -529,31 +533,44 @@ export default {
       }
     },
     async changeStatus() {
-      let res = await this.$fetch(
-        "/policy/updatePolicyStatus",
-        {
-          fileList: this.detailData.fileList,
-          flowId: this.detailData.flowId,
-          id: this.detailData.id,
-          loginUserCompany: this.$store.state.userInfo.companyCode,
-          loginUserId: this.$store.state.userInfo.id,
-          policyDate: this.detailData.policyDate,
-          policyNum:  this.detailData.policyNum,
-          policyRe:  this.detailData.policyRe,
-          policyRemark: this.detailData.policyRemark,
-          policyStatus:  this.policyStatus,
-          productLevel:  this.detailData.productLevel,
-          sign: 1234
-        },
-        "POST"
-      );
-      if (res.code == 0) {
-        this.$message({
-            message: '产品保险状态已改变！！',
-            type: 'success'
-        });
-        this.comeBack();
+      let data ={
+        flowId: this.detailData.flowId,
+        id: this.detailData.id,
+        policyRemark: this.detailData.policyRemark,
+        policyStatus:  this.policyStatus,
+        fileList: this.detailData.fileList,
+        loginUserCompany: this.$store.state.userInfo.companyCode,
+        loginUserId: this.$store.state.userInfo.id,
+        policyDate: this.detailData.policyDate,
+        policyNum:  this.detailData.policyNum,
+        policyRe:  this.detailData.policyRe,
+        productLevel:  this.detailData.productLevel,
       }
+       this.$checkSign(data, async signData => {
+         if (!signData) {
+            signData = this.$signData(data, 4);
+         }
+         let res = await this.$fetch( "/policy/updatePolicyStatus",signData, "POST" );
+          if (res.code == 0) {
+            this.$message({
+                message: '产品保险状态已改变！！',
+                type: 'success'
+            });
+            this.$refs.detailData.resetFields();
+            this.comeBack();
+          }else if(res.code == 500){
+             this.$message({
+                message: '服务连接异常！！',
+                type: 'error'
+            });
+          }
+       })
+
+    },
+    async exportList(){
+      console.log(this.detailData)
+      let res = await this.$fetch("/policy/export",{ flowId:this.detailData.flowId},"GET")
+      this.exportExcel();
     },
     getFileList(data){
        return data.split(",")
@@ -567,6 +584,14 @@ export default {
         this.getCodeList(1);
       }
     },
+    goBack(){
+      this.showDetails = false;
+      this.showOperation = false;
+      this.showInformation = false;
+      this.insuranceForm = false;
+      this.getCodeList(1)
+      this.$refs.detailData.resetFields();
+    },
     comeBack() {
       this.showDetails = false;
       this.showOperation = false;
@@ -575,6 +600,32 @@ export default {
       this.getCodeList(1)
 
     },
+    //定义导出Excel表格事件
+    exportExcel() {
+      /* 从表生成工作簿对象 */
+      var wb = XLSX.utils.table_to_book(document.querySelector("#consumer"));
+      /* 获取二进制字符串作为输出 */
+      var wbout = XLSX.write(wb, {
+          bookType: "xlsx",
+          bookSST: true,
+          type: "array"
+      });
+      try {
+          FileSaver.saveAs(
+          //Blob 对象表示一个不可变、原始数据的类文件对象。
+          //Blob 表示的不一定是JavaScript原生格式的数据。
+          //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+          //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+          new Blob([wbout], { type: "application/octet-stream" }),
+          //设置导出文件名称
+          "sheetjs.xlsx"
+          );
+      } catch (e) {
+          if (typeof console !== "undefined") console.log(e, wbout);
+      }
+      return wbout;
+    }
+
   },
   components: {
     Pagination,
