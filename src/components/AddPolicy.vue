@@ -131,7 +131,7 @@ export default {
         fileList: [],
         productUrl: window.productUrl,
         dialogVisible:false,
-         pickerOptions: {
+        pickerOptions: {
           disabledDate(time) {
             return time.getTime() < Date.now() - 8.64e7;
           }
@@ -150,72 +150,72 @@ export default {
 
     },
     methods:{
-        onAddSubmit(formName){
-          this.$refs[formName].validate((valid) => {
-            if (valid) {
-              this.dialogVisible= true;
-            } else {
-              return false;
+      onAddSubmit(formName){
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.dialogVisible= true;
+          } else {
+            return false;
+          }
+        });
+
+      },
+      async acceptInsurance(){
+          let data ={
+              fileList:this.addPolicyFrom.filePath,
+              flowId:this.rowFrom.flowId,
+              loginUserCompany:this.$store.state.userInfo.companyCode,
+              loginUserId:this.$store.state.userInfo.id,
+              policyDate:this.addPolicyFrom.policyDate,
+              policyNum:this.addPolicyFrom.policyNum,
+              policyRe:1,
+              policyRemark:this.addPolicyFrom.policyRemark,
+              policyStatus:'1',
+              productLevel:this.addPolicyFrom.productLevel,
+          }
+            console.log(data);
+          this.$checkSign(data, async signData => {
+            if (!signData) {
+              signData = this.$signData(data, 10);
             }
+              let res = await this.$fetch("/policy/acceptInsuranceBatch",signData, "POST")
+              if (res.code == 0) {
+                  this.$message({
+                      message: '此批产品已被承保！！',
+                      type: 'success'
+                  });
+                  this.dialogVisible = false;
+                  this.back();
+              }else if(res.code == 500){
+                this.$message({
+                    message: '服务连接异常！！',
+                    type: 'error'
+                });
+              }
           });
 
-        },
-        async acceptInsurance(){
-            let data ={
-                fileList:this.addPolicyFrom.filePath,
-                flowId:this.rowFrom.flowId,
-                loginUserCompany:this.$store.state.userInfo.companyCode,
-                loginUserId:this.$store.state.userInfo.id,
-                policyDate:this.addPolicyFrom.policyDate,
-                policyNum:this.addPolicyFrom.policyNum,
-                policyRe:1,
-                policyRemark:this.addPolicyFrom.policyRemark,
-                policyStatus:'1',
-                productLevel:this.addPolicyFrom.productLevel,
-            }
-             console.log(data);
-            this.$checkSign(data, async signData => {
-              if (!signData) {
-                signData = this.$signData(data, 10);
+      },
+      back(formName) {
+          this.$refs[formName].resetFields();
+          this.cancelBtn();
+      },
+      cancelBtn(){
+        this.$emit('cancelBtn',true)
+      },
+      handleFileChange(res, file, fileList) {
+          if (res.code == 0) {
+              if (this.addPolicyFrom.filePath) {
+                  this.addPolicyFrom.filePath += ",";
+                  this.addPolicyFrom.filePath += res.data;
+                  //console.log(this.addPolicyFrom.filePath)
+              }else{
+                  this.addPolicyFrom.filePath = res.data.join('');
+                  //console.log(this.addPolicyFrom.filePath)
               }
-               let res = await this.$fetch("/policy/acceptInsuranceBatch",signData, "POST")
-                if (res.code == 0) {
-                    this.$message({
-                        message: '此批产品已被承保！！',
-                        type: 'success'
-                    });
-                    this.dialogVisible = false;
-                    this.back();
-                }else if(res.code == 500){
-                  this.$message({
-                      message: '服务连接异常！！',
-                      type: 'error'
-                  });
-                }
-            });
 
-        },
-        back(formName) {
-            this.$refs[formName].resetFields();
-            this.cancelBtn();
-        },
-        cancelBtn(){
-          this.$emit('cancelBtn',true)
-        },
-        handleFileChange(res, file, fileList) {
-            if (res.code == 0) {
-                if (this.addPolicyFrom.filePath) {
-                    this.addPolicyFrom.filePath += ",";
-                    this.addPolicyFrom.filePath += res.data;
-                    //console.log(this.addPolicyFrom.filePath)
-                }else{
-                    this.addPolicyFrom.filePath = res.data.join('');
-                    //console.log(this.addPolicyFrom.filePath)
-                }
-
-            }
-            this.fileList = fileList;
-        }
+          }
+          this.fileList = fileList;
+      }
     },
     destroyed(){
       clearInterval(this.timer)

@@ -32,6 +32,25 @@
       <el-form-item label="溯源类别">
         <p>出库</p>
       </el-form-item>
+      <el-form-item label="文件">
+        <el-upload
+          class="upload-demo"
+          :action="productUrl + '/list/upload'"
+          :on-success="handleFileChange"
+          :file-list="fileList"
+          list-type="text"
+          ref="imgUpload"
+        >
+          <el-button
+            size="small"
+            type="primary"
+          >点击上传</el-button>
+          <div
+            slot="tip"
+            class="el-upload__tip"
+          >只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload>
+      </el-form-item>
       <el-form-item
         label="物流企业"
         prop="company"
@@ -89,14 +108,16 @@ export default {
       codes: ["001", "002"],
       logisticsCompanys: [],
       rules: {
-        boxNum: [
+        boxNumEnd: [
           { required: true, message: "请输入出库箱码", trigger: "blur" }
         ],
-        company: [
+        logisticsCompany: [
           { required: true, message: "请选择物流机构", trigger: "blur" }
         ],
         date: [{ required: true, message: "请选择出库时间", trigger: "blur" }]
-      }
+      },
+      fileList: [],
+      productUrl: window.productUrl,
     };
   },
   props: {
@@ -143,8 +164,10 @@ export default {
             action: "产品出库",
             transferCompanyCode: this.stockOutForm.logisticsCompany,
             outTime: this.stockOutForm.date,
-            actionId: this.rowData.id
+            actionId: this.rowData.id,
+            filePath:this.stockOutForm.filePath
           };
+          console.log(data)
           this.$checkSign(data, async signData => {
             if (!signData) {
               signData = this.$signData(data, 6);
@@ -158,6 +181,20 @@ export default {
           });
         }
       });
+    },
+    handleFileChange(res, file, fileList) {
+        if (res.code == 0) {
+            if (this.stockOutForm.filePath) {
+                this.stockOutForm.filePath += ",";
+                this.stockOutForm.filePath += res.data;
+                //console.log(this.stockOutForm.filePath)
+            }else{
+                this.stockOutForm.filePath = res.data.join('');
+                //console.log(this.stockOutForm.filePath)
+            }
+
+        }
+        this.fileList = fileList;
     }
   },
   watch: {

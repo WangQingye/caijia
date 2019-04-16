@@ -99,6 +99,25 @@
         >
           <el-input v-model="addCodeForm.storeNum"></el-input>
         </el-form-item>
+        <el-form-item label="文件">
+          <el-upload
+            class="upload-demo"
+            :action="productUrl + '/list/upload'"
+            :on-success="handleFileChange"
+            :file-list="fileList"
+            list-type="text"
+            ref="imgUpload"
+          >
+            <el-button
+              size="small"
+              type="primary"
+            >点击上传</el-button>
+            <div
+              slot="tip"
+              class="el-upload__tip"
+            >只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </el-form-item>
         <el-form-item
           label="农产种类"
           prop="goodBigType"
@@ -229,6 +248,7 @@ export default {
           prop: "step"
         }
       ],
+      productUrl: window.productUrl,
       addCodeForm: {
         storeOrg: "",
         storeNum: "",
@@ -240,6 +260,7 @@ export default {
         desc: "",
         flowId: ""
       },
+      fileList:[],
       rules: {
         storeOrg: [
           { required: true, message: "请选择仓储机构", trigger: "blur" }
@@ -393,8 +414,10 @@ export default {
             farmCode: this.$store.state.userInfo.companyCode,
             farmName: this.$store.state.userInfo.companyName,
             account: this.$store.state.userInfo.account,
-            handlerId: this.$store.state.userInfo.id
+            handlerId: this.$store.state.userInfo.id,
+            filePath:this.addCodeForm.filePath
           };
+          console.log(data)
           this.$checkSign(data, async signData => {
             if (!signData) {
               signData = this.$signData(data, 15);
@@ -531,8 +554,23 @@ export default {
           break;
       }
       return text;
+    },
+    handleFileChange(res, file, fileList) {
+        if (res.code == 0) {
+            if (this.addCodeForm.filePath) {
+                this.addCodeForm.filePath += ",";
+                this.addCodeForm.filePath += res.data;
+                console.log(this.addCodeForm.filePath)
+            }else{
+                this.addCodeForm.filePath = res.data.join('');
+                console.log(this.addCodeForm.filePath)
+            }
+
+        }
+        this.fileList = fileList;
+        console.log(this.fileList)
     }
-  },
+},
   components: {
     Pagination
   }

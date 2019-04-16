@@ -14,20 +14,24 @@
         >
       </el-col>
       <el-col :span="16">
-        <p class="time">{{renderTime(listData[productIndex].stepOrde==2 ? listData[productIndex].cCheckTime : listData[productIndex].oCreateTime)}}</p>
-        <!-- <p class="details">{{listData[productIndex].oremark}}</p> -->
-        <p class="details">{{ listData[productIndex].stepOrde==3 ? '标签申请': listData[productIndex].oRemark}}</p>
-        <p class="test-report" v-if="listData[productIndex].stepOrde==2">
-          <button  @click="dialogTableVisible = true" class="test-report-btn">查看检测报告</button>
+        <p class="time">
+          {{renderTime(listData[productIndex].stepOrde==2 ? listData[productIndex].cCheckTime : (listData[productIndex].stepOrde==6 ? listData[productIndex].policyDate:listData[productIndex].oCreateTime))}}
         </p>
-
+        <!-- <p class="details">{{listData[productIndex].oremark}}</p> -->
+        <p class="details">
+          {{ listData[productIndex].stepOrde==3 ? '标签申请':(listData[productIndex].stepOrde==6 ? listData[productIndex].policyRemark: listData[productIndex].oRemark)}}
+        </p>
+        <p class="block-identification"><span>区块链标识：</span>{{listData[productIndex].stepOrde==6 ? listData[productIndex].bxHash:listData[productIndex].actionHash}}</p>
+        <el-button  v-if="listData[productIndex].stepOrde==2"  @click="dialogTableVisible = true" class="test-report-btn">查看检测报告</el-button>
+        <el-button  v-if="listData[productIndex].stepOrde==1"  @click="dialogTableVisible = true" class="real-scene-btn">查看实景照片</el-button>
+        <el-button  v-if="listData[productIndex].stepOrde==4"  @click="dialogTableVisible = true" class="real-scene-btn">查看实景照片</el-button>
       </el-col>
       <el-col
         :span="4"
         class="goodsImg"
         style="padding:0"
       >
-        <!-- <img class="goods" src='@/assets/imgs/goods.jpg'> -->
+        <!-- <img class="goods" :src='imgs[5]'> -->
         <img
           class="goods"
           :src="imgs[listData[productIndex].stepOrde-1]"
@@ -72,6 +76,7 @@ import step2 from "@/assets/imgs/2.png";
 import step3 from "@/assets/imgs/3.png";
 import step4 from "@/assets/imgs/4.png";
 import step5 from "@/assets/imgs/5.png";
+import step6 from "@/assets/imgs/5.png";
 
 import test1 from "@/assets/imgs/test1-1.jpg";
 import test2 from "@/assets/imgs/test1-2.jpg";
@@ -80,7 +85,7 @@ import test3 from "@/assets/imgs/test1-3.jpg";
 export default {
   data() {
     return {
-      imgs: [step1, step2, step3, step4, step5],
+      imgs: [step1, step2, step3, step4, step5,step6],
       isAutoPlay:false,
       phoneShow:false,
       pcShow:false,
@@ -133,24 +138,6 @@ export default {
     this.goPAGE();
   },
   methods: {
-    renderTime(date) {// IOS/iPhone的Safari不兼容Javascript中的Date( YYYY-MM-DD HH:mm:ss 或者YYYY/MM/DD HH:mm:ss这样的时间格式)问题
-      if (!date) return;
-      let aa = date.replace(/\-/g, "/");
-      let bb = aa.replace(/T/g, " ");
-      let cc = bb.split(".")[0];
-      let dataObj = new Date(cc);
-      let txt = "";
-      txt += dataObj.getFullYear() + "-";
-      txt += this.PrefixInteger(dataObj.getMonth() + 1, 2) + "-";
-      txt += this.PrefixInteger(dataObj.getDate(), 2) + " ";
-      txt += this.PrefixInteger(dataObj.getHours(), 2) + ":";
-      txt += this.PrefixInteger(dataObj.getMinutes(), 2) + ":";
-      txt += this.PrefixInteger(dataObj.getSeconds(), 2);
-      return this.regfn(txt);
-    },
-    PrefixInteger(num, n) {
-      return (Array(n).join(0) + num).slice(-n);
-    },
     goPAGE() {
         if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
             /*window.location.href="你的手机版地址";*/
@@ -170,16 +157,6 @@ export default {
     closeBox() {
         this.lightBoxToggle = false;
     },
-    regfn(str){
-      let reg=/\s+00:|:00+$/g;
-      let strIndex=str.search(reg);
-      if(strIndex>0){
-        let strSlice = str.slice(0,strIndex)
-        return strSlice
-      }else{
-        return str
-      }
-    }
 
   },
   components: {
@@ -270,15 +247,27 @@ export default {
       left: 24px;
     }
   }
-  .test-report{
-    margin-top:10px;
-    margin-left:-142px;
-    .test-report-btn{
-      outline: none;
-      border:none;
-      background:#fff;
-      text-decoration:underline
+  .block-identification{
+    color:#5daf34;
+    word-break:break-all;
+    text-align: left;
+    width:250px;
+    span{
+      font-weight:bold
     }
+  }
+  .real-scene-btn{
+    border:1px solid #5daf34;
+    border-radius: 30px;
+    color:#5daf34;
+  }
+  .test-report-btn{
+    outline: none;
+    border:none;
+    background:#fff;
+    border:1px solid #5daf34;
+    border-radius: 30px;
+    color:#5daf34;
   }
 
 }
