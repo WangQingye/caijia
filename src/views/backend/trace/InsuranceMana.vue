@@ -135,7 +135,7 @@
         <el-form-item label="文件">
           <!-- <p>{{detailData.fileList}}</p> -->
           <ul>
-            <li v-for="(item,index) in fileArry" :key="index">保单{{index+1}}.txt</li>
+            <li v-for="(item,index) in fileArry" :key="index"><a :href="productUrl+item">{{item}}.txt</a></li>
           </ul>
         </el-form-item>
         <el-form-item label="产品等级">
@@ -569,8 +569,15 @@ export default {
     },
     async exportList(){
       console.log(this.detailData)
-      let res = await this.$fetch("/policy/export",{ flowId:this.detailData.flowId},"GET")
-      this.exportExcel();
+      let res = await this.$fetch("/policy/export",{ flowId:this.detailData.flowId})
+      if (!res) return;
+      console.log(res)
+      var a = document.createElement("a");
+      var url = window.URL.createObjectURL(res);
+      a.href = url;
+      a.download = `消费者信息${this.detailData.flowId}.zip`;
+      a.click();
+      window.URL.revokeObjectURL(url);
     },
     getFileList(data){
        return data.split(",")

@@ -145,24 +145,6 @@ export default {
         this.productDetails = data.data;
       }
     },
-    renderTime(date) {
-      if (!date) return;
-      let aa = date.replace(/\-/g, "/");
-      let bb = aa.replace(/T/g, " ");
-      let cc = bb.split(".")[0];
-      let dataObj = new Date(cc);
-      let txt = "";
-      txt += dataObj.getFullYear() + "-";
-      txt += this.PrefixInteger(dataObj.getMonth() + 1, 2) + "-";
-      txt += this.PrefixInteger(dataObj.getDate(), 2) + " ";
-      txt += this.PrefixInteger(dataObj.getHours(), 2) + ":";
-      txt += this.PrefixInteger(dataObj.getMinutes(), 2) + ":";
-      txt += this.PrefixInteger(dataObj.getSeconds(), 2);
-      return this.regfn(txt);
-    },
-    PrefixInteger(num, n) {
-      return (Array(n).join(0) + num).slice(-n);
-    },
     parseQRCode(codeURL) {
       var code = codeURL.split("id%3D");
       return code[1];
@@ -173,16 +155,6 @@ export default {
       this.urlParam = this.urlParam.substr(num + 10);
       //alert(this.urlParam)
     },
-    regfn(str){
-      let reg=/\s+00:|:00+$/g;
-      let strIndex=str.search(reg);
-      if(strIndex>0){
-        let strSlice = str.slice(0,strIndex)
-        return strSlice
-      }else{
-        return str
-      }
-    }
   },
   mounted() {
      this.getUrlParam();

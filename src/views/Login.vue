@@ -72,8 +72,7 @@
     <el-dialog
       title="绑定二级密码"
       :visible.sync="dialogVisible"
-      width="30%"
-    >
+      width="30%">
       <p :style="'margin-bottom:20px'">此密码用于账户安全，仅输入一次，请务必牢记</p>
       <el-input
         v-model="privateKey"
@@ -126,6 +125,7 @@ export default {
         password: this.loginForm.password
       };
       let res = await fetch("/user/login", data, "POST", "user");
+      console.log(res.code)
       if (res.code == 0) {
         this.$message.success({
           message: "登录成功",
@@ -140,7 +140,7 @@ export default {
         }
         this.$router.push({ path: "/backend" });
       } else if (res.code == 301) {
-        // this.dialogVisible = true;
+        this.dialogVisible = true;
       }
     },
     async checkLogin() {
@@ -170,6 +170,7 @@ export default {
         pk: api.apiGetTransPk(key.pk),
         sign: api.apiGetTransSign(sign)
       };
+      console.log(data)
       let res = await this.$fetch("/user/signAccount", data, "POST", "user");
       if (res.code == 0) {
         this.login();

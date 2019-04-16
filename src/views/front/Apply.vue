@@ -112,6 +112,27 @@
         </el-form-item>
       </el-form>
     </el-card>
+     <el-dialog
+      title="绑定二级密码"
+      :visible.sync="dialogVisible"
+      width="30%">
+      <p :style="'margin-bottom:20px'">此密码用于账户安全，仅输入一次，请务必牢记</p>
+      <el-input
+        v-model="privateKey"
+        placeholder="请输入二级密码"
+        type="password"
+      ></el-input>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="applyPk"
+        >确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -152,7 +173,9 @@ export default {
       },
       fileList: [],
       companyTypes: [],
-      userUrl: window.userUrl
+      userUrl: window.userUrl,
+      privateKey:'',
+      dialogVisible:false
     };
   },
   mounted() {
@@ -222,12 +245,37 @@ export default {
       console.log(this.applyForm)
       let res = await this.$fetch("/company/addCompany", data, "POST", "user");
       if (res.code === 0) {
+        this.$store.commit("saveUserInfo", res.data);
+        if (this.privateKey) {
+          this.$store.commit(
+            "savePrivateKey",
+            api.apiDecESk(this.privateKey, res.data.esk)
+          );
+        }
         this.$alert("提交成功，审核通过后将通过电话联系您。", "提交成功", {
           confirmButtonText: "确定",
           callback: action => {
             this.$router.push({ path: "/main" });
           }
         });
+      }else if(res.code == 301){
+        this.dialogVisible =true;
+      }
+    },
+    async applyPk() {
+      let key = api.apiKeyGen(this.privateKey);
+      let sign = api.apiSign(this.loginForm.account, key.sk);
+      let data = {
+        account: this.loginForm.account,
+        esk: key.esk,
+        password: this.loginForm.password,
+        pk: api.apiGetTransPk(key.pk),
+        sign: api.apiGetTransSign(sign)
+      };
+      console.log(data)
+      let res = await this.$fetch("/user/signAccount", data, "POST", "user");
+      if (res.code == 0) {
+        this.addCompany();
       }
     }
   },

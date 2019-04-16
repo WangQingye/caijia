@@ -216,6 +216,7 @@ export default {
             password: this.addAccountForm.password,
             phone: this.addAccountForm.phone
           };
+
           let res = await this.$fetch("/user/addUser", data, "POST", "user");
           if (res.code == 0) {
             this.$message.success("添加成功");

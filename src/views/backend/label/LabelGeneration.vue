@@ -56,8 +56,9 @@
               @click="download(scope.row)"
               type="text"
               size="small"
-              v-if="scope.row.status == 1"
+              v-if="scope.row.schedule_status ==3"
             >下载</el-button>
+            <p v-else-if="scope.row.schedule_status == 2">正在生成</p>
             <p v-else>待生成</p>
           </template>
         </el-table-column>

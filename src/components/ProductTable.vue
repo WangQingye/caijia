@@ -76,7 +76,7 @@ import step2 from "@/assets/imgs/2.png";
 import step3 from "@/assets/imgs/3.png";
 import step4 from "@/assets/imgs/4.png";
 import step5 from "@/assets/imgs/5.png";
-import step6 from "@/assets/imgs/5.png";
+import step6 from "@/assets/imgs/6.png";
 
 import test1 from "@/assets/imgs/test1-1.jpg";
 import test2 from "@/assets/imgs/test1-2.jpg";
@@ -254,6 +254,12 @@ export default {
     width:250px;
     span{
       font-weight:bold
+    }
+    span::before{
+      display:inline-block;
+      width:20px;
+      height:20px;
+      background: url("../assets/imgs/block.png")no-repeat;
     }
   }
   .real-scene-btn{

@@ -371,6 +371,7 @@ export default {
       this.reportList = data.picList.split(",").map(item => {
         return window.productUrl.replace("/zp_product_manager", "") + item;
       });
+      console.log(this.reportList)
     },
     addTest(data) {
       console.log(data);
