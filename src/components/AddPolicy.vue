@@ -185,7 +185,8 @@ export default {
                       type: 'success'
                   });
                   this.dialogVisible = false;
-                  this.back();
+                 this.$refs.addPolicyFrom.resetFields();
+                 this.cancelBtn();
               }else if(res.code == 500){
                 this.$message({
                     message: '服务连接异常！！',

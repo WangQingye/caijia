@@ -183,18 +183,18 @@ export default {
       });
     },
     handleFileChange(res, file, fileList) {
-        if (res.code == 0) {
-            if (this.stockOutForm.filePath) {
-                this.stockOutForm.filePath += ",";
-                this.stockOutForm.filePath += res.data;
-                //console.log(this.stockOutForm.filePath)
-            }else{
-                this.stockOutForm.filePath = res.data.join('');
-                //console.log(this.stockOutForm.filePath)
-            }
+      if (res.code == 0) {
+          if (this.stockOutForm.filePath) {
+              this.stockOutForm.filePath += ",";
+              this.stockOutForm.filePath += res.data;
+              //console.log(this.stockOutForm.filePath)
+          }else{
+              this.stockOutForm.filePath = res.data.join('');
+              //console.log(this.stockOutForm.filePath)
+          }
 
-        }
-        this.fileList = fileList;
+      }
+      this.fileList = fileList;
     }
   },
   watch: {

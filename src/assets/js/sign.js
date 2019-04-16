@@ -21,13 +21,14 @@ function signData(data, num) {
 };
 function checkSign(data, cb) {
     console.log(v.$store.state.privateKey);
-    if (!v.$store.state.privateKey) {
-        v.$store.commit("setPkDialogShow", true);
-        v.$store.commit('setPkCallBack', cb);
-        return;
-    } else {
-        cb();
-    }
+    // if (!v.$store.state.privateKey) {
+    //     v.$store.commit("setPkDialogShow", true);
+    //     v.$store.commit('setPkCallBack', cb);
+    //     return;
+    // } else {
+        //cb();
+    // }
+    cb();
 }
 
 export {
