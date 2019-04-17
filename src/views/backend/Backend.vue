@@ -71,7 +71,7 @@
           </el-submenu>
           <el-submenu
             index="account"
-            v-if="this.$store.state.userInfo.typeCode == 5 "
+            v-if="this.$store.state.userInfo.companyAccount || this.$store.state.userInfo.typeCode == 1"
           >
             <template slot="title">
               <i class="el-icon-setting"></i>
