@@ -1,29 +1,18 @@
 <template>
   <div class="back-header">
-    <p class="logo">
-      <img
-        class="logo-img"
-        src="@/assets/imgs/single-logo.png"
-        alt=""
-      >信链臻品管理系统</p>
+    <p class="logo"><span style="width:5px;height:5px;background:#39ac5f;border-radius:50%;display:inline-block;vertical-align:middle;margin-right:10px"></span>首页{{parsePath($store.state.paths)}}</p>
     <div class="header-right">
-      <router-link
-        to="/"
-        class="back-main"
-      >
-        <p><i class="el-icon-menu"></i> 回到首页</p>
-      </router-link>
       <div class="user-info">
+        <p class="user-company">{{this.$store.state.userInfo.userName}}</p>
         <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
             {{this.$store.state.userInfo.account}}<i class="el-icon-caret-bottom el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="0">修改密码</el-dropdown-item>
+            <!-- <el-dropdown-item command="0">修改密码</el-dropdown-item> -->
             <el-dropdown-item command="1">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <p class="user-company">{{this.$store.state.userInfo.companyName}}</p>
       </div>
     </div>
     <el-dialog
@@ -91,8 +80,8 @@ export default {
   props: {},
   methods: {
     async logOut() {
-      let res = await this.$fetch("/user/logout", {}, "POST", "user");
-      if (res.code == 0) {
+      let res = await fetch("/admin/api/v1/logout", {}, "POST");
+      if (res.code == 200) {
         this.$message.success("退出登录成功");
         this.$store.commit("clearUserInfo");
         this.$router.push({ path: "/login" });
@@ -117,16 +106,28 @@ export default {
       if (this.changePassForm.newPass !== this.changePassForm.reNewPass) {
         this.$message.error("两次输入的新密码不一致");
       } else {
-        let res = await this.$fetch('/user/resetPassword', {
-          account: this.$store.state.userInfo.account,
-          passwordNew: this.changePassForm.newPass,
-          passwordOld: this.changePassForm.oldPass
-        }, 'POST', 'user');
+        let res = await this.$fetch(
+          "/user/resetPassword",
+          {
+            account: this.$store.state.userInfo.account,
+            passwordNew: this.changePassForm.newPass,
+            passwordOld: this.changePassForm.oldPass
+          },
+          "POST",
+          "user"
+        );
         if (res.code == 0) {
-          this.$message.success('修改成功');
+          this.$message.success("修改成功");
           this.closeChangeForm();
         }
       }
+    },
+    parsePath(path) {
+      let ret = "";
+      path.map(item => {
+        ret += " > " + item;
+      });
+      return ret;
     }
   },
   watch: {}
@@ -141,26 +142,16 @@ export default {
   height: 60px;
   box-sizing: border-box;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding: 0 50px;
   background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  margin-top: 8px;
+  align-items: center;
 }
 .logo {
-  padding-top: 15px;
-  font-size: 20px;
-  font-weight: bold;
-  .logo-img {
-    width: 30px;
-    height: 30px;
-    vertical-align: middle;
-    margin-right: 10px;
-  }
+  font-size: 14px;
 }
 .header-right {
   display: flex;
-  padding-top: 10px;
 }
 .back-main {
   padding-top: 10px;
@@ -168,13 +159,14 @@ export default {
   margin-right: 50px;
 }
 .user-info {
+  display: flex;
   .el-dropdown-link {
     cursor: pointer;
     font-size: 16px;
   }
   .user-company {
     color: #777;
-    font-size: 12px;
+    font-size: 14px;
     text-align: left;
   }
 }

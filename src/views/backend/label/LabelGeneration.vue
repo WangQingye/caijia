@@ -65,7 +65,8 @@
       </el-table>
       <pagination
         :total="dataTotalLength"
-        @page-change="pageChange"
+                @page-change="pageChange"
+        @size-change="sizeChange"
       >
       </pagination>
     </div>

@@ -18,7 +18,7 @@ export default async (url = '', data = {}, type = 'GET', backend = '', needLoadi
 
     if (window.fetch && method == 'fetch') {
         let requestConfig = {
-            credentials: 'include', // 传Cookie给服务器用以维护登录状态
+            // credentials: 'include', // 传Cookie给服务器用以维护登录状态
             method: type,
             headers: {
                 'Accept': 'application/json,text/html',
@@ -66,7 +66,7 @@ export default async (url = '', data = {}, type = 'GET', backend = '', needLoadi
                 }
             } else {
                 responseData = await response.json();
-                if (responseData.code !== 0 && responseData.code !== 301) {
+                if (responseData.code !== 200 && responseData.code !== 301) {
                     console.log('请求错误', responseData);
                     a.$message({
                         message: responseData.msg || '系统错误，请稍后再试',

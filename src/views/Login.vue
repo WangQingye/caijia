@@ -6,73 +6,99 @@
         alt=""
         class="header-img"
       >
-      <p class="header-text">后台登录</p>
+      <p class="header-text">登录</p>
     </el-row>
+    <section class="">
+
+    </section>
     <el-card
       class="login"
       v-if=isLogin
     >
       <div slot="header">
-        <span class="title">信链臻品 - 后台登录</span>
+        <span class="title">后台登录</span>
       </div>
       <el-form
         :model="loginForm"
         status-icon
         :rules="rules"
         ref="loginForm"
-        label-width="80px"
         label-position="left"
         class="loginForm"
       >
-        <el-form-item
-          label="账号"
-          prop="account"
-        >
+        <el-form-item prop="account">
           <el-input
             v-model="loginForm.account"
             autocomplete="off"
+            placeholder="企业账号"
           ></el-input>
         </el-form-item>
-        <el-form-item
-          label="密码"
-          prop="password"
-        >
+        <el-form-item prop="password">
           <el-input
             type="password"
             v-model="loginForm.password"
             autocomplete="off"
+            placeholder="登录密码"
           ></el-input>
         </el-form-item>
+        <!-- <el-form-item prop="verifyCode">
+          <el-input
+            type="password"
+            v-model="loginForm.password"
+            autocomplete="off"
+            placeholder="输入手机验证码"
+          >
+            <template slot="append">
+              <el-button style="color: #39AC5F;background:white;width:112px;" v-if="!getVerifyTime" @click="getVerify">获取验证码</el-button>
+              <el-button style="color: #39AC5F;background:white;width:112px;" v-else :disabled="true">{{getVerifyTime}} s</el-button>
+            </template>
+          </el-input>
+        </el-form-item> -->
+        <!-- <p
+          class="forget-pass"
+          style="text-align:right;margin-top:-10px;cursor:pointer"
+        >忘记密码？</p> -->
         <el-form-item>
           <el-button
             type="primary"
             @click="submitForm('loginForm')"
-            :style="'width:200px;margin-left:-50px;margin-top:30px'"
-          >登录</el-button>
-          <router-link to="/main">
-            <p :style="'margin-left:-50px;font-size:12px;text-decoration:underline'">返回首页</p>
-          </router-link>
+            :style="'width:342px;margin-top:30px'"
+          >立即登录</el-button>
+          <!-- <router-link to="/main">
+            <p
+              style="cursor:pointer;width:130px;margin:20px auto;"
+              class="account-apply"
+            >还没账号？去申请</p>
+          </router-link> -->
         </el-form-item>
       </el-form>
     </el-card>
-    <section class="bottom">
+    <!-- <section class="bottom">
       <img
         class="bottom-slogan"
         src="@/assets/imgs/slogan_gray.png"
         alt=""
       >
-      <p class="bottom-text">Copyright © 2019  XINLIAN TECHNOLOGY  OF CETC, All Rights Reserved. 蜀ICP备18030395号
+      <p class="bottom-text">Copyright © 2019 XINLIAN TECHNOLOGY OF CETC, All Rights Reserved. 蜀ICP备18030395号
       </p>
       <p>
-        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51019002001977" style="display:inline-block;text-decoration:underline;height:20px;line-height:30px;color:#757575">川公网安备 51019002001977号
-        <img src="@/assets/imgs/record-number.png" style="margin-left:5px;display:inline-block;height:16px;vertical-align: middle;margin-top:-5px;"/></a>
+        <a
+          target="_blank"
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51019002001977"
+          style="display:inline-block;text-decoration:underline;height:20px;line-height:30px;color:#757575"
+        >川公网安备 51019002001977号
+          <img
+            src="@/assets/imgs/record-number.png"
+            style="margin-left:5px;display:inline-block;height:16px;vertical-align: middle;margin-top:-5px;"
+          /></a>
       </p>
 
-    </section>
+    </section> -->
     <el-dialog
       title="绑定二级密码"
       :visible.sync="dialogVisible"
-      width="30%">
+      width="30%"
+    >
       <p :style="'margin-bottom:20px'">此密码用于账户安全，仅输入一次，请务必牢记</p>
       <el-input
         v-model="privateKey"
@@ -112,7 +138,8 @@ export default {
       rules: {
         account: [{ required: true, message: "请输入账号", trigger: "blur" }],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }]
-      }
+      },
+      getVerifyTime: 0
     };
   },
   mounted() {
@@ -121,26 +148,17 @@ export default {
   methods: {
     async login() {
       let data = {
-        account: this.loginForm.account,
+        userName: this.loginForm.account,
         password: this.loginForm.password
       };
-      let res = await fetch("/user/login", data, "POST", "user");
-      console.log(res.code)
-      if (res.code == 0) {
+      let res = await fetch("/admin/api/v1/login", data, "POST");
+      if (res.code == 200) {
         this.$message.success({
           message: "登录成功",
           type: "success"
         });
-        this.$store.commit("saveUserInfo", res.data);
-        if (this.privateKey) {
-          this.$store.commit(
-            "savePrivateKey",
-            api.apiDecESk(this.privateKey, res.data.esk)
-          );
-        }
-        this.$router.push({ path: "/backend" });
-      } else if (res.code == 301) {
-        this.dialogVisible = true;
+        this.$store.commit("saveUserInfo",{userName: 'admin', userId: 1});
+        this.$router.push({ path: "/datadetail" });
       }
     },
     async checkLogin() {
@@ -170,11 +188,18 @@ export default {
         pk: api.apiGetTransPk(key.pk),
         sign: api.apiGetTransSign(sign)
       };
-      console.log(data)
+      console.log(data);
       let res = await this.$fetch("/user/signAccount", data, "POST", "user");
       if (res.code == 0) {
         this.login();
       }
+    },
+    getVerify() {
+      this.getVerifyTime = 60;
+      let interval = setInterval(() => {
+        this.getVerifyTime--;
+        if (!this.getVerifyTime) clearInterval(interval);
+      }, 1000);
     }
   },
   watch: {},
@@ -182,7 +207,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .contanier {
   width: 100%;
   min-width: 1200px;
@@ -193,21 +218,37 @@ export default {
   background-size: 1920px 660px;
   background-position: 0 60px;
   box-sizing: border-box;
+
+  .el-card__header {
+    border: none;
+    padding: 10px 0;
+  }
+  .el-card__body {
+    padding: 0px;
+  }
 }
 .login {
-  width: 500px;
+  width: 442px;
   height: 360px;
   margin: 0 auto;
   margin-left: 60%;
 }
 .title {
   font-size: 20px;
-  font-weight: bold;
+  display: inline-block;
+  line-height: 50px;
+  height: 50px;
 }
 .loginForm {
-  width: 400px;
+  width: 342px;
   margin: 0 auto;
   margin-top: 15px;
+  .account-apply:hover {
+    text-decoration: underline;
+  }
+  .forget-pass:hover {
+    text-decoration: underline;
+  }
 }
 .header {
   margin-bottom: 6%;
@@ -225,11 +266,12 @@ export default {
     border-left: 1px solid #757575;
     font-size: 18px;
     line-height: 20px;
-    color: #757575;
+    color: #000;
     vertical-align: top;
     margin-top: 20px;
     padding-left: 30px;
     margin-left: 30px;
+    font-weight: bold;
   }
 }
 .bottom {
