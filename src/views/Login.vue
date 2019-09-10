@@ -8,13 +8,17 @@
       >
       <p class="header-text">登录</p>
     </el-row>
-    <section class="">
-
+    <section class="login-bg">
+      <p class="title">农产品价格采集系统</p>
+      <p class="main">为打造农业保险领域业界领先的蔬菜价格指数保险产品，对成都市各类农产品离地价格进行采集。</p>
+      <i class="el-icon-phone logo"></i>
+      <p class="phone">028-88888888</p>
     </section>
     <el-card
       class="login"
       v-if=isLogin
     >
+
       <div slot="header">
         <span class="title">后台登录</span>
       </div>
@@ -157,7 +161,7 @@ export default {
           message: "登录成功",
           type: "success"
         });
-        this.$store.commit("saveUserInfo",{userName: 'admin', userId: 1});
+        this.$store.commit("saveUserInfo", { userName: "admin", userId: 1 });
         this.$router.push({ path: "/datadetail" });
       }
     },
@@ -226,12 +230,40 @@ export default {
   .el-card__body {
     padding: 0px;
   }
+  .login-bg {
+    position: absolute;
+    width: 760px;
+    height: 280px;
+    background: rgba(18, 147, 61, 0.6);
+    margin-left: 20.4%;
+    color: white;
+    top: 215px;
+    .title {
+      font-size: 40px;
+      font-weight: bold;
+      margin-top: 50px;
+    }
+    .main {
+      font-size: 16px;
+      width: 570px;
+      margin: 0 auto;
+      margin-top: 24px;
+    }
+    .logo {
+      margin-top:40px;
+    }
+    .phone {
+      font-size: 18px;
+      margin-top:5px;
+    }
+  }
 }
 .login {
   width: 442px;
   height: 360px;
   margin: 0 auto;
   margin-left: 60%;
+  position: relative;
 }
 .title {
   font-size: 20px;
@@ -289,7 +321,6 @@ export default {
     font-size: 14px;
   }
 }
-
 @media screen and (max-width: 1400px) {
   .contanier {
     background-size: 1366px 470px;
