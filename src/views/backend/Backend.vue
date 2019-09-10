@@ -9,6 +9,7 @@
         @select="onMenuSelect"
         ref="asideMenu"
       >
+        <img style="margin: 60px 0 100px 0" src="@/assets/imgs/logo-1.png"/>
         <el-submenu index="stat">
           <template slot="title">
             <i class="el-icon-s-data"></i>
@@ -82,7 +83,7 @@ export default {
     ];
     this.paths = [...new Set(this.paths)];
     this.$store.commit("setPaths", this.paths);
-    // this.testLogin();
+    this.testLogin();
   },
   mounted() {},
   methods: {
