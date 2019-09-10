@@ -227,6 +227,7 @@ export default {
           if (item.price && data.yesterday[index].price) {
             percent =
               ((item.price - data.yesterday[index].price) / item.price) * 100;
+            percent = percent.toFixed(2);
             gap = Math.abs(item.price - data.yesterday[index].price);
           } else {
             percent = "-";
@@ -244,6 +245,13 @@ export default {
     async getCacheGather() {
       let res = await this.$fetch("/common/api/v1/getCacheGather", {}, "POST");
       if (res.code == 200) {
+        res.data.forEach(item => {
+          let data = JSON.parse(item).data;
+          console.log(data);
+          data.gatherTime = this.fixTime(data.gatherTime);
+          data.kind = data.largeKindName + ' > ' + data.kindName;
+          this.scrollList.push(data);
+        });
       }
     },
     initChart1() {
@@ -353,11 +361,13 @@ export default {
     },
     fixTime(timeStamp) {
       let time = new Date(timeStamp);
-      let hour = time.toString()[4];
       let year = time.getFullYear();
       let month = time.getMonth() + 1;
       let day = time.getDate();
-      return year + "-" + month + "-" + day + ' ' + hour;
+      let hour = time.getHours();
+      let minute = time.getMinutes();
+      let second = time.getSeconds();
+      return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
     }
   }
 };
