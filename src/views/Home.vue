@@ -153,14 +153,7 @@ export default {
         // { name: "大白菜", price: 3.14, percent: -0.12, gap: 0.16 }
       ],
       productUrl,
-      scrollList: [
-        {
-          gatherTime: 1567951491000,
-          point: "bb",
-          kind: "茎菜类 > 大白菜",
-          price: 1
-        }
-      ],
+      scrollList: [],
       placeNum: "00031",
       kindNum: "00034",
       gatherNum: "00014",
@@ -223,12 +216,19 @@ export default {
       if (res.code == 200) {
         let data = res.data.data;
         data.today.forEach((item, index) => {
+          let yesterday;
+          data.yesterday.forEach(element => {
+            if (element.name == item.name) {
+              yesterday = element;
+              return;
+            }
+          });
+          console.log(yesterday);
           let percent, gap;
-          if (item.price && data.yesterday[index].price) {
-            percent =
-              ((item.price - data.yesterday[index].price) / item.price) * 100;
+          if (item.price && yesterday.price) {
+            percent = ((item.price - yesterday.price) / item.price) * 100;
             percent = percent.toFixed(2);
-            gap = Math.abs(item.price - data.yesterday[index].price);
+            gap = Math.abs(item.price - yesterday.price);
           } else {
             percent = "-";
             gap = "-";
@@ -247,9 +247,8 @@ export default {
       if (res.code == 200) {
         res.data.forEach(item => {
           let data = JSON.parse(item).data;
-          console.log(data);
           data.gatherTime = this.fixTime(data.gatherTime);
-          data.kind = data.largeKindName + ' > ' + data.kindName;
+          data.kind = data.largeKindName + " > " + data.kindName;
           this.scrollList.push(data);
         });
       }
@@ -367,8 +366,20 @@ export default {
       let hour = time.getHours();
       let minute = time.getMinutes();
       let second = time.getSeconds();
-      return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-    }
+      return (
+        year +
+        "-" +
+        this.prefixZero(month,2) +
+        "-" +
+        this.prefixZero(day,2) +
+        " " +
+        this.prefixZero(hour,2) +
+        ":" +
+        this.prefixZero(minute,2) +
+        ":" +
+        this.prefixZero(second,2)
+      );
+    },
   }
 };
 </script>

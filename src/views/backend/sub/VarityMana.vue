@@ -103,7 +103,7 @@ export default {
         },
         {
           name: "采集大类",
-          prop: "largeId"
+          prop: "largeKindName"
         },
         {
           name: "采集品种",

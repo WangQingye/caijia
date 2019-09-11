@@ -16,7 +16,7 @@
             <span slot="title">数据统计</span>
           </template>
           <el-menu-item index="datadetail">详细数据</el-menu-item>
-          <el-menu-item index="datachart">图表</el-menu-item>
+          <!-- <el-menu-item index="datachart">图表</el-menu-item> -->
         </el-submenu>
         <el-menu-item index="membermana"><i class="el-icon-user-solid"></i>采价人管理</el-menu-item>
         <el-submenu index="datamana">
