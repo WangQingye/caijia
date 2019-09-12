@@ -69,6 +69,7 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+            :default-time="['00:00:00', '23:59:59']"
           >
           </el-date-picker>
         </el-col>
@@ -143,7 +144,7 @@
         >
           <template slot-scope="scope">
             <p v-if="item.prop == 'gatherTime'">
-              {{scope.row[item.prop] && scope.row[item.prop].split('.')[0].replace('T',' ')}}
+              {{scope.row[item.prop] && fixTime(scope.row[item.prop])}}
             </p>
             <p v-else-if="item.prop == 'price'">
               <span
@@ -327,7 +328,7 @@ export default {
         "/admin/api/v1/gatherSearch",
         {
           gatherStartTime: this.timeValue[0] || "",
-          getGatherEndTime: this.timeValue[1] || "",
+          getherEndTime: this.timeValue[1] || "",
           point: this.placeValue,
           origin: this.originValue,
           kind: this.kindValue,
@@ -348,7 +349,7 @@ export default {
         "/admin/api/v1/gatherExcel",
         {
           gatherStartTime: this.timeValue[0] || "",
-          getGatherEndTime: this.timeValue[1] || "",
+          getherEndTime: this.timeValue[1] || "",
           point: this.placeValue,
           origin: this.originValue,
           kind: this.kindValue,
@@ -416,6 +417,31 @@ export default {
       if (needFresh) {
         this.getCodeList(this.currentPage);
       }
+    },
+    prefixZero(num, n) {
+      return (Array(n).join(0) + num).slice(-n);
+    },
+    fixTime(date) {
+      let time = new Date(date);
+      let year = time.getFullYear();
+      let month = time.getMonth() + 1;
+      let day = time.getDate();
+      let hour = time.getHours();
+      let minute = time.getMinutes();
+      let second = time.getSeconds();
+      return (
+        year +
+        "-" +
+        this.prefixZero(month, 2) +
+        "-" +
+        this.prefixZero(day, 2) +
+        " " +
+        this.prefixZero(hour, 2) +
+        ":" +
+        this.prefixZero(minute, 2) +
+        ":" +
+        this.prefixZero(second, 2)
+      );
     }
   },
   components: {
