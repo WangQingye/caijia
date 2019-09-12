@@ -12,7 +12,7 @@
       <p class="title">农产品价格采集系统</p>
       <p class="main">为打造农业保险领域业界领先的蔬菜价格指数保险产品，对成都市各类农产品离地价格进行采集。</p>
       <i class="el-icon-phone logo"></i>
-      <p class="phone">028-88888888</p>
+      <p class="phone">028-85314649</p>
     </section>
     <el-card
       class="login"

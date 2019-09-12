@@ -49,6 +49,12 @@
           >
           </el-option>
         </el-select>
+        <el-button
+          type="danger"
+          size="small"
+          style="margin-left:20px"
+          @click="deleteBigType"
+        >删除</el-button>
       </el-form-item>
       <el-form-item label="采集子类">
         <el-input
@@ -111,10 +117,10 @@ export default {
     return {
       addVarity: false,
       dataForm: {
-        varityValue: 1,
-        minPrice: 1,
-        maxPrice: 1,
-        kind: 1
+        varityValue: "",
+        minPrice: 0,
+        maxPrice: 0,
+        kind: ""
       },
       varityOptions: [],
       cityOptions: [],
@@ -179,6 +185,16 @@ export default {
       if (res.code == 200) {
         this.$message.success("操作成功");
         this.back(true);
+      }
+    },
+    async deleteBigType() {
+      let res = await this.$fetch("/admin/api/v1/deleteLargeKind", {
+        id: this.dataForm.varityValue
+      }, "POST");
+      if (res.code == 200) {
+        this.$message.success("删除成功");
+        this.dataForm.varityValue = '';
+        this.getLargeKind();
       }
     },
     setData() {
