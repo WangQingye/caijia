@@ -18,7 +18,7 @@ export default async (url = '', data = {}, type = 'GET', backend = '', needLoadi
 
     if (window.fetch && method == 'fetch') {
         let requestConfig = {
-            // credentials: 'include', // 传Cookie给服务器用以维护登录状态
+            credentials: 'include', // 传Cookie给服务器用以维护登录状态
             method: type,
             headers: {
                 'Accept': 'application/json,text/html',
@@ -53,17 +53,17 @@ export default async (url = '', data = {}, type = 'GET', backend = '', needLoadi
             clearTimeout(timer);
             if (needLoading) loading.close();
             let responseData;
-            if (url.indexOf('download') !== -1) {
+            if (url.indexOf('gatherExcel') !== -1) {
                 let contentLength = response.headers.get('Content-Length');
                 responseData = await response.blob();
                 let realSize = responseData.size;
-                if (!contentLength || !realSize) {
-                    a.$message.error('文件不存在，下载失败，请联系管理员');
-                    return false;
-                } else if (realSize != contentLength) {
-                    a.$message.error('文件大小错误，下载失败，请联系管理员');
-                    return false;
-                }
+                // if (!contentLength || !realSize) {
+                //     a.$message.error('文件不存在，下载失败，请联系管理员');
+                //     return false;
+                // } else if (realSize != contentLength) {
+                //     a.$message.error('文件大小错误，下载失败，请联系管理员');
+                //     return false;
+                // }
             } else {
                 responseData = await response.json();
                 if (responseData.code !== 200 && responseData.code !== 301) {

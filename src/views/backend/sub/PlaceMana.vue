@@ -38,6 +38,14 @@
         class="my-table"
       >
         <el-table-column
+          fixed
+          label="序号"
+          width="100"
+          align="center"
+        >
+          <template scope="scope"><span>{{scope.$index+(currentPage - 1) * pageLimit + 1}} </span></template>
+        </el-table-column>
+        <el-table-column
           v-for="(item,index) in labels"
           :key="index"
           :label="item.name"
@@ -95,10 +103,6 @@ export default {
   data: () => {
     return {
       labels: [
-        {
-          name: "序号",
-          prop: "id"
-        },
         {
           name: "所属地区",
           prop: "area"

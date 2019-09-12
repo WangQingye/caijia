@@ -101,11 +101,12 @@
         class="add-button"
         type="danger"
         size="small"
-      >删除</el-button>
+      >删除</el-button> -->
       <el-button
         class="add-button"
         size="small"
-      >导出</el-button> -->
+        @click="downloadExcel"
+      >导出</el-button>
       <el-table
         ref="codeTable"
         :data="codeData"
@@ -113,6 +114,15 @@
         class="my-table"
         border
       >
+
+        <el-table-column
+          fixed
+          label="序号"
+          width="100"
+          align="center"
+        >
+          <template scope="scope"><span>{{scope.$index+(currentPage - 1) * pageLimit + 1}} </span></template>
+        </el-table-column>
         <!-- <el-table-column
           type="selection"
           width="90"
@@ -136,7 +146,10 @@
               {{scope.row[item.prop] && scope.row[item.prop].split('.')[0].replace('T',' ')}}
             </p>
             <p v-else-if="item.prop == 'price'">
-              <span v-if="scope.row.abnormal == 1" style="color:red">采价异常</span>
+              <span
+                v-if="scope.row.abnormal == 1"
+                style="color:red"
+              >采价异常</span>
               <span v-else>{{scope.row[item.prop]}}</span>
             </p>
             <p v-else-if="item.prop == 'status'">
@@ -167,7 +180,7 @@
               :disabled="scope.row.abnormal == 1"
             >编辑</el-button>
             <el-button
-              @click="editType(scope.row)"
+              @click="deleteData(scope.row)"
               type="text"
               style="color:red"
               size="small"
@@ -330,6 +343,27 @@ export default {
         this.dataTotalLength = res.data.count;
       }
     },
+    async downloadExcel() {
+      let res = await this.$fetch(
+        "/admin/api/v1/gatherExcel",
+        {
+          gatherStartTime: this.timeValue[0] || "",
+          getGatherEndTime: this.timeValue[1] || "",
+          point: this.placeValue,
+          origin: this.originValue,
+          kind: this.kindValue,
+          search: this.searchText
+        },
+        "POST"
+      );
+      if (!res) return;
+      var a = document.createElement("a");
+      var url = window.URL.createObjectURL(res);
+      a.href = url;
+      a.download = `采集数据.xls`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    },
     async getLocation() {
       let res = await this.$fetch("/admin/api/v1/locationSearch", {}, "POST");
       if (res.code == 200) {
@@ -357,6 +391,19 @@ export default {
       this.$store.commit("setPaths", this.$store.state.paths.concat(["编辑"]));
       this.editData = data;
       this.showFlag = 2;
+    },
+    async deleteData(data) {
+      let res = await this.$fetch(
+        "/admin/api/v1/gatherDel",
+        {
+          id: data.id
+        },
+        "POST"
+      );
+      if (res.code == 200) {
+        this.$message.success("操作成功");
+        this.getCodeList(this.currentPage);
+      }
     },
     checkType(data) {
       this.$store.commit("setPaths", this.$store.state.paths.concat(["查看"]));

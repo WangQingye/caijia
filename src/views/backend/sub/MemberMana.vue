@@ -31,6 +31,14 @@
       class="my-table"
     >
       <el-table-column
+        fixed
+        label="序号"
+        width="100"
+        align="center"
+      >
+        <template scope="scope"><span>{{scope.$index+(currentPage - 1) * pageLimit + 1}} </span></template>
+      </el-table-column>
+      <el-table-column
         v-for="(item,index) in labels"
         :key="index"
         :label="item.name"
@@ -80,8 +88,8 @@
     </el-table>
     <pagination
       :total="dataTotalLength"
-              @page-change="pageChange"
-        @size-change="sizeChange"
+      @page-change="pageChange"
+      @size-change="sizeChange"
     ></pagination>
   </div>
 </template>
@@ -93,10 +101,6 @@ export default {
   data: () => {
     return {
       labels: [
-        {
-          name: "序号",
-          prop: "id"
-        },
         {
           name: "微信号",
           prop: "openId"
@@ -116,7 +120,7 @@ export default {
         },
         {
           name: "采价点",
-          prop: "locationId"
+          prop: "point"
         },
         {
           name: "状态",

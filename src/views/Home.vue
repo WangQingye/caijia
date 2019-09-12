@@ -24,11 +24,11 @@
           <div class="top-item">
             <p class="top-item-left-text justify">采价次数</p>
             <ul class="top-item-ul">
-              <li class="top-item-li">0</li>
-              <li class="top-item-li">0</li>
-              <li class="top-item-li">0</li>
-              <li class="top-item-li">3</li>
-              <li class="top-item-li">4</li>
+              <li
+                class="top-item-li"
+                v-for="(item,index) in gatherNum"
+                :key="index"
+              >{{item}}</li>
             </ul>
           </div>
           <div class="top-item">
@@ -154,9 +154,9 @@ export default {
       ],
       productUrl,
       scrollList: [],
-      placeNum: "00031",
-      kindNum: "00034",
-      gatherNum: "00014",
+      placeNum: "00000",
+      kindNum: "00000",
+      gatherNum: "00000",
       chartData1: [],
       chartDays: [],
       chartDaysData: []
@@ -223,7 +223,6 @@ export default {
               return;
             }
           });
-          console.log(yesterday);
           let percent, gap;
           if (item.price && yesterday.price) {
             percent = ((item.price - yesterday.price) / item.price) * 100;
@@ -235,7 +234,7 @@ export default {
           }
           this.priceData.push({
             name: item.name,
-            price: item.price,
+            price: item.price && item.price.toFixed(2),
             percent,
             gap
           });
@@ -249,6 +248,7 @@ export default {
           let data = JSON.parse(item).data;
           data.gatherTime = this.fixTime(data.gatherTime);
           data.kind = data.largeKindName + " > " + data.kindName;
+          this.gatherNum = this.prefixZero(data.count,5);
           this.scrollList.push(data);
         });
       }
@@ -343,7 +343,7 @@ export default {
               kind: data.data.largeKindName + " > " + data.data.kindName,
               price: data.data.price
             });
-            this.gatherNum = this.prefixZero(data.data.count);
+            this.gatherNum = this.prefixZero(data.data.count,5);
           }
         } catch (error) {}
       };
