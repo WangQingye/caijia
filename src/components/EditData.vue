@@ -9,7 +9,7 @@
     >
       <el-form-item label="采集品种">
         <el-select
-          v-model="dataForm.largeKindName"
+          v-model="dataForm.largeKindId"
           placeholder="请选择"
         >
           <el-option
@@ -126,6 +126,7 @@ export default {
     return {
       dataForm: {
         largeKindName: "",
+        largeKindId: "",
         kindName: "",
         origin: 1,
         gatherNum: "2019-09-08T08:57:24.000+0000",
@@ -154,8 +155,6 @@ export default {
   },
   mounted() {
     this.setData();
-    this.getKind();
-    this.getLargeKind();
   },
   methods: {
     async update() {
@@ -186,24 +185,27 @@ export default {
       if (res.code == 200) {
         this.varityOptions = [];
         res.data.forEach(item => {
+          if (item.name  == this.dataForm.largeKindName) {
+            this.dataForm.largeKindId = item.id;
+          }
           this.varityOptions.push({
-            value: item.name,
+            value: item.id,
             label: item.name
           });
         });
+        this.getKind();
       }
     },
     async getKind() {
       let res = await this.$fetch(
-        "/admin/api/v1/kindSearch",
+        "/admin/api/v1/kindGet",
         {
-          pageNo: 1,
-          pageSize: 10000,
-          search: ""
+          id: this.dataForm.largeKindId
         },
         "POST"
       );
       if (res.code == 200) {
+        console.log(res);
         res.data.list.forEach(item => {
           this.typeOptions.push({
             value: item.name,
@@ -254,7 +256,7 @@ export default {
       } else {
         this.showUpload = true;
       }
-      console.log(this.fileList);
+      this.getLargeKind();
     },
     handleRemove(file) {
       console.log(file);
