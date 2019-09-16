@@ -232,7 +232,6 @@ export default {
             percent = "-";
             gap = "-";
           }
-          console.log(gap);
           this.priceData.push({
             name: item.name,
             price: item.price && item.price.toFixed(2),
@@ -339,7 +338,7 @@ export default {
           let data = JSON.parse(msg.data);
           if (data.type == 1) {
             this.scrollList.push({
-              gatherTime: data.data.gatherTime,
+              gatherTime: this.fixTime(data.data.gatherTime),
               point: data.data.point,
               kind: data.data.largeKindName + " > " + data.data.kindName,
               price: data.data.price
@@ -474,6 +473,7 @@ export default {
     .main-middle {
       padding: 10px 20px 20px 20px;
       margin-left: 10px;
+      min-width: 790px;
       .middle-bottom {
         position: relative;
         padding: 20px;

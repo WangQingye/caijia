@@ -123,7 +123,7 @@
           width="100"
           align="center"
         >
-          <template scope="scope"><span>{{scope.$index+(currentPage - 1) * pageLimit + 1}} </span></template>
+          <template slot-scope="scope"><span>{{scope.$index+(currentPage - 1) * pageLimit + 1}} </span></template>
         </el-table-column>
         <!-- <el-table-column
           type="selection"

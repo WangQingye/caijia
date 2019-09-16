@@ -69,7 +69,7 @@ export default async (url = '', data = {}, type = 'GET', backend = '', needLoadi
                 if (responseData.code !== 200 && responseData.code !== 301) {
                     console.log('请求错误', responseData);
                     a.$message({
-                        message: responseData.msg || '系统错误，请稍后再试',
+                        message: responseData.errMsg || '系统错误，请稍后再试',
                         type: "error"
                     });
                     return false;

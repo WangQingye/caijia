@@ -57,9 +57,12 @@
           <p class="chart-title-text"><span class="chart-title-dot"></span>价格波动信息统计</p>
           <div class="chart-desc">
             <p
-              v-for="item in checkedPoints"
+              v-for="(item, index) in checkedPoints"
               :key="item"
-            ><span class="chart-desc-line"></span>{{item}}</p>
+            ><span
+                class="chart-desc-line"
+                :style="'background:' + colors[index]"
+              ></span>{{item}}</p>
             <!-- <i class="el-icon-full-screen"></i> -->
           </div>
         </div>
@@ -75,9 +78,12 @@
           <p class="chart-title-text"><span class="chart-title-dot"></span>采价次数信息统计</p>
           <div class="chart-desc">
             <p
-              v-for="item in checkedPoints"
+              v-for="(item, index) in checkedPoints"
               :key="item"
-            ><span class="chart-desc-line"></span>{{item}}</p>
+            ><span
+                class="chart-desc-line"
+                :style="'background:' + colors[index]"
+              ></span>{{item}}</p>
             <!-- <i class="el-icon-full-screen"></i> -->
           </div>
         </div>
@@ -100,7 +106,7 @@
         </div>
         <el-table
           :data="priceData"
-          style="width: 700px;margin: 0 auto;margin-top:15px"
+          style="width: 700px;margin: 0 auto;margin-top:15px; height: 200px;overflow-y:scroll"
           size="small"
           header-cell-class-name="table-header"
         >
@@ -124,7 +130,7 @@
             align="center"
           >
             <template slot-scope="scope">
-              <p :style="'color:' + (scope.row.percent > 0 ? '#f05e5e' : '#39ac5f')">{{scope.row.percent}}%</p>
+              <p :style="'color:' + (scope.row.percent > 0 ? '#f05e5e' : '#39ac5f')">{{scope.row.percent == '-' ? scope.row.percent : scope.row.percent + '%'}}</p>
             </template>
           </el-table-column>
           <el-table-column
@@ -133,7 +139,7 @@
             align="center"
           >
             <template slot-scope="scope">
-              <p :style="'color:' + (scope.row.percent > 0 ? '#f05e5e' : '#39ac5f')">{{scope.row.num}}</p>
+              <p :style="'color:' + (scope.row.percent > 0 ? '#f05e5e' : '#39ac5f')">{{scope.row.gap}}</p>
             </template>
           </el-table-column>
         </el-table>
@@ -147,8 +153,8 @@
           </div>
         </div>
         <el-table
-          :data="priceData"
-          style="width: 700px;margin: 0 auto;margin-top:15px"
+          :data="userData"
+          style="width: 700px;margin: 0 auto;margin-top:15px;height: 200px;overflow-y:hidden"
           size="small"
           header-cell-class-name="table-header"
         >
@@ -159,24 +165,27 @@
             align="center"
           >
             <template slot-scope="scope">
-              <p :style="'color:' + (scope.row.percent > 0 ? '#f05e5e' : '#39ac5f')"></p>
+              <p
+                :style="'color:' + rankColors[scope.$index]"
+                class="rank-index"
+              >{{scope.$index + 1}}</p>
             </template>
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="userName"
             label="采价人"
             width="180"
             align="center"
           >
           </el-table-column>
           <el-table-column
-            prop="place"
+            prop="point"
             label="所属采价点"
             align="center"
           >
           </el-table-column>
           <el-table-column
-            prop="time"
+            prop="count"
             label="采价次数"
             align="center"
           >
@@ -191,36 +200,34 @@ var echarts = require("echarts");
 export default {
   data: () => {
     return {
-      searchType: 1,
+      searchType: "",
       typeOptions: [],
       places: [],
       checkedPoints: [],
       chart1: null,
       chart2: null,
-      chartData1: [
-        [1.5, 2, 3.6, 1, 3, 2],
-        [2, 1, 3.1, 2, 3, 2],
-        [2.5, 2.5, 3, 1.2, 1, 3]
-      ],
+      // chartData1: [
+      //   [1.5, 2, 3.6, 1, 3, 2],
+      //   [2, 1, 3.1, 2, 3, 2],
+      //   [2.5, 2.5, 3, 1.2, 1, 3]
+      // ],
+      chartData1: [[], [], []],
       colors: ["#6bc688", "#67c9f6", "#fbcf97"],
-      priceData: [
-        { place: "高新", price: "2.3", percent: -0.12, num: 0.16 },
-        { place: "高新", price: "2.3", percent: 0.12, num: 0.16 },
-        { place: "高新", price: "2.3", percent: -0.12, num: 0.16 },
-        { place: "高新", price: "2.3", percent: 0.12, num: 0.16 }
-      ],
-      priceData: [
-        { place: "高新", rank: "1", name: "小王", time: 230 },
-        { place: "高新", rank: "2", name: "小王1", time: 200 },
-        { place: "高新", rank: "3", name: "小王2", time: 180 },
-        { place: "高新", rank: "4", name: "小王3", time: 160 }
-      ]
+      priceData: [],
+      userData: [],
+      rankColors: ["#f05e5e", "#f79357", "#f7b411", "#999999"],
+      days: []
     };
   },
   mounted() {
-    this.getLocation();
+    // let nowDate = new Date().getDate();
+    // let nowMonth = new Date().getDate();
+    // for (var i = 0; i < 7; i++) {
+
+    // }
+    // console.log(nowDate);
     this.getKind();
-    this.initChart();
+    this.getUserRank();
   },
   methods: {
     initChart() {
@@ -230,7 +237,7 @@ export default {
       this.chart1.setOption({
         xAxis: {
           type: "category",
-          data: ["6.20", "6.21", "6.22", "6.23", "6.24", "6.25"]
+          data: this.days
         },
         yAxis: {},
         series: [
@@ -344,8 +351,11 @@ export default {
         ]
       });
     },
-    pointChange() {
-      this.chartData1 = this.chartData1.slice(0, 1);
+    async pointChange() {
+      this.chartData1 = [];
+      for (var i = 0; i < this.checkedPoints.length; i++) {
+        await this.getChart1(this.checkedPoints[i], i);
+      }
       this.initChart();
     },
     async getLocation() {
@@ -361,6 +371,9 @@ export default {
         res.data.list.forEach(item => {
           this.places.push(item.point);
         });
+        this.checkedPoints = this.places.slice(0, 3);
+        this.getPrices();
+        this.pointChange();
       }
     },
     async getKind(page) {
@@ -374,7 +387,79 @@ export default {
       );
       if (res.code == 200) {
         res.data.list.forEach(item => {
-          this.typeOptions.push({label: item.name, value: item.name});
+          this.typeOptions.push({ label: item.name, value: item.name });
+        });
+        this.searchType = this.typeOptions[0].label;
+        this.getLocation();
+      }
+    },
+    async getChart1(point, index) {
+      if (!this.chartData1[index]) this.chartData1[index] = [];
+      let res = await this.$fetch(
+        "/admin/api/v1/gatherPriceByKindLocation",
+        {
+          kindName: this.searchType,
+          point
+        },
+        "POST"
+      );
+
+      if (res.code == 200) {
+        res.data.forEach(item => {
+          let date = item.days.slice(5);
+          if (this.days.indexOf(date) == -1 && this.days.length < 6) {
+            this.days.push(date);
+          }
+          this.days.sort((a, b) => {
+            return new Date(a) - new Date(b);
+          });
+        });
+        res.data.forEach(item => {
+          let date = item.days.slice(5);
+          console.log(date);
+          console.log(this.days);
+          this.chartData1[index][this.days.indexOf(date)] = item.price;
+        });
+        this.initChart();
+      }
+    },
+    async getUserRank() {
+      let res = await this.$fetch("/admin/api/v1/userGatherOrder", {}, "POST");
+      if (res.code == 200) {
+        this.userData = res.data;
+      }
+    },
+    async getPrices() {
+      let res = await this.$fetch(
+        "/admin/api/v1/gatherByKindForLocation",
+        {
+          kindName: this.searchType
+        },
+        "POST"
+      );
+      if (res.code == 200) {
+        res.data.today.forEach(item => {
+          let yesterday;
+          res.data.yesterday.forEach(element => {
+            if (item.point == element.point) {
+              yesterday = element;
+            }
+          });
+          let percent, gap;
+          if (item.price && yesterday.price) {
+            percent = ((item.price - yesterday.price) / item.price) * 100;
+            percent = percent.toFixed(2);
+            gap = Math.abs(item.price - yesterday.price).toFixed(2);
+          } else {
+            percent = "-";
+            gap = "-";
+          }
+          this.priceData.push({
+            place: item.point,
+            price: item.price && item.price.toFixed(2),
+            percent,
+            gap
+          });
         });
       }
     }
@@ -450,6 +535,12 @@ export default {
             }
           }
         }
+      }
+      .rank-index {
+        font-size: 22px;
+        font-weight: bold;
+        font-style: italic;
+        color: #999;
       }
     }
   }

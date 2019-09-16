@@ -22,7 +22,7 @@
         </el-select>
         <span style="margin: 0 10px"> — </span>
         <el-select
-          v-model="dataForm.kindName"
+          v-model="dataForm.kindId"
           placeholder="请选择"
         >
           <el-option
@@ -129,12 +129,14 @@ export default {
         largeKindId: "",
         kindName: "",
         origin: 1,
-        gatherNum: "2019-09-08T08:57:24.000+0000",
+        gatherNum: "",
         price: 111,
-        gatherTime: ""
+        gatherTime: "",
+        kindId: ""
       },
       varityOptions: [],
       typeOptions: [],
+      allTypes: [],
       originOptions: [
         { value: "露地蔬菜", label: "露地蔬菜" },
         { value: "大棚蔬菜", label: "大棚蔬菜" }
@@ -166,8 +168,8 @@ export default {
           gatherNum: this.dataForm.gatherNum,
           gatherTime: this.dataForm.gatherTime,
           id: this.rowData.id,
-          kindName: this.dataForm.kindName,
-          origin: this.dataForm.largeKindName,
+          kindId: this.dataForm.kindId,
+          origin: this.dataForm.origin,
           pic1: this.fileList[0] && this.fileList[0].name || '',
           pic2: this.fileList[1] && this.fileList[1].name || '',
           pic3: this.fileList[2] && this.fileList[2].name || '',
@@ -198,23 +200,40 @@ export default {
     },
     async getKind() {
       let res = await this.$fetch(
-        "/admin/api/v1/kindGet",
+        "/admin/api/v1/kindSearch",
         {
-          id: this.dataForm.largeKindId
+          page:1,
+          pageSize:10000
         },
         "POST"
       );
       if (res.code == 200) {
-        console.log(res);
         res.data.list.forEach(item => {
-          this.typeOptions.push({
-            value: item.name,
+          this.allTypes.push({
+            value: item.id,
             label: item.name,
             min: item.minPrice,
-            max: item.maxPrice
-          });
+            max: item.maxPrice,
+            largeId: item.largeId
+          })
         });
+        this.getTypeFromAll();
+        this.typeOptions.forEach(item => {
+        if (item.name == this.dataForm.kindName) {
+          this.dataForm.kindId = item.value
+        }
+      });
       }
+    },
+    getTypeFromAll() {
+      this.typeOptions = [];
+      this.allTypes.forEach(item => {
+        if (item.largeId == this.dataForm.largeKindId) {
+          this.typeOptions.push(item);
+        }
+      });
+      console.log(this.typeOptions);
+      this.dataForm.kindId = this.typeOptions[0] && this.typeOptions[0].value;
     },
     testForm() {
       let min, max;
@@ -227,14 +246,13 @@ export default {
       return true;
     },
     setData() {
+      console.log(this.rowData);
       this.dataForm.largeKindName = this.rowData.largeKindName;
       this.dataForm.kindName = this.rowData.kindName;
       this.dataForm.origin = this.rowData.origin;
       this.dataForm.gatherNum = this.rowData.gatherNum;
       this.dataForm.price = this.rowData.price;
-      this.dataForm.gatherTime = this.rowData.gatherTime
-        .split(".")[0]
-        .replace("T", " ");
+      this.dataForm.gatherTime = this.fixTime(this.rowData.gatherTime);
       if (this.rowData.pic1) {
         this.fileList[0] = {
           name: this.rowData.pic1,
@@ -279,6 +297,36 @@ export default {
     },
     back(needFresh) {
       this.$emit("back", needFresh);
+    },
+        prefixZero(num, n) {
+      return (Array(n).join(0) + num).slice(-n);
+    },
+    fixTime(date) {
+      let time = new Date(date);
+      let year = time.getFullYear();
+      let month = time.getMonth() + 1;
+      let day = time.getDate();
+      let hour = time.getHours();
+      let minute = time.getMinutes();
+      let second = time.getSeconds();
+      return (
+        year +
+        "-" +
+        this.prefixZero(month, 2) +
+        "-" +
+        this.prefixZero(day, 2) +
+        " " +
+        this.prefixZero(hour, 2) +
+        ":" +
+        this.prefixZero(minute, 2) +
+        ":" +
+        this.prefixZero(second, 2)
+      );
+    }
+  },
+  watch: {
+    'dataForm.largeKindId': function(val) {
+      this.getTypeFromAll();
     }
   }
 };

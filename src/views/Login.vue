@@ -43,6 +43,7 @@
             v-model="loginForm.password"
             autocomplete="off"
             placeholder="登录密码"
+            @keyup.enter="submitForm('loginForm')"
           ></el-input>
         </el-form-item>
         <!-- <el-form-item prop="verifyCode">

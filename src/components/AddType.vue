@@ -188,7 +188,7 @@ export default {
       }
     },
     async deleteBigType() {
-      let res = await this.$fetch("/admin/api/v1/deleteLargeKind", {
+      let res = await this.$fetch("/admin/api/v1/largeKindDel", {
         id: this.dataForm.varityValue
       }, "POST");
       if (res.code == 200) {
