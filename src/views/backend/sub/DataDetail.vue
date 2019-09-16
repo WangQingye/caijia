@@ -367,7 +367,14 @@ export default {
       window.URL.revokeObjectURL(url);
     },
     async getLocation() {
-      let res = await this.$fetch("/admin/api/v1/locationSearch", {}, "POST");
+      let res = await this.$fetch(
+        "/admin/api/v1/locationSearch",
+        {
+          page: 1,
+          pageSize: 100
+        },
+        "POST"
+      );
       if (res.code == 200) {
         res.data.list.forEach(item => {
           this.placeOptions.push({ value: item.point, label: item.point });

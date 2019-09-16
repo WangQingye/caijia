@@ -227,11 +227,12 @@ export default {
           if (item.price && yesterday.price) {
             percent = ((item.price - yesterday.price) / item.price) * 100;
             percent = percent.toFixed(2);
-            gap = Math.abs(item.price - yesterday.price);
+            gap = Math.abs(item.price - yesterday.price).toFixed(2);
           } else {
             percent = "-";
             gap = "-";
           }
+          console.log(gap);
           this.priceData.push({
             name: item.name,
             price: item.price && item.price.toFixed(2),
