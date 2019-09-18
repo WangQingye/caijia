@@ -36,7 +36,7 @@
         width="100"
         align="center"
       >
-        <template scope="scope"><span>{{scope.$index+(currentPage - 1) * pageLimit + 1}} </span></template>
+        <template slot-scope="scope"><span>{{scope.$index+(currentPage - 1) * pageLimit + 1}} </span></template>
       </el-table-column>
       <el-table-column
         v-for="(item,index) in labels"
@@ -44,7 +44,7 @@
         :label="item.name"
         :prop="item.prop"
         show-overflow-tooltip
-        :width="item.width||'200'"
+        :width="item.width||'160'"
         align="center"
       >
         <template slot-scope="scope">
@@ -103,7 +103,8 @@ export default {
       labels: [
         {
           name: "微信号",
-          prop: "openId"
+          prop: "openId",
+          width: 240
         },
         {
           name: "姓名",
@@ -120,7 +121,8 @@ export default {
         },
         {
           name: "采价点",
-          prop: "point"
+          prop: "point",
+          width: 300
         },
         {
           name: "状态",

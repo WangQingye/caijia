@@ -43,7 +43,7 @@
           width="100"
           align="center"
         >
-          <template scope="scope"><span>{{scope.$index+(currentPage - 1) * pageLimit + 1}} </span></template>
+          <template slot-scope="scope"><span>{{scope.$index+(currentPage - 1) * pageLimit + 1}} </span></template>
         </el-table-column>
         <el-table-column
           v-for="(item,index) in labels"
@@ -109,7 +109,8 @@ export default {
         },
         {
           name: "采价点",
-          prop: "point"
+          prop: "point",
+          width: 600
         }
       ],
       placeData: [

@@ -541,6 +541,9 @@ export default {
       .right-ul {
         width: 500px;
         margin-top: 20px;
+        max-height: 880px;
+        overflow-y: scroll;
+        overflow-x: hidden;
         .right-li {
           width: 500px;
           height: 62px;

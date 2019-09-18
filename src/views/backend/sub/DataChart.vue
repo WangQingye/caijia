@@ -416,8 +416,6 @@ export default {
         });
         res.data.forEach(item => {
           let date = item.days.slice(5);
-          console.log(date);
-          console.log(this.days);
           this.chartData1[index][this.days.indexOf(date)] = item.price;
         });
         this.initChart();

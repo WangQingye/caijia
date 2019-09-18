@@ -140,7 +140,7 @@
           :label="item.name"
           :prop="item.prop"
           show-overflow-tooltip
-          :width="item.width||'160'"
+          :width="item.width||'120'"
           align="center"
         >
           <template slot-scope="scope">
@@ -220,11 +220,13 @@ export default {
       labels: [
         {
           name: "采集时间",
-          prop: "gatherTime"
+          prop: "gatherTime",
+          width: 160
         },
         {
           name: "采价点",
-          prop: "point"
+          prop: "point",
+          width: 300
         },
         {
           name: "GPS定位",
