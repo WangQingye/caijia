@@ -248,7 +248,7 @@ export default {
           let data = JSON.parse(item).data;
           data.gatherTime = this.fixTime(data.gatherTime);
           data.kind = data.largeKindName + " > " + data.kindName;
-          this.gatherNum = this.prefixZero(data.count,5);
+          this.gatherNum = this.prefixZero(data.count, 5);
           this.scrollList.push(data);
         });
       }
@@ -343,7 +343,7 @@ export default {
               kind: data.data.largeKindName + " > " + data.data.kindName,
               price: data.data.price
             });
-            this.gatherNum = this.prefixZero(data.data.count,5);
+            this.gatherNum = this.prefixZero(data.data.count, 5);
           }
         } catch (error) {}
       };
@@ -369,17 +369,17 @@ export default {
       return (
         year +
         "-" +
-        this.prefixZero(month,2) +
+        this.prefixZero(month, 2) +
         "-" +
-        this.prefixZero(day,2) +
+        this.prefixZero(day, 2) +
         " " +
-        this.prefixZero(hour,2) +
+        this.prefixZero(hour, 2) +
         ":" +
-        this.prefixZero(minute,2) +
+        this.prefixZero(minute, 2) +
         ":" +
-        this.prefixZero(second,2)
+        this.prefixZero(second, 2)
       );
-    },
+    }
   }
 };
 </script>
@@ -544,6 +544,23 @@ export default {
         max-height: 880px;
         overflow-y: scroll;
         overflow-x: hidden;
+        &::-webkit-scrollbar {
+          /*滚动条整体样式*/
+          width: 10px; /*高宽分别对应横竖滚动条的尺寸*/
+          height: 1px;
+        }
+        &::-webkit-scrollbar-thumb {
+          /*滚动条里面小方块*/
+          border-radius: 10px;
+          -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+          background: #1886c53b
+        }
+        &::-webkit-scrollbar-track {
+          /*滚动条里面轨道*/
+          -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+          border-radius: 10px;
+          background: transparent;
+        }
         .right-li {
           width: 500px;
           height: 62px;
