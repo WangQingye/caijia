@@ -3,7 +3,7 @@
     <p class="logo"><span style="width:5px;height:5px;background:#39ac5f;border-radius:50%;display:inline-block;vertical-align:middle;margin-right:10px"></span>首页{{parsePath($store.state.paths)}}</p>
     <div class="header-right">
       <div class="user-info">
-        <p class="user-company">{{this.$store.state.userInfo.userName}}</p>
+        <p class="user-company">{{this.$store.state.userInfo.userName || 'admin'}}</p>
         <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
             {{this.$store.state.userInfo.account}}<i class="el-icon-caret-bottom el-icon--right"></i>

@@ -83,7 +83,7 @@ export default {
     ];
     this.paths = [...new Set(this.paths)];
     this.$store.commit("setPaths", this.paths);
-    this.testLogin();
+    // this.testLogin();
   },
   mounted() {},
   methods: {
