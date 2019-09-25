@@ -66,7 +66,11 @@ export default async (url = '', data = {}, type = 'GET', backend = '', needLoadi
                 // }
             } else {
                 responseData = await response.json();
-                if (responseData.code !== 200 && responseData.code !== 301) {
+                if (responseData.code == 403) {
+                    a.$router.push({path:'/login'});
+                    return;
+                }
+                if (responseData.code !== 200) {
                     console.log('请求错误', responseData);
                     a.$message({
                         message: responseData.errMsg || '系统错误，请稍后再试',
