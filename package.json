@@ -17,7 +17,7 @@
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.1",
     "vue2-preview": "^1.0.5",
-    "xlsx": "^0.14.2"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.3",
